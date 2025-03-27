@@ -1,0 +1,125 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    color: white;
+    background: linear-gradient(to right, #131010, #543A14, #F0BB78);
+    height: 100vh;
+    overflow: hidden;
+}
+
+.container {
+    display: flex;
+    height: 100vh;
+}
+
+.intro {
+    flex: 1;
+    padding: 4rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.intro h1 {
+    font-size: 3rem;
+    margin-top: 1rem;
+}
+
+.intro p {
+    margin-top: 1.5rem;
+    font-size: 1.2rem;
+    line-height: 1.6;
+    max-width: 400px;
+}
+
+.showcase {
+    flex: 1;
+    position: relative;
+    box-shadow: 0px 0px 155px black;
+    background: black;
+    border-top-left-radius: 25px;
+    border-bottom-left-radius: 25px;
+    padding: 2rem;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 90vh;
+
+}
+
+
+.showcase-container {
+    position: relative;
+    display: inline-block;
+}
+
+.showcase-container img {
+    display: block;
+    width: 30em;
+    height: 20vh;
+    border-radius: 10px;
+    object-fit: cover;
+    object-position: center;
+}
+
+.navbar {
+    display: flex;
+    gap: 1.5rem;
+    font-weight: 600;
+}
+
+.navbar a {
+    color: white;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.navbar a:hover {
+    color: #ffcb6b;
+}
+
+.hero {
+    display: grid;
+    margin-top: 4rem;
+}
+
+.hero h3 {
+    font-size: 0.9rem;
+    opacity: 0.8;
+    margin-bottom: 0.5rem;
+}
+
+.hero h1 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+}
+
+
+.recommendations {
+    margin-bottom: 2rem;
+}
+
+.recommendations h4 {
+    margin-bottom: 1rem;
+    font-weight: 600;
+}
+
+.movie-cards {
+    display: flex;
+    gap: 1rem;
+}
+
+.movie-cards img {
+    width: 150px;
+    height: 210px;
+    object-fit: cover;
+    border-radius: 10px;
+}
