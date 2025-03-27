@@ -121,5 +121,6 @@ body {
     width: 150px;
     height: 210px;
     object-fit: cover;
-    border-radius: 10px;
+    justify-content: center;
+    border-radius: 15px;
 }
