@@ -1,0 +1,104 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    color: white;
+    background: linear-gradient(to right, #131010, #543A14, #F0BB78);
+    min-height: 100vh;
+    overflow-x: hidden;
+    user-select: none;
+}
+
+.navbar {
+    display: flex;
+    gap: 1.5rem;
+    font-weight: 600;
+}
+
+.navbar a {
+    color: white;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.navbar a:hover {
+    color: #ffcb6b;
+}
+.main-container {
+    display: flex;
+}
+
+.vaultive-message-container {
+    display: flex;
+    flex: 1;
+    justify-content: center;
+    align-items: center;
+    height: 50vh;
+    padding: 4rem;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+    flex-direction: column;
+}
+
+.vaultive-message {
+    max-width: 80%;
+}
+.vaultive-message p{
+    font-size: 1.2rem;
+}
+.vaultive-message h1{
+    font-size: 3rem;
+}
+
+.showcase-container {
+    flex: 2;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    box-shadow: 0px 0px 155px black;
+    background: black;
+    border-top-left-radius: 25px;
+    border-bottom-left-radius: 25px;
+    padding: 2rem;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+    justify-content: space-between;
+    height: 90vh;
+    max-width: 60rem;
+
+}
+
+.star-movies-container {
+    flex: 1;
+    display: flex;
+    border: 1px red solid;
+    flex-direction: column;
+}
+.star-movie-img {
+    display: flex;
+    width: 30em;
+    height: 13em;
+    border-radius: 10px;
+    object-fit: cover;
+    object-position: center;
+}
+
+.recommendations-container {
+    flex:2;
+    display: flex;
+    align-items: center;
+    border: 1px white solid;
+}
+.recommendations {
+    display: flex;
+    flex-direction: column;
+}
+.movie-cards {
+    display: flex;
+    flex-direction: row;
+}
