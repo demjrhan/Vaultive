@@ -6,7 +6,6 @@
 }
 
 body {
-    font-family: 'Inter', sans-serif;
     color: white;
     background: black;
     min-height: 100vh;
@@ -103,7 +102,7 @@ header {
     margin-top: 2rem;
     margin-bottom: 2rem;
     justify-content: space-between;
-    height: 90vh;
+    height: 80vh;
     max-width: 80rem;
 
 }
@@ -158,4 +157,11 @@ header {
 }
 .movie-cards:hover img:not(:hover) {
     opacity: 0.8;
+}
+
+@media (min-width: 1280px) {
+    .showcase-container {
+        max-width: 60rem;
+
+    }
 }
