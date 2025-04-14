@@ -79,11 +79,14 @@ body {
     text-align: justify;
 }
 .movie-description p {
+    width: 100%;
     padding-right: 2em;
 }
 .platform-links{
+    position: relative;
     display: flex;
     flex-direction: column;
+    justify-self: flex-end;
     align-items: center;
     justify-content: center;
     width: 3em;
