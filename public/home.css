@@ -12,7 +12,10 @@ body {
     overflow-x: hidden;
     user-select: none;
 }
-
+.wrapper {
+    height: 100vh;
+    width: 100vw;
+}
 header {
     display: flex;
     width: 100%;
@@ -102,7 +105,7 @@ header {
     margin-top: 2rem;
     margin-bottom: 2rem;
     justify-content: space-between;
-    height: 80vh;
+    height: 85vh;
     max-width: 80rem;
 
 }
@@ -158,6 +161,7 @@ header {
 .movie-cards:hover img:not(:hover) {
     opacity: 0.8;
 }
+
 
 @media (min-width: 1280px) {
     .showcase-container {
