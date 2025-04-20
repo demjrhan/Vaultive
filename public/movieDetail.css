@@ -1,6 +1,6 @@
 
 .main-container-detail {
-    display: flex;
+    display: none;
     flex-direction: column;
     width: 80vw;
     height: 80vh;
