@@ -151,6 +151,7 @@ header {
 }
 .movie-cards img {
     border-radius: 25px;
+    height: 18rem;
     box-shadow: 0px 0px 10px black;
 }
 
