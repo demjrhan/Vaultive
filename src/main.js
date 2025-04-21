@@ -10,11 +10,16 @@ const featuredMovie = {
 };
 
 const recommendations = [
-  { id: 'raya', src: './public/img/raya-the-last-dragon.jpeg', alt: 'Raya' },
+  { id: 'godfather', src: './public/img/godfather.jpg', alt: 'God Father' },
+  {
+    id: 'pulpfiction',
+    src: './public/img/pulpfiction.jpg',
+    alt: 'Pulp Fiction',
+  },
   { id: 'johnwick', src: './public/img/john_wick.png', alt: 'John Wick' },
   { id: 'deadpool', src: './public/img/deadpool.png', alt: 'Deadpool' },
-  { id: 'westworld', src: './public/img/westworld.png', alt: 'Westworld' },
-  { id: 'avangers', src: './public/img/avangers.png', alt: 'Avangers' },
+  { id: 'avengers', src: './public/img/avengers.png', alt: 'Avengers' },
+  { id: 'raya', src: './public/img/raya-the-last-dragon.jpeg', alt: 'Raya' },
 ];
 
 const details = [
@@ -24,7 +29,7 @@ const details = [
     alt: 'Raya',
     title: 'Raya',
     description:
-      'A fearless warrior named Raya embarks on a quest to find the last dragon...',
+      'Raya is a skilled warrior on a quest to find the last dragon and unite the fractured land of Kumandra. The movie blends Southeast Asian culture with stunning animation and heartfelt storytelling. As she faces challenges and betrayals, Raya learns the true meaning of trust and unity. This fantasy adventure is rich in emotion, action, and mythical wonder.',
     background: "url('../public/gif/raya.gif')",
   },
   {
@@ -32,8 +37,7 @@ const details = [
     src: 'public/img/john_wick.png',
     alt: 'John Wick',
     title: 'John Wick',
-    description:
-      'A retired hitman seeks vengeance against those who wronged him...',
+    description: "John Wick is a former assassin drawn back into the criminal underworld after the death of his beloved dog, a final gift from his late wife. The film is known for its stylish action sequences, intense choreography, and iconic gun-fu combat. Keanu Reeves delivers a powerful performance as a man driven by grief and vengeance. It sets a new standard for modern action films with a unique visual style.",
     background: "url('../public/gif/john-wick.gif')",
   },
   {
@@ -41,27 +45,32 @@ const details = [
     src: 'public/img/deadpool.png',
     alt: 'Deadpool',
     title: 'Deadpool',
-    description:
-      'Wade Wilson becomes the anti-hero Deadpool after a rogue experiment...',
+    description: "Deadpool tells the story of Wade Wilson, a former special forces operative who becomes a wise-cracking anti-hero after a rogue experiment. Breaking the fourth wall, Deadpool delivers nonstop humor and over-the-top violence. The film is a refreshing and irreverent take on the superhero genre. It balances its chaotic energy with a surprisingly emotional backstory.",
     background: "url('../public/gif/deadpool.gif')",
   },
   {
-    id: 'westworld',
-    src: 'public/img/westworld.png',
-    alt: 'Westworld',
-    title: 'Westworld',
-    description:
-      'A futuristic theme park where AI hosts begin to gain consciousness...',
-    background: "url('./gif/raya.gif')",
+    id: 'pulpfiction',
+    src: 'public/img/pulpfiction.png',
+    alt: 'Pulp Fiction',
+    title: 'Pulp Fiction',
+    description: "Pulp Fiction is a cult classic directed by Quentin Tarantino, weaving multiple crime stories in a non-linear narrative. It features unforgettable characters like Vincent Vega and Jules Winnfield, whose dialogue has become iconic. The film is praised for its unique storytelling, eclectic soundtrack, and dark humor. It’s a landmark in independent cinema and a must-watch for film lovers.",
+    background: "url('../public/gif/pulpfiction.gif')",
   },
   {
-    id: 'avangers',
-    src: 'public/img/avangers.png',
-    alt: 'Avangers',
+    id: 'avengers',
+    src: 'public/img/avengers.png',
+    alt: 'Avengers',
     title: 'Avengers',
-    description:
-      "Earth's mightiest heroes unite to fight threats beyond any one hero's capabilities...",
-    background: "url('./gif/raya.gif')",
+    description: "Avengers brings together Marvel's greatest superheroes in an epic battle to save the world from Loki and the Chitauri army. It’s a thrilling culmination of the MCU's Phase One, filled with action, humor, and memorable team dynamics. The chemistry between Iron Man, Captain America, Thor, Hulk, Black Widow, and Hawkeye is electric. This blockbuster redefined superhero ensemble films.",
+    background: "url('../public/gif/avengers.gif')",
+  },
+  {
+    id: 'godfather',
+    src: 'public/img/godfather.jpg',
+    alt: 'God Father',
+    title: 'God Father',
+    description: "The Godfather is a cinematic masterpiece that chronicles the rise of Michael Corleone in the powerful Italian-American mafia family. It explores themes of loyalty, power, and family through unforgettable storytelling. The film’s direction, performances, and score are critically acclaimed and deeply influential. It remains one of the greatest and most respected films in history.",
+    background: "url('../public/gif/godfather.gif')",
   },
 ];
 
