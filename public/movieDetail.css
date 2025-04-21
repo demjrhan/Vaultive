@@ -56,13 +56,17 @@
     height: 100%;
 }
 .movie-title-detail{
-    padding-top: 2em;
-    padding-left: 2em;
+    align-self: flex-start;
+    font-size: 2rem;
+    margin-top: 1em;
+    margin-left: 1em;
+
 }
 .movie-description-detail{
     display: flex;
     flex-direction: column;
     width: 100%;
+
 }
 .movie-text-description-detail{
     padding-left: 2em;
