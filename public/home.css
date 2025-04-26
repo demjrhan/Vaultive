@@ -26,32 +26,7 @@ header {
     padding-top: 16px;
 }
 
-.profile {
-    display: flex;
-    flex-direction: row;
-    width: 100%;
-    height: 56px;
-    align-items: center;
-    justify-content: flex-end;
-    padding-right: 16px;
-}
 
-.profile-button {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
-    width: 128px;
-    text-decoration: none;
-    color: white;
-    font-size: 22px;
-    transition: color 0.3s ease;
-    text-shadow: 0px 0px 15px black;
-}
-
-.profile-button:hover {
-    color: #ffcb6b;
-}
 
 .navbar {
     display: flex;
@@ -83,10 +58,6 @@ header {
     margin-top: 2rem;
     margin-bottom: 2rem;
     flex-direction: column;
-}
-
-.vaultive-message {
-    max-width: 60%;
 }
 
 .vaultive-message p {
