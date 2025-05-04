@@ -13,7 +13,6 @@ export const recommendations = [
   { id: 'scarface', src: 'public/img/scarface-poster.png', alt: 'Scarface' },
   { id: 'deadpool', src: './public/img/deadpool-poster.png', alt: 'Deadpool' },
   { id: 'johnwick', src: './public/img/john-wick-poster.png', alt: 'John Wick' },
-  { id: 'raya', src: './public/img/raya-the-last-dragon-poster.png', alt: 'Raya' },
   { id: 'godfather', src: './public/img/godfather-poster.png', alt: 'God Father' },
 ];
 

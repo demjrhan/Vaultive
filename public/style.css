@@ -80,7 +80,7 @@ header {
     display: flex;
     flex-direction: column;
     position: relative;
-    box-shadow: 0px 0px 155px black;
+    box-shadow: 0 0 155px black;
     background-image: url('./gif/raya.gif');
     background-repeat: no-repeat;
     background-size: cover;
@@ -156,10 +156,29 @@ header {
     opacity: 0.8;
 }
 
+@media (max-width: 1280px) {
+    .vaultive-message h1 {
+        font-size: 2.5rem;
+    }
 
-@media (min-width: 1280px) {
+    .vaultive-message p {
+        font-size: 1.1rem;
+    }
+
     .showcase-container {
-        max-width: 60rem;
+        padding: 1.5rem;
+        margin: 1.5rem;
+        height: auto;
+        max-width: 60%;
+        gap: 20px;
+    }
 
+    .star-movie-img {
+        width: 100%;
+        height: auto;
+    }
+
+    .movie-cards img {
+        height: 16rem;
     }
 }
