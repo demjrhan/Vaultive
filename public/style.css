@@ -12,13 +12,12 @@ body {
     overflow-x: hidden;
     user-select: none;
 }
+
 body.detail-view-open .main-container {
     pointer-events: none;
     user-select: none;
     filter: grayscale(100%) blur(5px);
 }
-
-
 
 .wrapper {
     height: 100vh;
@@ -32,8 +31,6 @@ header {
     align-items: center;
     padding-top: 16px;
 }
-
-
 
 .navbar {
     display: flex;
@@ -55,6 +52,7 @@ header {
     display: flex;
 }
 
+/* Vaultive Message */
 .vaultive-message-container {
     display: flex;
     flex: 1;
@@ -67,14 +65,15 @@ header {
     flex-direction: column;
 }
 
-.vaultive-message p {
-    font-size: 1.2rem;
-}
-
 .vaultive-message h1 {
     font-size: 3rem;
 }
 
+.vaultive-message p {
+    font-size: 1.2rem;
+}
+
+/* Showcase Container */
 .showcase-container {
     flex: 2;
     display: flex;
@@ -91,18 +90,16 @@ header {
     margin-top: 2rem;
     margin-bottom: 2rem;
     justify-content: space-between;
-    height: 85vh;
+    height: 90vh;
     max-width: 80rem;
-
-
 }
 
+/* Star Movies */
 .star-movies-container {
     flex: 1;
     display: flex;
     flex-direction: column;
     justify-content: center;
-
 }
 
 .star-movie-img {
@@ -119,6 +116,7 @@ header {
     color: #F0BB78;
 }
 
+/* Recommendations */
 .recommendations-container {
     flex: 1;
     display: flex;
@@ -131,14 +129,19 @@ header {
     gap: 1rem;
 }
 
+.movie-cards-wrapper {
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
 .movie-cards {
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
     gap: 1.5rem;
-    transition: transform 0.6s,
-    opacity 0.6s ease;
-
+    transition: transform 0.6s, opacity 0.6s ease;
+    width: 60vw;
 }
 
 .movie-cards img {
@@ -156,7 +159,43 @@ header {
     opacity: 0.8;
 }
 
+/* Navigation Buttons */
+.nav-button {
+    background: black;
+    border: none;
+    color: white;
+    font-size: 2rem;
+    cursor: pointer;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background 0.3s ease;
+    z-index: 1000;
+}
+
+.prev-button {
+    position: sticky;
+    left: 0;
+    top: 50%;
+    margin-right: 1rem;
+}
+
+.next-button {
+    position: sticky;
+    right: 0;
+    top: 50%;
+    margin-left: 1rem;
+}
+
+/* Media Queries */
 @media (max-width: 1280px) {
+    .showcase-container {
+        max-width: 55rem;
+    }
+
     .vaultive-message h1 {
         font-size: 2.5rem;
     }
@@ -165,20 +204,7 @@ header {
         font-size: 1.1rem;
     }
 
-    .showcase-container {
-        padding: 1.5rem;
-        margin: 1.5rem;
-        height: auto;
-        max-width: 60%;
-        gap: 20px;
-    }
-
-    .star-movie-img {
-        width: 100%;
-        height: auto;
-    }
-
     .movie-cards img {
-        height: 16rem;
+        height: 15rem;
     }
 }
