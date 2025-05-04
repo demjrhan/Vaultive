@@ -10,7 +10,7 @@ body {
     background: black;
     min-height: 100vh;
     overflow-x: hidden;
-    user-select: none;
+    user-select: none; /* Consider narrowing this scope if needed */
 }
 
 body.detail-view-open .main-container {
@@ -20,8 +20,8 @@ body.detail-view-open .main-container {
 }
 
 .wrapper {
-    height: 100vh;
-    width: 100vw;
+    height: 100dvh; /* More reliable on mobile */
+    width: 100dvw;
 }
 
 header {
@@ -65,6 +65,11 @@ header {
     flex-direction: column;
 }
 
+.vaultive-message h1,
+.vaultive-message p {
+    transition: font-size 0.3s ease;
+}
+
 .vaultive-message h1 {
     font-size: 3rem;
 }
@@ -92,7 +97,11 @@ header {
     justify-content: space-between;
     height: 90vh;
     max-width: 80rem;
+    transition:
+            max-width 0.3s ease,
+            padding 0.3s ease;
 }
+
 
 /* Star Movies */
 .star-movies-container {
@@ -131,28 +140,37 @@ header {
 
 .movie-cards-wrapper {
     display: flex;
+    flex-direction: row;
     align-items: center;
-    position: relative;
+    width: 100%;
+    gap: 4rem;
+    transition: padding 0.3s ease, gap 0.3s ease;
 }
+
 
 .movie-cards {
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
     gap: 1.5rem;
-    transition: transform 0.6s, opacity 0.6s ease;
-    width: 60vw;
+    transition: gap 0.3s ease;
+
 }
 
 .movie-cards img {
     border-radius: 25px;
     height: 18rem;
     box-shadow: 0px 0px 10px black;
+    transition:
+            transform 0.3s ease,
+            box-shadow 0.3s ease,
+            height 0.3s ease,
+            border-radius 0.3s ease;
 }
 
 .movie-cards img:hover {
     box-shadow: 0px 0px 25px black;
-    scale: 1.1;
+    transform: scale(1.1); /* Replaces shorthand scale */
 }
 
 .movie-cards:hover img:not(:hover) {
@@ -160,7 +178,7 @@ header {
 }
 
 /* Navigation Buttons */
-.nav-button {
+.nav-button button{
     background: black;
     border: none;
     color: white;
@@ -172,28 +190,80 @@ header {
     display: flex;
     justify-content: center;
     align-items: center;
-    transition: background 0.3s ease;
     z-index: 1000;
+    transition:
+            background 0.3s ease,
+            width 0.3s ease,
+            height 0.3s ease,
+            font-size 0.3s ease,
+            transform 0.3s ease;
 }
 
 .prev-button {
-    position: sticky;
     left: 0;
-    top: 50%;
-    margin-right: 1rem;
+    order: -1;
 }
 
 .next-button {
-    position: sticky;
     right: 0;
-    top: 50%;
-    margin-left: 1rem;
+    order: 1;
+}
+/* Animation classes for movie cards */
+.fade-out {
+    animation: fadeOut 0.3s forwards;
 }
 
+.fade-in {
+    animation: fadeIn 0.3s forwards;
+}
+
+/* Slide left (for next) */
+@keyframes slideOutLeft {
+    from { opacity: 1; transform: translateX(0); }
+    to { opacity: 0; transform: translateX(-50px); }
+}
+
+@keyframes slideInRight {
+    from { opacity: 0; transform: translateX(50px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+/* Slide right (for previous) */
+@keyframes slideOutRight {
+    from { opacity: 1; transform: translateX(0); }
+    to { opacity: 0; transform: translateX(50px); }
+}
+
+@keyframes slideInLeft {
+    from { opacity: 0; transform: translateX(-50px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+/* Classes to apply */
+.slide-out-left {
+    animation: slideOutLeft 0.3s forwards;
+}
+
+.slide-in-right {
+    animation: slideInRight 0.3s forwards;
+}
+
+.slide-out-right {
+    animation: slideOutRight 0.3s forwards;
+}
+
+.slide-in-left {
+    animation: slideInLeft 0.3s forwards;
+}
+
+
 /* Media Queries */
-@media (max-width: 1280px) {
+@media (max-width: 1300px) {
     .showcase-container {
         max-width: 55rem;
+    }
+    .movie-cards-wrapper {
+        width: 50rem;
     }
 
     .vaultive-message h1 {
@@ -205,6 +275,17 @@ header {
     }
 
     .movie-cards img {
-        height: 15rem;
+        height: 17rem;
     }
+}
+
+@media (max-width: 1000px) {
+
+    .showcase-container {
+        max-width: 45rem;
+    }
+    .movie-cards-wrapper {
+        width: 40rem;
+    }
+
 }
