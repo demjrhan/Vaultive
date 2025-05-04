@@ -12,6 +12,13 @@ body {
     overflow-x: hidden;
     user-select: none;
 }
+body.detail-view-open .main-container {
+    pointer-events: none;
+    user-select: none;
+    filter: grayscale(100%) blur(5px);
+}
+
+
 
 .wrapper {
     height: 100vh;
