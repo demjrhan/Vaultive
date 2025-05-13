@@ -154,7 +154,6 @@ header {
     flex-wrap: nowrap;
     gap: 1.5rem;
     transition: gap 0.3s ease;
-
 }
 
 .movie-cards img {
@@ -177,37 +176,7 @@ header {
     opacity: 0.8;
 }
 
-/* Navigation Buttons */
-.nav-button button{
-    background: black;
-    border: none;
-    color: white;
-    cursor: pointer;
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-    transition:
-            background 0.3s ease,
-            width 0.3s ease,
-            height 0.3s ease,
-            font-size 0.3s ease,
-            transform 0.3s ease;
-    font-size: 1.5rem;
-}
 
-.prev-button {
-    left: 0;
-    order: -1;
-}
-
-.next-button {
-    right: 0;
-    order: 1;
-}
 /* Animation classes for movie cards */
 .fade-out {
     animation: fadeOut 0.3s forwards;
@@ -257,24 +226,30 @@ header {
 }
 
 
-/* Media Queries */
 @media (max-width: 1300px) {
-    .showcase-container {
-        max-width: 55rem;
+
+    .main-container {
+        flex-direction: column;
+        align-items: center;
     }
-    .movie-cards-wrapper {
-        width: 50rem;
-        gap: 4rem;
+
+    .showcase-container {
+        bottom: 0;
+        gap: 50px;
+        width: 90%;
+        height: auto;
+        margin-top: 0;
+        margin-bottom: 0;
+        border-radius: 25px 25px 0 0;
     }
 
     .vaultive-message h1 {
-        font-size: 2.5rem;
+        font-size: 3rem;
     }
 
     .vaultive-message p {
-        font-size: 1.1rem;
+        font-size: 1.7rem;
     }
-
 
     .movie-cards img {
         height: 17rem;
@@ -282,13 +257,104 @@ header {
 }
 
 @media (max-width: 1000px) {
+    .showcase-container {
+        gap: 40px;
+        padding: 1.5rem;
+    }
+
+    .vaultive-message h1 {
+        font-size: 2.5rem;
+    }
+
+    .vaultive-message p {
+        font-size: 1.4rem;
+        text-align: center;
+    }
+
+    .movie-cards img {
+        height: 15rem;
+    }
+
+
+    .movie-cards-wrapper {
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+
+    .movie-cards {
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+}
+
+@media (max-width: 600px) {
+    body {
+        font-size: 90%;
+    }
+
+    header {
+        flex-direction: column;
+        height: auto;
+        padding: 1rem 0;
+        text-align: center;
+    }
+
+    .navbar {
+        flex-direction: column;
+        gap: 0.8rem;
+        align-items: center;
+        padding-bottom: 1rem;
+    }
 
     .showcase-container {
-        width: 45rem;
-    }
-    .movie-cards-wrapper {
-        width: 40rem;
-        gap: 5rem;
+        gap: 25px;
+        padding: 1rem;
+        width: 95%;
+        border-radius: 20px;
     }
 
+    .vaultive-message-container {
+        padding: 2rem 1rem;
+        text-align: center;
+    }
+
+    .vaultive-message h1 {
+        font-size: 1.8rem;
+        line-height: 2.2rem;
+    }
+
+    .vaultive-message p {
+        font-size: 1.1rem;
+        line-height: 1.6rem;
+    }
+
+    .movie-cards-wrapper {
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .movie-cards {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 1rem;
+    }
+
+    .movie-cards img {
+        height: 10rem;
+        border-radius: 12px;
+    }
+
+    .star-movie-img {
+        width: 100%;
+        height: auto;
+    }
+
+    .recommendations-container {
+        flex-direction: column;
+        align-items: center;
+        padding: 1rem 0;
+    }
 }
+

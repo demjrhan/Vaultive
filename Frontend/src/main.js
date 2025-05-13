@@ -8,4 +8,8 @@ document.addEventListener('DOMContentLoaded', () => {
   renderRecommendations(recommendations);
   closeDetailOnClick();
   closeDetailOnEscape();
+
+  window.addEventListener('resize', () => {
+    renderRecommendations(recommendations);
+  });
 });
