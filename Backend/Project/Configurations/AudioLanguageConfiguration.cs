@@ -13,7 +13,7 @@ namespace Project.Configurations
             
             builder.HasOne(a => a.AudioOption)
                 .WithMany(ao => ao.AudioLanguages)
-                .HasForeignKey(al => al.AudioOptionId)
+                .HasForeignKey(al => al.MediaTitle)
                 .OnDelete(DeleteBehavior.Cascade);
         }
     }

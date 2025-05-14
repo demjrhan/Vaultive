@@ -2,7 +2,6 @@
 
 public class SubtitleOption
 {
-    public int Id { get; set; }
 
     public ICollection<SubtitleLanguage> SubtitleLanguages { get; set; } = new HashSet<SubtitleLanguage>();
 

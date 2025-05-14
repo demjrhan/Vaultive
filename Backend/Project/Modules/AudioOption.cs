@@ -2,7 +2,6 @@
 
 public class AudioOption
 {
-    public int Id { get; set; }
 
     public ICollection<AudioLanguage> AudioLanguages { get; set; } = new HashSet<AudioLanguage>();
 

@@ -12,7 +12,7 @@ namespace Project.Configurations
             builder.Property(sl => sl.Language).HasMaxLength(50).IsRequired();
             builder.HasOne(s => s.SubtitleOption)
                 .WithMany(so => so.SubtitleLanguages)
-                .HasForeignKey(sl => sl.SubtitleOptionId)
+                .HasForeignKey(sl => sl.MediaTitle)
                 .OnDelete(DeleteBehavior.Cascade);
             
         }

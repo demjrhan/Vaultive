@@ -13,7 +13,6 @@ namespace Project.Configurations
             builder.HasOne(ao => ao.MediaContent)
                 .WithOne(m => m.AudioOption)
                 .HasForeignKey<AudioOption>(ao => ao.MediaTitle)
-                .HasPrincipalKey<MediaContent>(m => m.Title)
                 .OnDelete(DeleteBehavior.Cascade);
 
             

@@ -150,15 +150,6 @@ public static class SampleData
                         new() { Language = "German" }
                     }
                 },
-                AudioOption = new AudioOption
-                {
-                    MediaTitle = "The Matrix",
-                    AudioLanguages = new List<AudioLanguage>
-                    {
-                        new() { Language = "English" },
-                        new() { Language = "Spanish" }
-                    }
-                }
             };
 
             var movie2 = new Movie
@@ -176,14 +167,6 @@ public static class SampleData
                     SubtitleLanguages = new List<SubtitleLanguage>
                     {
                         new() { Language = "English" }
-                    }
-                },
-                AudioOption = new AudioOption
-                {
-                    MediaTitle = "Romantic Escape",
-                    AudioLanguages = new List<AudioLanguage>
-                    {
-                        new() { Language = "French" }
                     }
                 }
             };
