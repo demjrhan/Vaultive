@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 using Project.Context;
 using Project.Repositories;
@@ -8,10 +9,16 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddOpenApi();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    /* This option removes the nulls from the json.*/
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+    });
+
 builder.Services.AddDbContext<MasterContext>(options => options.UseSqlite("Data Source=vaultive.db"));
 builder.Services.AddScoped<UserRepository>();
-builder.Services.AddScoped<SubscriptionConfirmationRepository>();
+builder.Services.AddScoped<SubscriptionRepository>();
 builder.Services.AddScoped<UserService>();
 
 var app = builder.Build();

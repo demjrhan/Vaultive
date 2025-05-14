@@ -8,46 +8,52 @@ namespace Project.Services;
 public class UserService
 {
     private readonly UserRepository _userRepository;
-    private readonly SubscriptionConfirmationRepository _subscriptionConfirmationRepository;
+    private readonly SubscriptionRepository _subscriptionRepository;
 
     public UserService(UserRepository userRepository,
-        SubscriptionConfirmationRepository subscriptionConfirmationRepository)
+        SubscriptionRepository subscriptionRepository)
     {
         _userRepository = userRepository;
-        _subscriptionConfirmationRepository = subscriptionConfirmationRepository;
+        _subscriptionRepository = subscriptionRepository;
     }
 
     public async Task<UserWithSubscriptionsDTO> GetUserWithSubscriptions(int userId)
     {
         var user = await _userRepository.GetUserWithIdAsync(userId);
-        var subscriptionConfirmations =
-            await _subscriptionConfirmationRepository.GetUsersSubscriptionConfirmationsAsync(userId);
+        var activeSubscriptions = await _subscriptionRepository.GetUserActiveSubscriptionsAsync(userId);
+
         if (user == null)
         {
             throw new UserNotFoundException(userId);
         }
 
-        if (subscriptionConfirmations == null)
+        if (activeSubscriptions == null)
         {
             throw new SubscriptionsNotFoundException(userId);
         }
 
-        return new UserWithSubscriptionsDTO()
+        var subscriptionDtos = await Task.WhenAll(activeSubscriptions.Select(async sc =>
+        {
+            var confirmation = await _subscriptionRepository.GetConfirmationDetailsForSubscription(sc);
+
+            return confirmation == null ? null : new SubscriptionResponseDTO
             {
-                User = new UserResponseDTO()
-                {
-                    Country = user.Country,
-                    Firstname = user.Firstname,
-                    Lastname = user.Lastname,
-                    Nickname = user.Nickname,
-                    Status = user.Status.ToString()
-                },
-                Subscriptions = subscriptionConfirmations.Select(sc => new SubscriptionResponseDTO
-                {
-                    DaysLeft = (sc.EndTime - DateTime.Today).Days,
-                    Price = sc.Amount,
-                    StreamingServiceName = sc.Subscription.StreamingService.Name
-                }).ToList()
+                DaysLeft = sc.DurationInDays,
+                Price = confirmation.Price, 
+                StreamingServiceName = sc.StreamingService.Name
             };
+        }));
+
+        return new UserWithSubscriptionsDTO
+        {
+            User = new UserResponseDTO
+            {
+                Country = user.Country,
+                Nickname = user.Nickname,
+                Status = user.Status.ToString()
+            },
+            Subscriptions = subscriptionDtos.Where(s => s != null)!
+        };
     }
+
 }

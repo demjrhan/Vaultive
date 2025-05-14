@@ -9,7 +9,7 @@ public class SubscriptionConfirmation
 
     public string PaymentMethod { get; set; } = null!;
 
-    public double Amount => CalculateAmount();
+    public double Price => CalculateAmount();
 
     public DateTime StartTime { get; set; }
     public DateTime EndTime { get; set; }

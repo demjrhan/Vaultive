@@ -9,16 +9,14 @@ public class Subscription
     public double DefaultPrice { get; set; }
     
     [NotMapped]
-    public int? DurationInDays
+    public int DurationInDays
     {
         get
         {
             var latest = Confirmations.MaxBy(c => c.StartTime);
-            return latest == null ? null : (int)(latest.EndTime - latest.StartTime).TotalDays;
+            return latest == null ? 0 : (int)(latest.EndTime - latest.StartTime).TotalDays;
         }
     }
-
-
 
     public ICollection<SubscriptionConfirmation> Confirmations { get; set; } = new HashSet<SubscriptionConfirmation>();
     
