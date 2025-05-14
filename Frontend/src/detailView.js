@@ -26,13 +26,7 @@ export function showMovieDetail(movie) {
 
 }
 
-export function closeDetailOnClick() {
-  window.onclick = function (event) {
-    if (event.target === detailContainer) {
-      closeDetailView();
-    }
-  };
-}
+
 
 export function closeDetailOnEscape() {
   window.addEventListener('keydown', (e) => {

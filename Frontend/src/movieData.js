@@ -17,18 +17,10 @@ export const recommendations = [
 ];
 
 export const details = [
-  {
-    id: 'raya',
-    src: 'public/img/raya-the-last-dragon-poster.png',
-    alt: 'Raya',
-    title: 'Raya',
-    description:
-      'Raya is a skilled warrior on a quest to find the last dragon...',
-    background: "url('../public/img/star/raya-the-last-dragon-background.png')",
-    backgroundGif: "url('../public/gif/raya.gif')",
-  },
+  
   {
     id: 'johnwick',
+    genres: ['Action', 'Thriller'],
     src: 'public/img/john-wick-poster.png',
     alt: 'John Wick',
     title: 'John Wick',
@@ -39,6 +31,7 @@ export const details = [
   },
   {
     id: 'deadpool',
+    genres: ['Action', 'Comedy', 'Superhero'],
     src: 'public/img/deadpool-poster.png',
     alt: 'Deadpool',
     title: 'Deadpool',
@@ -49,6 +42,7 @@ export const details = [
   },
   {
     id: 'pulpfiction',
+    genres: ['Crime', 'Drama'],
     src: 'public/img/pulpfiction-poster.png',
     alt: 'Pulp Fiction',
     title: 'Pulp Fiction',
@@ -59,6 +53,7 @@ export const details = [
   },
   {
     id: 'avengers',
+    genres: ['Action', 'Superhero', 'Sci-Fi'],
     src: 'public/img/avengers-poster.png',
     alt: 'Avengers',
     title: 'Avengers',
@@ -69,6 +64,7 @@ export const details = [
   },
   {
     id: 'godfather',
+    genres: ['Crime', 'Drama'],
     src: 'public/img/godfather-poster.png',
     alt: 'God Father',
     title: 'God Father',
@@ -79,6 +75,7 @@ export const details = [
   },
   {
     id: 'scarface',
+    genres: ['Crime', 'Drama'],
     src: 'public/img/scarface-poster.png',
     alt: 'Scarface',
     title: 'Scarface',
@@ -86,5 +83,5 @@ export const details = [
       "Scarface follows the rise and fall of Tony Montana, a Cuban immigrant...",
     background: "url('../public/img/scarface-background.png')",
     backgroundGif: "url('../public/gif/scarface.gif')",
-  },
+  }
 ];

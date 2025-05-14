@@ -4,6 +4,8 @@
   <meta charset="UTF-8">
   <link rel="stylesheet" href="public/style.css">
   <link rel="stylesheet" href="public/movieDetail.css">
+  <link rel="stylesheet" href="public/moviePage.css">
+  <title></title>
 </head>
 <script>
 
@@ -26,7 +28,7 @@
     <div class="showcase-container">
       <div class="navigation-container">
         <nav class="navbar">
-          <a href="test/test.html">MOVIES</a>
+          <a href="#" id="movies-link">MOVIES</a>
           <a href="#">GENRES</a>
         </nav>
       </div>
@@ -63,8 +65,41 @@
 
   </div>
 
+  <div class="movies-popup-container">
+    <div class="inner-container">
+      <div class="navigation-bar">
+        <div class="home-button">H</div>
+      </div>
+
+      <div class="search-bar">
+        <label>
+          <input type="text" class="search-area" placeholder="Search" />
+        </label>
+      </div>
+
+      <div class="content-box">
+
+        <div class="genre-container">
+          <div class="title-buttons-wrapper">
+            <h2 class="genre-title">Action</h2>
+            <div class="scroll-buttons">
+              <button class="scroll-button left">&#10094;</button>
+              <button class="scroll-button right">&#10095;</button>
+            </div>
+          </div>
+          <div class="movies">
+            <div class="movie-posters">
+            </div>
+          </div>
+        </div>
+
+        <!-- More genres if you want -->
+      </div>
+    </div>
+  </div>
 </div>
 
 <script type="module" src="src/main.js"></script>
+
 </body>
 </html>

@@ -1,15 +1,22 @@
 import { renderFeaturedMovie } from './renderFeatured.js';
 import { renderRecommendations } from './renderRecommendations.js';
-import { closeDetailOnClick, closeDetailOnEscape } from './detailView.js';
-import { featuredMovie, recommendations } from './movieData.js';
+import { closeDetailOnEscape } from './detailView.js';
+import { details, featuredMovie, recommendations } from './movieData.js';
+import { openMoviesPopup } from './moviesPage.js';
+import { renderMovies } from './renderMovies.js';
 
 document.addEventListener('DOMContentLoaded', () => {
   renderFeaturedMovie(featuredMovie);
   renderRecommendations(recommendations);
-  closeDetailOnClick();
   closeDetailOnEscape();
 
   window.addEventListener('resize', () => {
     renderRecommendations(recommendations);
+  });
+
+  const moviesButton = document.getElementById('movies-link');
+  moviesButton.addEventListener('click', () => {
+    openMoviesPopup();
+    renderMovies(details);
   });
 });
