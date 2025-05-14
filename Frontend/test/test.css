@@ -11,7 +11,7 @@ body, html {
     width: 100vw;
     height: 100vh;
     background-color: black;
-    font-family: sans-serif;
+    font-family: Poppins, sans-serif;
     color: white;
     overflow: auto;
     scrollbar-width: none;
@@ -52,7 +52,6 @@ body, html {
 
 .home-button {
     font-size: 1.2rem;
-    font-family: 'Poppins', sans-serif;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -148,9 +147,6 @@ body, html {
     flex-wrap: nowrap;
     gap: 1.5rem;
     transition: gap 0.3s ease;
-    padding-left: 4rem;
-    padding-right: 4rem;
-    overflow: hidden;
 }
 
 
@@ -175,33 +171,44 @@ body, html {
 .movie-posters:hover img:not(:hover) {
     opacity: 0.8;
 }
-.scroll-button {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    width: 3rem;
-    border: none;
-    color: white;
-    font-size: 2rem;
-    background: rgba(0, 0, 0, 0.4);
+
+
+.title-buttons-wrapper {
     display: flex;
+    flex-direction: row;
     align-items: center;
-    justify-content: center;
-    z-index: 2;
+    gap: 1rem;
+}
+.genre-title {
+    font-size: 2rem;
+}
+.scroll-buttons {
+    display: flex;
+}
+
+/* Common styles for both buttons */
+.scroll-button {
+    width: 30px;
+    height: 30px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: black;
     cursor: pointer;
-    transition: background 0.3s ease;
+    border: none;
+    transition: all 0.3s ease;
 }
 
+/* LEFT Button: Unique border-radius and colors */
 .scroll-button.left {
-    left: 0;
-    background: linear-gradient(to right, rgba(0,0,0,0.7), transparent);
+    border-radius: 20px 0 0 20px;
 }
 
+/* RIGHT Button: Mirrored shape and different colors */
 .scroll-button.right {
-    right: 0;
-    background: linear-gradient(to left, rgba(0,0,0,0.7), transparent);
+    border-radius: 0 20px 20px 0;
 }
 
+/* Hover effect */
 .scroll-button:hover {
-    background-color: rgba(0, 0, 0, 0.7);
+    box-shadow: 0 0 25px rgba(255, 255, 255, 0.4);
 }
