@@ -1,4 +1,4 @@
-﻿namespace Project.Modules.Enumerations;
+﻿namespace Project.Models.Enumerations;
 
 public enum Topic
 {

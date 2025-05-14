@@ -1,5 +1,5 @@
 ﻿
-namespace Project.Modules;
+namespace Project.Models;
 
 public abstract class MediaContent
 {

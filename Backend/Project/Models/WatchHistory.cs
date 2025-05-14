@@ -1,4 +1,4 @@
-﻿namespace Project.Modules;
+﻿namespace Project.Models;
 
 public class WatchHistory
 {

@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Project.Modules;
+using Project.Models;
 
 namespace Project.Context;
 

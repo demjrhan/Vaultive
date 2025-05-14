@@ -1,6 +1,6 @@
-﻿using Project.Modules.Enumerations;
+﻿using Project.Models.Enumerations;
 
-namespace Project.Modules;
+namespace Project.Models;
 
 public class Movie : MediaContent
 {

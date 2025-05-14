@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Project.Modules;
+namespace Project.Models;
 
 public class Subscription
 {

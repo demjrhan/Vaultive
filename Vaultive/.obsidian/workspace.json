@@ -4,39 +4,24 @@
     "type": "split",
     "children": [
       {
-        "id": "1b2182956bbee4a4",
+        "id": "19c7edc91f71eaef",
         "type": "tabs",
         "children": [
           {
-            "id": "9bd757fd0eebc461",
+            "id": "a42da3dc426a547d",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Diagram.md",
+                "file": "Implementation.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Diagram"
-            }
-          },
-          {
-            "id": "41dd50b404330bf6",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "Diagram.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "Diagram"
+              "title": "Implementation"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "vertical"
@@ -183,8 +168,9 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "41dd50b404330bf6",
+  "active": "a42da3dc426a547d",
   "lastOpenFiles": [
+    "a.md",
     "Implementation.md",
     "Diagram.md"
   ]

@@ -1,6 +1,6 @@
-﻿using Project.Modules.Enumerations;
+﻿using Project.Models.Enumerations;
 
-namespace Project.Modules.Interfaces;
+namespace Project.Models.Interfaces;
 
 public interface IMediaContent
 {
