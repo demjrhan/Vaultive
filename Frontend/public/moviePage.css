@@ -7,7 +7,15 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    position: relative; /* required for absolute children */
+    position: relative;
+    scroll-behavior: smooth;
+    /* Hide scrollbar for Firefox */
+    scrollbar-width: none;
+}
+
+/* Hide scrollbar for WebKit (Chrome, Safari, Edge) */
+.content-box::-webkit-scrollbar {
+    display: none;
 }
 
 .navigation-bar {

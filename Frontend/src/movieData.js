@@ -17,7 +17,7 @@ export const recommendations = [
 ];
 
 export const details = [
-  
+
   {
     id: 'johnwick',
     genres: ['Action', 'Thriller'],

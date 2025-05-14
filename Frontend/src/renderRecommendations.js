@@ -27,7 +27,7 @@ export function renderRecommendations(recommendations) {
     img.className = 'movie-cards-img';
     img.src = movie.src;
     img.alt = movie.alt;
-    img.addEventListener('click', () => showMovieDetail(movie));
+    img.addEventListener('click', () => showMovieDetail(movie, 'home'));
     movieCardsContainer.appendChild(img);
   });
 }

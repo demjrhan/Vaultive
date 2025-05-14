@@ -12,12 +12,16 @@ body {
     overflow-x: hidden;
     user-select: none; /* Consider narrowing this scope if needed */
 }
-
-body.detail-view-open .main-container {
-    pointer-events: none;
-    user-select: none;
-    filter: grayscale(100%) blur(5px);
+body.detail-overlay-active > *:not(.main-container-detail) {
+    pointer-events: none !important;
+    user-select: none !important;
 }
+
+body.detail-overlay-active {
+    overflow: hidden;
+}
+
+
 
 .wrapper {
     height: 100dvh; /* More reliable on mobile */
@@ -233,7 +237,7 @@ header {
     width: 100dvw;
     background-color: rgba(0, 0, 0, 0.8);
     z-index: 1000;
-    display: none; /* Hidden by default */
+    display: none;
     justify-content: center;
     align-items: center;
     overflow: auto;

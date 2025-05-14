@@ -39,7 +39,7 @@ export function renderMovies(details) {
       const img = document.createElement('img');
       img.src = movie.src;
       img.alt = movie.alt;
-      img.addEventListener('click', () => showMovieDetail(movie));
+      img.addEventListener('click', () => showMovieDetail(movie, 'movies'));
       postersContainer.appendChild(img);
     });
 

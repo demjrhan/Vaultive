@@ -19,14 +19,12 @@ function closeMoviesPopup() {
 }
 
 
-window.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape') {
-    closeMoviesPopup();
-    showcase.style.backgroundImage = `url(${featuredMovie.backgroundGif})`;
-    showcase.style.backgroundRepeat = 'no-repeat';
-    showcase.style.backgroundSize = 'cover';
-    showcase.style.backgroundPosition = 'center';
-  }
+document.getElementById('close-movies-popup')?.addEventListener('click', () => {
+  closeMoviesPopup();
+  showcase.style.backgroundImage = `url(${featuredMovie.backgroundGif})`;
+  showcase.style.backgroundRepeat = 'no-repeat';
+  showcase.style.backgroundSize = 'cover';
+  showcase.style.backgroundPosition = 'center';
 });
 
 
