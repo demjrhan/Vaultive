@@ -15,7 +15,10 @@ namespace Project.Configurations
 
             builder.HasOne(s => s.StreamingService)
                 .WithMany(ss => ss.Subscriptions)
-                .HasForeignKey(s => s.StreamingServiceId);
+                .HasForeignKey(s => s.StreamingServiceId)
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Cascade); 
+
 
             builder.Property(s => s.DefaultPrice).IsRequired();
 

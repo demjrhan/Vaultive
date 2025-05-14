@@ -9,7 +9,7 @@ namespace Project.Configurations
         public void Configure(EntityTypeBuilder<WatchHistory> builder)
         {
 
-            builder.HasKey(wh => wh.Id);
+            builder.HasAlternateKey(wh => new { wh.UserId, wh.MediaTitle });
             builder.Property(wh => wh.WatchDate).IsRequired();
             builder.Property(wh => wh.TimeLeftOf).IsRequired();
             

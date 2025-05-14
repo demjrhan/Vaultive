@@ -14,9 +14,21 @@ public static class SampleData
         {
             var users = new List<User>
             {
-                new() { Firstname = "Alice", Lastname = "Brown", Nickname = "AliB", Email = "alice@example.com", Country = "US", Status = Status.Normal },
-                new() { Firstname = "Bob", Lastname = "Smith", Nickname = "Bobby", Email = "bob@example.com", Country = "UK", Status = Status.Student },
-                new() { Firstname = "Carol", Lastname = "Jones", Nickname = "CJ", Email = "carol@example.com", Country = "CA", Status = Status.Elder },
+                new()
+                {
+                    Firstname = "Alice", Lastname = "Brown", Nickname = "AliB", Email = "alice@example.com",
+                    Country = "US", Status = Status.Normal
+                },
+                new()
+                {
+                    Firstname = "Bob", Lastname = "Smith", Nickname = "Bobby", Email = "bob@example.com",
+                    Country = "UK", Status = Status.Student
+                },
+                new()
+                {
+                    Firstname = "Carol", Lastname = "Jones", Nickname = "CJ", Email = "carol@example.com",
+                    Country = "CA", Status = Status.Elder
+                },
             };
             context.Users.AddRange(users);
             context.SaveChanges();
@@ -37,9 +49,19 @@ public static class SampleData
         {
             var subs = new List<Subscription>
             {
-                new() { DefaultPrice = 9.99, DurationInDays = 30, StreamingServiceId = context.StreamingServices.First().Id },
-                new() { DefaultPrice = 24.99, DurationInDays = 90, StreamingServiceId = context.StreamingServices.Skip(1).First().Id },
-                new() { DefaultPrice = 5.99, DurationInDays = 7, StreamingServiceId = context.StreamingServices.First().Id },
+                new()
+                {
+                    DefaultPrice = 9.99, DurationInDays = 30, StreamingServiceId = context.StreamingServices.First().Id
+                },
+                new()
+                {
+                    DefaultPrice = 24.99, DurationInDays = 90,
+                    StreamingServiceId = context.StreamingServices.Skip(1).First().Id
+                },
+                new()
+                {
+                    DefaultPrice = 5.99, DurationInDays = 7, StreamingServiceId = context.StreamingServices.First().Id
+                },
             };
             context.Subscriptions.AddRange(subs);
             context.SaveChanges();
@@ -169,6 +191,76 @@ public static class SampleData
             context.Movies.AddRange(movie, movie2);
             context.SaveChanges();
         }
-    }
 
+        if (!context.WatchHistories.Any())
+        {
+            var alice = context.Users.FirstOrDefault(u => u.Email == "alice@example.com");
+            var bob = context.Users.FirstOrDefault(u => u.Email == "bob@example.com");
+            var matrix = context.Movies.FirstOrDefault(m => m.Title == "The Matrix");
+            var romantic = context.Movies.FirstOrDefault(m => m.Title == "Romantic Escape");
+
+            var watchHistories = new List<WatchHistory>();
+
+            if (alice != null && matrix != null)
+            {
+                watchHistories.Add(new WatchHistory
+                {
+                    UserId = alice.Id,
+                    MediaTitle = matrix.Title,
+                    WatchDate = DateTime.UtcNow.AddDays(-2),
+                    TimeLeftOf = 0
+                });
+            }
+
+            if (bob != null && romantic != null)
+            {
+                watchHistories.Add(new WatchHistory
+                {
+                    UserId = bob.Id,
+                    MediaTitle = romantic.Title,
+                    WatchDate = DateTime.UtcNow.AddDays(-1),
+                    TimeLeftOf = 10
+                });
+            }
+
+            context.WatchHistories.AddRange(watchHistories);
+            context.SaveChanges();
+        }
+
+        if (!context.Reviews.Any())
+        {
+            var matrixWH = context.WatchHistories
+                .FirstOrDefault(w => w.MediaTitle == "The Matrix");
+
+            var romanticWH = context.WatchHistories
+                .FirstOrDefault(w => w.MediaTitle == "Romantic Escape");
+
+            var reviews = new List<Review>();
+
+            if (matrixWH != null)
+            {
+                reviews.Add(new Review
+                {
+                    UserId = matrixWH.UserId,
+                    MediaTitle = matrixWH.MediaTitle,
+                    Rating = 4.5,
+                    Comment = "A mind-bending classic!"
+                });
+            }
+
+            if (romanticWH != null)
+            {
+                reviews.Add(new Review
+                {
+                    UserId = romanticWH.UserId,
+                    MediaTitle = romanticWH.MediaTitle,
+                    Rating = 3.0,
+                    Comment = "Heartfelt but slow-paced."
+                });
+            }
+
+            context.Reviews.AddRange(reviews);
+            context.SaveChanges();
+        }
+    }
 }

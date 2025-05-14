@@ -177,7 +177,7 @@ namespace Project.Migrations
 
                     b.HasIndex("MediaTitle");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("UserId", "MediaTitle");
 
                     b.ToTable("Reviews");
                 });
@@ -378,8 +378,6 @@ namespace Project.Migrations
 
                     b.HasIndex("TimeLeftOf");
 
-                    b.HasIndex("UserId");
-
                     b.ToTable("WatchHistories");
                 });
 
@@ -503,9 +501,18 @@ namespace Project.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Project.Modules.WatchHistory", "WatchHistory")
+                        .WithMany()
+                        .HasForeignKey("UserId", "MediaTitle")
+                        .HasPrincipalKey("UserId", "MediaTitle")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.Navigation("MediaContent");
 
                     b.Navigation("User");
+
+                    b.Navigation("WatchHistory");
                 });
 
             modelBuilder.Entity("Project.Modules.StreamingService", b =>
