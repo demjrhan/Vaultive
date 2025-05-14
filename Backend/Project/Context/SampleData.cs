@@ -51,16 +51,16 @@ public static class SampleData
             {
                 new()
                 {
-                    DefaultPrice = 9.99, DurationInDays = 30, StreamingServiceId = context.StreamingServices.First().Id
+                    DefaultPrice = 9.99,  StreamingServiceId = context.StreamingServices.First().Id
                 },
                 new()
                 {
-                    DefaultPrice = 24.99, DurationInDays = 90,
+                    DefaultPrice = 24.99, 
                     StreamingServiceId = context.StreamingServices.Skip(1).First().Id
                 },
                 new()
                 {
-                    DefaultPrice = 5.99, DurationInDays = 7, StreamingServiceId = context.StreamingServices.First().Id
+                    DefaultPrice = 5.99, StreamingServiceId = context.StreamingServices.First().Id
                 },
             };
             context.Subscriptions.AddRange(subs);
@@ -84,7 +84,6 @@ public static class SampleData
                     UserId = alice.Id,
                     SubscriptionId = subscriptions[0].Id,
                     PaymentMethod = "CreditCard",
-                    Amount = subscriptions[0].DefaultPrice,
                     StartTime = DateTime.UtcNow.AddDays(-5),
                     EndTime = DateTime.UtcNow.AddDays(25)
                 });
@@ -94,7 +93,6 @@ public static class SampleData
                     UserId = alice.Id,
                     SubscriptionId = subscriptions[1].Id,
                     PaymentMethod = "PayPal",
-                    Amount = subscriptions[1].DefaultPrice,
                     StartTime = DateTime.UtcNow.AddMonths(-1),
                     EndTime = DateTime.UtcNow.AddMonths(2)
                 });
@@ -107,7 +105,6 @@ public static class SampleData
                     UserId = bob.Id,
                     SubscriptionId = subscriptions[2].Id,
                     PaymentMethod = "Voucher",
-                    Amount = 0.0,
                     StartTime = DateTime.UtcNow.AddDays(-3),
                     EndTime = DateTime.UtcNow.AddDays(4)
                 });
@@ -120,7 +117,6 @@ public static class SampleData
                     UserId = carol.Id,
                     SubscriptionId = subscriptions[1].Id,
                     PaymentMethod = "BankTransfer",
-                    Amount = subscriptions[1].DefaultPrice,
                     StartTime = DateTime.UtcNow.AddDays(-10),
                     EndTime = DateTime.UtcNow.AddDays(80)
                 });

@@ -1,11 +1,15 @@
-﻿namespace Project.Modules;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using Project.Modules.Enumerations;
+
+namespace Project.Modules;
 
 public class SubscriptionConfirmation
 {
     public int Id { get; set; }
 
     public string PaymentMethod { get; set; } = null!;
-    public double Amount { get; set; }
+
+    public double Amount => CalculateAmount();
 
     public DateTime StartTime { get; set; }
     public DateTime EndTime { get; set; }
@@ -15,4 +19,41 @@ public class SubscriptionConfirmation
 
     public int SubscriptionId { get; set; }
     public Subscription Subscription { get; set; } = null!;
+    
+    private double CalculateAmount()
+    {
+        var basePrice = Subscription.DefaultPrice;
+        double discount = 0;
+
+        switch (User.Status)
+        {
+            case Status.Student:
+                discount += 0.20; 
+                break;
+            case Status.Elder:
+                discount += 0.10; 
+                break;
+        }
+
+        switch (User.Country.Trim().ToUpperInvariant())
+        {
+            case "POLAND":
+                discount += 0.05;
+                break;
+            case "GERMANY":
+                discount += 0.03;
+                break;
+            case "FRANCE":
+                discount += 0.02;
+                break;
+            default:
+                discount += 0;
+                break; 
+        }
+
+        var finalPrice = basePrice * (1 - discount);
+
+        return Math.Max(finalPrice, 0);
+    }
+
 }
