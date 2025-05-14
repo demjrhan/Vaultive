@@ -10,10 +10,11 @@ namespace Project.Configurations
         {
             builder.HasKey(al => al.Id);
             builder.Property(al => al.Language).HasMaxLength(50).IsRequired();
-
-            builder.HasOne(al => al.AudioOption)
+            
+            builder.HasOne(a => a.AudioOption)
                 .WithMany(ao => ao.AudioLanguages)
-                .HasForeignKey(al => al.AudioOptionId);
+                .HasForeignKey(al => al.AudioOptionId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

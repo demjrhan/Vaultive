@@ -8,12 +8,15 @@ namespace Project.Configurations
     {
         public void Configure(EntityTypeBuilder<AudioOption> builder)
         {
-            builder.HasKey(ao => ao.Id);
+            builder.HasKey(ao => ao.MediaTitle); 
+
             builder.HasOne(ao => ao.MediaContent)
                 .WithOne(m => m.AudioOption)
                 .HasForeignKey<AudioOption>(ao => ao.MediaTitle)
-                .HasPrincipalKey<MediaContent>(m => m.Title);
+                .HasPrincipalKey<MediaContent>(m => m.Title)
+                .OnDelete(DeleteBehavior.Cascade);
 
+            
 
         }
     }

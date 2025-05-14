@@ -11,7 +11,7 @@ namespace Project.Configurations
             builder.HasKey(e => e.Id);
             builder.HasMany(s => s.Confirmations)
                 .WithOne(sc => sc.Subscription)
-                .HasForeignKey(s => s.Id);
+                .HasForeignKey(sc => sc.SubscriptionId);
 
             builder.HasOne(s => s.StreamingService)
                 .WithMany(ss => ss.Subscriptions)

@@ -10,9 +10,11 @@ namespace Project.Configurations
         {
             builder.HasKey(sl => sl.Id);
             builder.Property(sl => sl.Language).HasMaxLength(50).IsRequired();
-            builder.HasOne(sl => sl.SubtitleOption)
+            builder.HasOne(s => s.SubtitleOption)
                 .WithMany(so => so.SubtitleLanguages)
-                .HasForeignKey(sl => sl.SubtitleOptionId);
+                .HasForeignKey(sl => sl.SubtitleOptionId)
+                .OnDelete(DeleteBehavior.Cascade);
+            
         }
     }
 }

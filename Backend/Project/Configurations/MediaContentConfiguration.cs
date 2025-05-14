@@ -20,12 +20,11 @@ namespace Project.Configurations
 
             builder.HasOne(m => m.SubtitleOption)
                 .WithOne(s => s.MediaContent)
-                .HasForeignKey<SubtitleOption>(s => s.MediaTitle );
-
+                .HasForeignKey<SubtitleOption>(s => s.MediaTitle);
+            
             builder.HasOne(m => m.AudioOption)
                 .WithOne(a => a.MediaContent)
-                .HasForeignKey<AudioOption>(a => a.MediaTitle );
-
+                .HasForeignKey<AudioOption>(a => a.MediaTitle);
 
             builder.HasMany(m => m.MediaContentStreamingServices)
                 .WithOne(mcss => mcss.MediaContent)
