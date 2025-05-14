@@ -1,6 +1,6 @@
-﻿namespace backend.Exceptions;
+﻿namespace Project.Exceptions;
 
-public class UserNotFoundException : System.Exception
+public class UserNotFoundException : Exception
 {
     public UserNotFoundException(int userId) : base($"User with id {userId} does not exists.")
     {

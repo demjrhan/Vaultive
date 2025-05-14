@@ -1,6 +1,5 @@
-﻿using backend.Exceptions;
-using Project.DTOs;
-using Project.Modules.Enumerations;
+﻿using Project.DTOs;
+using Project.Exceptions;
 using Project.Repositories;
 
 namespace Project.Services;
@@ -9,18 +8,21 @@ public class UserService
 {
     private readonly UserRepository _userRepository;
     private readonly SubscriptionRepository _subscriptionRepository;
+    private readonly WatchHistoryRepository _watchHistoryRepository;
 
     public UserService(UserRepository userRepository,
-        SubscriptionRepository subscriptionRepository)
+        SubscriptionRepository subscriptionRepository,
+        WatchHistoryRepository watchHistoryRepository)
     {
         _userRepository = userRepository;
         _subscriptionRepository = subscriptionRepository;
+        _watchHistoryRepository = watchHistoryRepository;
     }
 
     public async Task<UserWithSubscriptionsDTO> GetUserWithSubscriptions(int userId)
     {
         var user = await _userRepository.GetUserWithIdAsync(userId);
-        var activeSubscriptions = await _subscriptionRepository.GetUserActiveSubscriptionsAsync(userId);
+        var activeSubscriptions = await _subscriptionRepository.GetActiveSubscriptionsForUserIdAsync(userId);
 
         if (user == null)
         {
@@ -32,15 +34,19 @@ public class UserService
             throw new SubscriptionsNotFoundException(userId);
         }
 
-        var subscriptionDtos = await Task.WhenAll(activeSubscriptions.Select(async sc =>
+        var subscriptionDtos = await Task.WhenAll(activeSubscriptions.Select(async s =>
         {
-            var confirmation = await _subscriptionRepository.GetConfirmationDetailsForSubscription(sc);
-
-            return confirmation == null ? null : new SubscriptionResponseDTO
+            var confirmation = await _subscriptionRepository.GetConfirmationDetailsForSubscription(s);
+            if (confirmation == null)
             {
-                DaysLeft = sc.DurationInDays,
-                Price = confirmation.Price, 
-                StreamingServiceName = sc.StreamingService.Name
+                throw new SubscriptionConfirmationNotFoundException(s.Id);
+            }
+
+            return new SubscriptionResponseDTO
+            {
+                DaysLeft = s.DurationInDays,
+                Price = confirmation.Price,
+                StreamingServiceName = s.StreamingService.Name
             };
         }));
 
@@ -52,8 +58,39 @@ public class UserService
                 Nickname = user.Nickname,
                 Status = user.Status.ToString()
             },
-            Subscriptions = subscriptionDtos.Where(s => s != null)!
+            Subscriptions = subscriptionDtos.ToList()
         };
     }
 
+    public async Task<UserWithWatchHistoryDTO> GetUserWithWatchHistory(int userId)
+    {
+        var user = await _userRepository.GetUserWithIdAsync(userId);
+        var watchHistory = await _watchHistoryRepository.GetWatchHistoryForUsedId(userId);
+
+        if (user == null)
+        {
+            throw new UserNotFoundException(userId);
+        }
+
+        if (watchHistory == null)
+        {
+            throw new WatchHistoryNotFoundException(userId);
+        }
+
+        return new UserWithWatchHistoryDTO()
+        {
+            User = new UserResponseDTO()
+            {
+                Country = user.Country,
+                Nickname = user.Nickname,
+                Status = user.Status.ToString()
+            },
+            WatchHistory = watchHistory.Select(wh => new WatchHistoryResponseDTO()
+            {
+                MediaTitle = wh.MediaTitle,
+                TimeLeftOf = wh.TimeLeftOf,
+                WatchDate = wh.WatchDate
+            }).ToList()
+        };
+    }
 }

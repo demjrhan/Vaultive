@@ -13,7 +13,7 @@ public class SubscriptionRepository
         _context = masterContext;
     }
 
-    public async Task<IEnumerable<Subscription>> GetUserActiveSubscriptionsAsync(int userId)
+    public async Task<IEnumerable<Subscription>> GetActiveSubscriptionsForUserIdAsync(int userId)
     {
         var subscriptions = await _context.Subscriptions
             .Include(s => s.Confirmations)

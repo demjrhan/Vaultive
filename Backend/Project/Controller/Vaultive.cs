@@ -1,6 +1,6 @@
-﻿using backend.Exceptions;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Project.Context;
+using Project.Exceptions;
 using Project.Repositories;
 using Project.Services;
 
@@ -36,7 +36,23 @@ public class Vaultive : ControllerBase
         {
             return BadRequest(ex.Message);
         }
-        
-
     }
+    [HttpGet("GetUserWithWatchHistory/{userId}")]
+    public async Task<IActionResult> GetUserWithWatchHistory(int userId)
+    {
+        try
+        {
+            var result = await _userService.GetUserWithWatchHistory(userId);
+            return Ok(result);
+        }
+        catch (UserNotFoundException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+        catch (SubscriptionsNotFoundException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+    
 }

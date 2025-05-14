@@ -20,6 +20,7 @@ builder.Services.AddDbContext<MasterContext>(options => options.UseSqlite("Data 
 builder.Services.AddScoped<UserRepository>();
 builder.Services.AddScoped<SubscriptionRepository>();
 builder.Services.AddScoped<UserService>();
+builder.Services.AddScoped<WatchHistoryRepository>();
 
 var app = builder.Build();
 SampleData.Initialize(app.Services);
