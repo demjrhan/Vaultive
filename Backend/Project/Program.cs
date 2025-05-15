@@ -21,6 +21,8 @@ builder.Services.AddScoped<UserRepository>();
 builder.Services.AddScoped<SubscriptionRepository>();
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<WatchHistoryRepository>();
+builder.Services.AddScoped<MovieRepository>();
+
 
 var app = builder.Build();
 SampleData.Initialize(app.Services);

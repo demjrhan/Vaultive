@@ -16,7 +16,6 @@ namespace Project.Configurations
                         .Select(Enum.Parse<Genre>)
                         .ToList()
                 );
-            builder.Property(m => m.Length).IsRequired();
         }
     }
 }

@@ -6,14 +6,17 @@ namespace Project.Services;
 
 public class UserService
 {
+    private readonly MovieRepository _movieRepository;
     private readonly UserRepository _userRepository;
     private readonly SubscriptionRepository _subscriptionRepository;
     private readonly WatchHistoryRepository _watchHistoryRepository;
 
-    public UserService(UserRepository userRepository,
+    public UserService(MovieRepository movieRepository,
+        UserRepository userRepository,
         SubscriptionRepository subscriptionRepository,
         WatchHistoryRepository watchHistoryRepository)
     {
+        _movieRepository = movieRepository;
         _userRepository = userRepository;
         _subscriptionRepository = subscriptionRepository;
         _watchHistoryRepository = watchHistoryRepository;

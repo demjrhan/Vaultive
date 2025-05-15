@@ -135,7 +135,7 @@ public static class SampleData
                 ReleaseDate = new DateTime(1999, 3, 31),
                 OriginalLanguage = "English",
                 Country = "USA",
-                Length = 136,
+                Duration = 136,
                 Genres = new HashSet<Genre> { Genre.Action, Genre.SciFi },
                 SubtitleOption = new SubtitleOption
                 {
@@ -155,7 +155,7 @@ public static class SampleData
                 ReleaseDate = new DateTime(2020, 2, 14),
                 OriginalLanguage = "French",
                 Country = "France",
-                Length = 112,
+                Duration = 112,
                 Genres = new HashSet<Genre> { Genre.Romantic },
                 SubtitleOption = new SubtitleOption
                 {
