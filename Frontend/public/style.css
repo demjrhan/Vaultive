@@ -10,21 +10,21 @@ body {
     background: black;
     min-height: 100vh;
     overflow-x: hidden;
-    user-select: none; /* Consider narrowing this scope if needed */
 }
-body.detail-overlay-active > *:not(.main-container-detail) {
+.showcase-container.overlay-disabled > *:not(.main-container-detail) {
+    pointer-events: none !important;
+    user-select: none !important;
+    overflow: hidden !important;
+}
+
+.overlay-disabled {
     pointer-events: none !important;
     user-select: none !important;
 }
 
-body.detail-overlay-active {
-    overflow: hidden;
-}
-
-
 
 .wrapper {
-    height: 100dvh; /* More reliable on mobile */
+    height: 100dvh;
     width: 100dvw;
 }
 

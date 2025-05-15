@@ -36,6 +36,8 @@ public class MovieService
                 OriginalLanguage = m.OriginalLanguage,
                 ReleaseDate = m.ReleaseDate,
                 Title = m.Title,
+                BackgroundImage = m.BackgroundImage,
+                PosterImage = m.PosterImage,
                 Reviews = m.Reviews.Select(r => new ReviewResponseDTO()
                 {
                     Comment = r.Comment,
@@ -62,6 +64,8 @@ public class MovieService
                 OriginalLanguage = m.OriginalLanguage,
                 ReleaseDate = m.ReleaseDate,
                 Title = m.Title,
+                BackgroundImage = m.BackgroundImage,
+                PosterImage = m.PosterImage,
                 Reviews = m.Reviews.Select(r => new ReviewResponseDTO()
                 {
                     Comment = r.Comment,

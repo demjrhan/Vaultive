@@ -1,10 +1,12 @@
-import { details, featuredMovie } from './movieData.js';
+import { featuredMovie } from './movieData.js';
 
 const detailContainer = document.querySelector('.main-container-detail');
 const mainContainer = document.querySelector('.main-container');
 const detailImage = document.querySelector('.movie-image-detail');
 const detailTitle = document.querySelector('.movie-title-detail');
-const detailDescription = document.querySelector('.movie-text-description-detail');
+const detailDescription = document.querySelector(
+  '.movie-text-description-detail',
+);
 const showcase = mainContainer.querySelector('.showcase-container');
 const moviesPopupContainer = document.querySelector('.movies-popup-container');
 
@@ -13,14 +15,17 @@ let detailOpenedFrom = 'home';
 export function showMovieDetail(movie, from = 'home') {
   detailOpenedFrom = from;
 
-  detailImage.innerHTML = `<img src="${movie.mediaContent.posterImage}" alt="${movie.mediaContent?.title}">`;
+  detailImage.innerHTML = `<img src="../public/img/${movie.mediaContent.posterImage}.png" alt="${movie.mediaContent?.title}">`;
   detailTitle.innerHTML = movie.mediaContent?.title ?? 'Untitled';
-  detailDescription.innerHTML = movie.mediaContent?.description ?? 'No description available.';
+  detailDescription.innerHTML =
+    movie.mediaContent?.description ?? 'No description available.';
 
-  detailImage.style.backgroundImage = `
+
+  detailImage.style.backgroundImage =`
     linear-gradient(to bottom, rgba(0,0,0, 0) 0%, rgba(0,0,0, 1) 100%),
-    ${movie.mediaContent?.backgroundImage}
-  `;
+  url(../public/img/${movie.mediaContent?.backgroundImage}.png)`
+  ;
+
   detailContainer.style.display = 'flex';
 
   mainContainer.style.filter = 'grayscale(100%) blur(5px)';
@@ -29,13 +34,12 @@ export function showMovieDetail(movie, from = 'home') {
 
   if (from === 'movies') {
     moviesPopupContainer.style.filter = 'grayscale(100%) blur(5px)';
+    moviesPopupContainer.classList.add('overlay-disabled');
   }
 
-  document.body.classList.add('detail-overlay-active');
+
+  showcase.classList.add('overlay-disabled');
 }
-
-
-
 
 export function closeDetailOnEscape() {
   window.addEventListener('keydown', (e) => {
@@ -52,16 +56,16 @@ export function closeDetailOnEscape() {
   });
 }
 
-
-
 function closeDetailView() {
   detailContainer.style.display = 'none';
 
   if (detailOpenedFrom === 'movies') {
     moviesPopupContainer.style.filter = 'none';
+    moviesPopupContainer.classList.remove('overlay-disabled');
   } else {
     mainContainer.style.filter = 'none';
   }
 
-  document.body.classList.remove('detail-overlay-active');
+
+  showcase.classList.remove('overlay-disabled');
 }

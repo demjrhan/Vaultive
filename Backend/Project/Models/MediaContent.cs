@@ -22,6 +22,12 @@ public abstract class MediaContent
     public AudioOption AudioOption { get; set; } = null!;
     public int AudioOptionId { get; set; }
     
+    
+    /* properties for frontend visual */
+    
+    public string PosterImage { get; set; } = null!;
+    public string BackgroundImage { get; set; } = null!;
+    
 
 
 }

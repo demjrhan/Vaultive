@@ -138,6 +138,8 @@ public static class SampleData
                     OriginalLanguage = "English",
                     Country = "USA",
                     Duration = 101,
+                    BackgroundImage = "john-wick-background",
+                    PosterImage = "john-wick-poster",
                     Genres = new HashSet<Genre> { Genre.Action, Genre.Thriller },
                     SubtitleOption = new SubtitleOption
                     {
@@ -156,10 +158,32 @@ public static class SampleData
                     OriginalLanguage = "English",
                     Country = "USA",
                     Duration = 108,
+                    BackgroundImage = "deadpool-background",
+                    PosterImage = "deadpool-poster",
                     Genres = new HashSet<Genre> { Genre.Action, Genre.Comedy, Genre.Superhero },
                     SubtitleOption = new SubtitleOption
                     {
                         MediaTitle = "Deadpool",
+                        SubtitleLanguages = new List<SubtitleLanguage>
+                        {
+                            new() { Language = "English" }
+                        }
+                    }
+                },
+                new Movie
+                {
+                    Title = "Spiderman",
+                    Description = "Hero wearing red cape.",
+                    ReleaseDate = new DateTime(2017, 2, 12),
+                    OriginalLanguage = "English",
+                    Country = "USA",
+                    Duration = 108,
+                    BackgroundImage = "spider-man-background",
+                    PosterImage = "spider-man-poster",
+                    Genres = new HashSet<Genre> { Genre.Action, Genre.Superhero },
+                    SubtitleOption = new SubtitleOption
+                    {
+                        MediaTitle = "Spiderman",
                         SubtitleLanguages = new List<SubtitleLanguage>
                         {
                             new() { Language = "English" }
@@ -174,6 +198,8 @@ public static class SampleData
                     OriginalLanguage = "English",
                     Country = "USA",
                     Duration = 154,
+                    BackgroundImage = "pulpfiction-background",
+                    PosterImage = "pulpfiction-poster",
                     Genres = new HashSet<Genre> { Genre.Crime, Genre.Drama },
                     SubtitleOption = new SubtitleOption
                     {
@@ -192,6 +218,8 @@ public static class SampleData
                     OriginalLanguage = "English",
                     Country = "USA",
                     Duration = 143,
+                    BackgroundImage = "avengers-background",
+                    PosterImage = "avengers-poster",
                     Genres = new HashSet<Genre> { Genre.Action, Genre.Superhero, Genre.SciFi },
                     SubtitleOption = new SubtitleOption
                     {
@@ -211,6 +239,8 @@ public static class SampleData
                     OriginalLanguage = "English",
                     Country = "USA",
                     Duration = 175,
+                    BackgroundImage = "godfather-background",
+                    PosterImage = "godfather-poster",
                     Genres = new HashSet<Genre> { Genre.Crime, Genre.Drama },
                     SubtitleOption = new SubtitleOption
                     {
@@ -229,6 +259,8 @@ public static class SampleData
                     OriginalLanguage = "English",
                     Country = "USA",
                     Duration = 170,
+                    BackgroundImage = "scarface-background",
+                    PosterImage = "scarface-poster",
                     Genres = new HashSet<Genre> { Genre.Crime, Genre.Drama },
                     SubtitleOption = new SubtitleOption
                     {

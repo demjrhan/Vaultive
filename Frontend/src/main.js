@@ -1,7 +1,7 @@
 import { renderFeaturedMovie } from './renderFeatured.js';
 import { renderRecommendations } from './renderRecommendations.js';
 import { closeDetailOnEscape } from './detailView.js';
-import { details, featuredMovie, recommendations } from './movieData.js';
+import { featuredMovie} from './movieData.js';
 import { openMoviesPopup } from './moviesPage.js';
 import { renderMovies } from './renderMovies.js';
 
@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
   closeDetailOnEscape();
 
   window.addEventListener('resize', () => {
-    renderRecommendations(recommendations);
+    renderRecommendations();
   });
 
   const moviesButton = document.getElementById('movies-link');
