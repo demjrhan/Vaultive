@@ -10,7 +10,5 @@ public class MediaContentResponseDTO
     public string Country { get; set; } = null!;
     public int Duration { get; set; }
     public ICollection<ReviewResponseDTO> Reviews { get; set; } = new HashSet<ReviewResponseDTO>();
-    public double Rating { get; set; }
-    public string Comment { get; set; } = null!;
 
 }

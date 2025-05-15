@@ -17,8 +17,7 @@ public class MovieRepository
     
     public async Task<IEnumerable<Movie>> GetMoviesWithGivenGenre(Genre genre)
     {
-        return await _context.Movies.Where(m => m.Genres.Contains(genre)).ToListAsync();
-    } 
-    
-    
+        return (await _context.Movies.ToListAsync())
+            .Where(m => m.Genres.Contains(genre));
+    }
 }

@@ -26,10 +26,7 @@ namespace Project.Migrations
                     Discriminator = table.Column<string>(type: "TEXT", maxLength: 13, nullable: false),
                     Length = table.Column<int>(type: "INTEGER", nullable: true),
                     Topics = table.Column<string>(type: "TEXT", nullable: true),
-                    Movie_Length = table.Column<int>(type: "INTEGER", nullable: true),
-                    Genres = table.Column<string>(type: "TEXT", nullable: true),
-                    AvgEpisodeLength = table.Column<double>(type: "REAL", nullable: true),
-                    Series_Genres = table.Column<string>(type: "TEXT", nullable: true)
+                    Genres = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -66,28 +63,6 @@ namespace Project.Migrations
                     table.ForeignKey(
                         name: "FK_AudioOptions_MediaContents_MediaTitle",
                         column: x => x.MediaTitle,
-                        principalTable: "MediaContents",
-                        principalColumn: "Title",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Episodes",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Title = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
-                    Length = table.Column<double>(type: "REAL", nullable: false),
-                    SeasonNumber = table.Column<int>(type: "INTEGER", nullable: false),
-                    SeriesTitle = table.Column<string>(type: "TEXT", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Episodes", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Episodes_MediaContents_SeriesTitle",
-                        column: x => x.SeriesTitle,
                         principalTable: "MediaContents",
                         principalColumn: "Title",
                         onDelete: ReferentialAction.Cascade);
@@ -313,17 +288,6 @@ namespace Project.Migrations
                 column: "MediaTitle");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Episodes_SeriesTitle",
-                table: "Episodes",
-                column: "SeriesTitle");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Episodes_Title",
-                table: "Episodes",
-                column: "Title",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
                 name: "IX_MediaContents_OriginalLanguage",
                 table: "MediaContents",
                 column: "OriginalLanguage");
@@ -401,9 +365,6 @@ namespace Project.Migrations
         {
             migrationBuilder.DropTable(
                 name: "AudioLanguages");
-
-            migrationBuilder.DropTable(
-                name: "Episodes");
 
             migrationBuilder.DropTable(
                 name: "MediaContentStreamingServices");

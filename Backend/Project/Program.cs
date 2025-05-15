@@ -10,10 +10,13 @@ builder.Services.AddOpenApi();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddControllers()
-    /* This option removes the nulls from the json.*/
     .AddJsonOptions(options =>
     {
+        /* This option removes the nulls from the json.*/
         options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+        /* This option makes the genre names from 0,1,2 to actual names.*/
+        options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()); // 👈 Add this line
+
     });
 
 builder.Services.AddDbContext<MasterContext>(options => options.UseSqlite("Data Source=vaultive.db"));
@@ -22,6 +25,7 @@ builder.Services.AddScoped<SubscriptionRepository>();
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<WatchHistoryRepository>();
 builder.Services.AddScoped<MovieRepository>();
+builder.Services.AddScoped<MovieService>();
 
 
 var app = builder.Build();

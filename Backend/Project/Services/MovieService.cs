@@ -22,12 +22,31 @@ public class MovieService
         _watchHistoryRepository = watchHistoryRepository;
     }
 
-    /*public async Task<MovieResponseDTO> GetMoviesWithGivenGenre(Genre genre)
+    public async Task<List<MovieResponseDTO>> GetMoviesWithGivenGenre(Genre genre)
     {
         var movies = await _movieRepository.GetMoviesWithGivenGenre(genre);
-        movies.Select(m => new MovieResponseDTO
+        return movies.Select(m => new MovieResponseDTO
         {
-            
-        })
-    }*/
+            Genres = m.Genres.Select(g => g.ToString()).ToList(),
+            MediaContent = new MediaContentResponseDTO()
+            {
+                Country = m.Country,
+                Description = m.Description,
+                Duration = m.Duration,
+                OriginalLanguage = m.OriginalLanguage,
+                ReleaseDate = m.ReleaseDate,
+                Title = m.Title,
+                Reviews = m.Reviews.Select(r => new ReviewResponseDTO()
+                {
+                    Comment = r.Comment,
+                    Rating = r.Rating,
+                    User = new UserResponseDTO()
+                    {
+                        Nickname = r.User.Nickname
+                    }
+                }).ToList()
+            }
+        }).ToList();
+    }
+    
 }

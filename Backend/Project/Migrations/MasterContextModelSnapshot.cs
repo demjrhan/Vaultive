@@ -49,37 +49,6 @@ namespace Project.Migrations
                     b.ToTable("AudioOptions");
                 });
 
-            modelBuilder.Entity("Project.Models.Episode", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<double>("Length")
-                        .HasColumnType("REAL");
-
-                    b.Property<int>("SeasonNumber")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("SeriesTitle")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("SeriesTitle");
-
-                    b.HasIndex("Title")
-                        .IsUnique();
-
-                    b.ToTable("Episodes");
-                });
-
             modelBuilder.Entity("Project.Models.MediaContent", b =>
                 {
                     b.Property<string>("Title")
@@ -383,36 +352,7 @@ namespace Project.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("Length")
-                        .HasColumnType("INTEGER");
-
-                    b.ToTable("MediaContents", t =>
-                        {
-                            t.Property("Length")
-                                .HasColumnName("Movie_Length");
-                        });
-
                     b.HasDiscriminator().HasValue("Movie");
-                });
-
-            modelBuilder.Entity("Project.Models.Series", b =>
-                {
-                    b.HasBaseType("Project.Models.MediaContent");
-
-                    b.Property<double>("AvgEpisodeLength")
-                        .HasColumnType("REAL");
-
-                    b.Property<string>("Genres")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.ToTable("MediaContents", t =>
-                        {
-                            t.Property("Genres")
-                                .HasColumnName("Series_Genres");
-                        });
-
-                    b.HasDiscriminator().HasValue("Series");
                 });
 
             modelBuilder.Entity("Project.Models.AudioLanguage", b =>
@@ -435,17 +375,6 @@ namespace Project.Migrations
                         .IsRequired();
 
                     b.Navigation("MediaContent");
-                });
-
-            modelBuilder.Entity("Project.Models.Episode", b =>
-                {
-                    b.HasOne("Project.Models.Series", "Series")
-                        .WithMany("Episodes")
-                        .HasForeignKey("SeriesTitle")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Series");
                 });
 
             modelBuilder.Entity("Project.Models.MediaContentStreamingService", b =>
@@ -619,11 +548,6 @@ namespace Project.Migrations
                     b.Navigation("Reviews");
 
                     b.Navigation("WatchHistories");
-                });
-
-            modelBuilder.Entity("Project.Models.Series", b =>
-                {
-                    b.Navigation("Episodes");
                 });
 #pragma warning restore 612, 618
         }
