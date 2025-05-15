@@ -1,22 +1,21 @@
 import { showMovieDetail } from './detailView.js';
 
-export function renderMovies(details) {
+const API_BASE_URL = 'http://localhost:5034/Vaultive';
+
+export async function renderMovies() {
   const popupContentBox = document.querySelector('.movies-popup-container .content-box');
   popupContentBox.innerHTML = ''; // Clear previous genres
 
-  // Step 1: Collect unique genres
-  const genreMap = new Map();
-  details.forEach(movie => {
-    movie.genres.forEach(genre => {
-      if (!genreMap.has(genre)) {
-        genreMap.set(genre, []);
-      }
-      genreMap.get(genre).push(movie);
-    });
-  });
+  try {
+    const genre = 'Action';
+    const response = await fetch(`${API_BASE_URL}/GetMoviesWithGivenGenre/${genre}`);
+    if (!response.ok) {
+      throw new Error('Failed to fetch movies');
+    }
 
-  // Step 2: Render each genre section
-  genreMap.forEach((movies, genre) => {
+    const movies = await response.json();
+    console.log('Fetched movies:', movies);
+
     const genreContainer = document.createElement('div');
     genreContainer.className = 'genre-container';
 
@@ -37,12 +36,15 @@ export function renderMovies(details) {
 
     movies.forEach(movie => {
       const img = document.createElement('img');
-      img.src = movie.src;
-      img.alt = movie.alt;
+      img.src = '../public/img/avengers-poster.png';
+      img.alt = movie.MediaContent?.Title ?? 'Movie Poster';
       img.addEventListener('click', () => showMovieDetail(movie, 'movies'));
       postersContainer.appendChild(img);
     });
 
     popupContentBox.appendChild(genreContainer);
-  });
+  } catch (error) {
+    console.error('Error loading movies:', error);
+    popupContentBox.innerHTML = '<p class="error-message">Failed to load Action movies.</p>';
+  }
 }

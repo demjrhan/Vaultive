@@ -4,5 +4,11 @@ public enum Genre
 {
     Action,
     Romantic,
-    SciFi
+    SciFi,
+    Comedy,
+    Drama,
+    Thriller,
+    Mystery,
+    Crime,
+    Superhero
 }

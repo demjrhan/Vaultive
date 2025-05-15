@@ -7,7 +7,7 @@ import { renderMovies } from './renderMovies.js';
 
 document.addEventListener('DOMContentLoaded', () => {
   renderFeaturedMovie(featuredMovie);
-  renderRecommendations(recommendations);
+  renderRecommendations();
   closeDetailOnEscape();
 
   window.addEventListener('resize', () => {
@@ -17,6 +17,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const moviesButton = document.getElementById('movies-link');
   moviesButton.addEventListener('click', () => {
     openMoviesPopup();
-    renderMovies(details);
+    renderMovies();
   });
 });

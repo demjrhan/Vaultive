@@ -51,11 +51,11 @@ public static class SampleData
             {
                 new()
                 {
-                    DefaultPrice = 9.99,  StreamingServiceId = context.StreamingServices.First().Id
+                    DefaultPrice = 9.99, StreamingServiceId = context.StreamingServices.First().Id
                 },
                 new()
                 {
-                    DefaultPrice = 24.99, 
+                    DefaultPrice = 24.99,
                     StreamingServiceId = context.StreamingServices.Skip(1).First().Id
                 },
                 new()
@@ -128,46 +128,119 @@ public static class SampleData
 
         if (!context.Movies.Any())
         {
-            var movie = new Movie
+            var movies = new List<Movie>
             {
-                Title = "The Matrix",
-                Description = "Neo discovers the truth about reality.",
-                ReleaseDate = new DateTime(1999, 3, 31),
-                OriginalLanguage = "English",
-                Country = "USA",
-                Duration = 136,
-                Genres = new HashSet<Genre> { Genre.Action, Genre.SciFi },
-                SubtitleOption = new SubtitleOption
+                new Movie
                 {
-                    MediaTitle = "The Matrix",
-                    SubtitleLanguages = new List<SubtitleLanguage>
+                    Title = "John Wick",
+                    Description = "John Wick is a former assassin drawn back into the criminal underworld...",
+                    ReleaseDate = new DateTime(2014, 10, 24), // example
+                    OriginalLanguage = "English",
+                    Country = "USA",
+                    Duration = 101,
+                    Genres = new HashSet<Genre> { Genre.Action, Genre.Thriller },
+                    SubtitleOption = new SubtitleOption
                     {
-                        new() { Language = "English" },
-                        new() { Language = "German" }
+                        MediaTitle = "John Wick",
+                        SubtitleLanguages = new List<SubtitleLanguage>
+                        {
+                            new() { Language = "English" }
+                        }
                     }
                 },
-            };
-
-            var movie2 = new Movie
-            {
-                Title = "Romantic Escape",
-                Description = "A love story across continents.",
-                ReleaseDate = new DateTime(2020, 2, 14),
-                OriginalLanguage = "French",
-                Country = "France",
-                Duration = 112,
-                Genres = new HashSet<Genre> { Genre.Romantic },
-                SubtitleOption = new SubtitleOption
+                new Movie
                 {
-                    MediaTitle = "Romantic Escape",
-                    SubtitleLanguages = new List<SubtitleLanguage>
+                    Title = "Deadpool",
+                    Description = "Deadpool tells the story of Wade Wilson, a former special forces operative...",
+                    ReleaseDate = new DateTime(2016, 2, 12),
+                    OriginalLanguage = "English",
+                    Country = "USA",
+                    Duration = 108,
+                    Genres = new HashSet<Genre> { Genre.Action, Genre.Comedy, Genre.Superhero },
+                    SubtitleOption = new SubtitleOption
                     {
-                        new() { Language = "English" }
+                        MediaTitle = "Deadpool",
+                        SubtitleLanguages = new List<SubtitleLanguage>
+                        {
+                            new() { Language = "English" }
+                        }
+                    }
+                },
+                new Movie
+                {
+                    Title = "Pulp Fiction",
+                    Description = "Pulp Fiction is a cult classic directed by Quentin Tarantino...",
+                    ReleaseDate = new DateTime(1994, 10, 14),
+                    OriginalLanguage = "English",
+                    Country = "USA",
+                    Duration = 154,
+                    Genres = new HashSet<Genre> { Genre.Crime, Genre.Drama },
+                    SubtitleOption = new SubtitleOption
+                    {
+                        MediaTitle = "Pulp Fiction",
+                        SubtitleLanguages = new List<SubtitleLanguage>
+                        {
+                            new() { Language = "English" }
+                        }
+                    }
+                },
+                new Movie
+                {
+                    Title = "Avengers",
+                    Description = "Avengers brings together Marvel's greatest superheroes in an epic battle...",
+                    ReleaseDate = new DateTime(2012, 5, 4),
+                    OriginalLanguage = "English",
+                    Country = "USA",
+                    Duration = 143,
+                    Genres = new HashSet<Genre> { Genre.Action, Genre.Superhero, Genre.SciFi },
+                    SubtitleOption = new SubtitleOption
+                    {
+                        MediaTitle = "Avengers",
+                        SubtitleLanguages = new List<SubtitleLanguage>
+                        {
+                            new() { Language = "English" }
+                        }
+                    }
+                },
+                new Movie
+                {
+                    Title = "God Father",
+                    Description =
+                        "The Godfather is a cinematic masterpiece that chronicles the rise of Michael Corleone...",
+                    ReleaseDate = new DateTime(1972, 3, 24),
+                    OriginalLanguage = "English",
+                    Country = "USA",
+                    Duration = 175,
+                    Genres = new HashSet<Genre> { Genre.Crime, Genre.Drama },
+                    SubtitleOption = new SubtitleOption
+                    {
+                        MediaTitle = "God Father",
+                        SubtitleLanguages = new List<SubtitleLanguage>
+                        {
+                            new() { Language = "English" }
+                        }
+                    }
+                },
+                new Movie
+                {
+                    Title = "Scarface",
+                    Description = "Scarface follows the rise and fall of Tony Montana, a Cuban immigrant...",
+                    ReleaseDate = new DateTime(1983, 12, 9),
+                    OriginalLanguage = "English",
+                    Country = "USA",
+                    Duration = 170,
+                    Genres = new HashSet<Genre> { Genre.Crime, Genre.Drama },
+                    SubtitleOption = new SubtitleOption
+                    {
+                        MediaTitle = "Scarface",
+                        SubtitleLanguages = new List<SubtitleLanguage>
+                        {
+                            new() { Language = "English" }
+                        }
                     }
                 }
             };
-
-            context.Movies.AddRange(movie, movie2);
+            context.Movies.AddRange(movies);
             context.SaveChanges();
         }
 

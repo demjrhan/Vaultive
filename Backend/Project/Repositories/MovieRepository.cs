@@ -20,4 +20,9 @@ public class MovieRepository
         return (await _context.Movies.ToListAsync())
             .Where(m => m.Genres.Contains(genre));
     }
+
+    public async Task<IEnumerable<Movie>> GetAllMovies()
+    {
+        return await _context.Movies.ToListAsync();
+    }
 }

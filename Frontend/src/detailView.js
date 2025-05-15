@@ -13,14 +13,13 @@ let detailOpenedFrom = 'home';
 export function showMovieDetail(movie, from = 'home') {
   detailOpenedFrom = from;
 
-  const detail = details.find((d) => d.id === movie.id);
-  detailImage.innerHTML = `<img src=${movie.src} alt=${movie.alt}>`;
-  detailTitle.innerHTML = detail.title;
-  detailDescription.innerHTML = detail.description;
+  detailImage.innerHTML = `<img src="${movie.mediaContent.posterImage}" alt="${movie.mediaContent?.title}">`;
+  detailTitle.innerHTML = movie.mediaContent?.title ?? 'Untitled';
+  detailDescription.innerHTML = movie.mediaContent?.description ?? 'No description available.';
 
   detailImage.style.backgroundImage = `
     linear-gradient(to bottom, rgba(0,0,0, 0) 0%, rgba(0,0,0, 1) 100%),
-    ${detail.background}
+    ${movie.mediaContent?.backgroundImage}
   `;
   detailContainer.style.display = 'flex';
 
@@ -66,4 +65,3 @@ function closeDetailView() {
 
   document.body.classList.remove('detail-overlay-active');
 }
-

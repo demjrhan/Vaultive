@@ -60,11 +60,28 @@ public class Vaultive : ControllerBase
     
     [HttpGet("GetMoviesWithGivenGenre/{genre}")]
 
-    public async Task<IActionResult> GetMoviesWithGivenGenre(Genre genre)
+    public async Task<IActionResult> GetMoviesWithGivenGenre(string genre)
     {
         try
         {
-            var result = await _movieService.GetMoviesWithGivenGenre(genre);
+            if (!Enum.TryParse<Genre>(genre, true, out var parsedGenre))
+                return BadRequest($"Invalid genre: {genre}");
+
+            var result = await _movieService.GetMoviesWithGivenGenre(parsedGenre);
+            return Ok(result);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+    
+    [HttpGet("GetAllMovies/")]
+    public async Task<IActionResult> GetAllMovies()
+    {
+        try
+        {
+            var result = await _movieService.GetAllMovies();
             return Ok(result);
         }
         catch (Exception ex)

@@ -15,10 +15,18 @@ builder.Services.AddControllers()
         /* This option removes the nulls from the json.*/
         options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
         /* This option makes the genre names from 0,1,2 to actual names.*/
-        options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()); // 👈 Add this line
+        options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()); 
 
     });
-
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", policy =>
+    {
+        policy.AllowAnyOrigin()
+            .AllowAnyMethod()
+            .AllowAnyHeader();
+    });
+});
 builder.Services.AddDbContext<MasterContext>(options => options.UseSqlite("Data Source=vaultive.db"));
 builder.Services.AddScoped<UserRepository>();
 builder.Services.AddScoped<SubscriptionRepository>();
@@ -37,7 +45,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-
+app.UseCors("AllowAll");
 app.UseHttpsRedirection();
 app.MapControllers();
 app.Run();
