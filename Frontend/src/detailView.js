@@ -57,10 +57,11 @@ export function closeDetailOnEscape() {
 
 function closeDetailView() {
   detailContainer.style.display = 'none';
-  mainContainer.style.filter = 'none';
 
   if (detailOpenedFrom === 'movies') {
     moviesPopupContainer.style.filter = 'none';
+  } else {
+    mainContainer.style.filter = 'none';
   }
 
   document.body.classList.remove('detail-overlay-active');
