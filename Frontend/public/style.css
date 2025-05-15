@@ -10,6 +10,7 @@ body {
     background: black;
     min-height: 100vh;
     overflow-x: hidden;
+    user-select: none;
 }
 .showcase-container.overlay-disabled > *:not(.main-container-detail) {
     pointer-events: none !important;
