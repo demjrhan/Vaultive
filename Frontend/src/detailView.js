@@ -27,7 +27,12 @@ export function showMovieDetail(movie, from = 'home') {
     <button class="trailer-button">Watch Trailer</button>
     <button class="review-button">Give Review</button>
   </div>
-  <button class="close-button" id="close-detail-view">X</button>
+  
+    <button class="back-button" id="close-detail-view">
+      <img src="../public/icons/back.png" alt="back">
+    </button>
+      
+ 
 `;
 
   detailTitle.innerHTML = movie.mediaContent?.title ?? 'Untitled';
@@ -60,6 +65,9 @@ export function showMovieDetail(movie, from = 'home') {
     moviesPopupContainer.classList.add('overlay-disabled');
   }
 
+  document.getElementById("close-detail-view")?.addEventListener("click", () => {
+    closeDetailOnButtonClick();
+  });
 
   showcase.classList.add('overlay-disabled');
 }
@@ -79,6 +87,19 @@ export function closeDetailOnEscape() {
   });
 }
 
+ function closeDetailOnButtonClick() {
+    if (detailContainer.style.display === 'flex') {
+      closeDetailView();
+
+      if (detailOpenedFrom === 'home') {
+        showcase.style.backgroundImage = `url(${featuredMovie.backgroundGif})`;
+        showcase.style.backgroundRepeat = 'no-repeat';
+        showcase.style.backgroundSize = 'cover';
+        showcase.style.backgroundPosition = 'center';
+      }
+    }
+}
+
 function closeDetailView() {
   detailContainer.style.display = 'none';
 
@@ -87,6 +108,7 @@ function closeDetailView() {
     moviesPopupContainer.classList.remove('overlay-disabled');
   } else {
     mainContainer.style.filter = 'none';
+
   }
 
 
