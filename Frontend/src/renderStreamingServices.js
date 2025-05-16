@@ -24,8 +24,6 @@ export async function renderStreamingServices() {
     const shuffledStreamingServices = [...streamingMap.keys()]
       .sort(() => Math.random() - 0.5); // Simple shuffle
 
-    console.log(shuffledStreamingServices);
-
     shuffledStreamingServices.forEach(streamingServiceName => {
       const streamingMovies = streamingMap.get(streamingServiceName);
       const streamingContainer = document.createElement('div');
@@ -45,6 +43,8 @@ export async function renderStreamingServices() {
       `;
 
       const postersContainer = streamingContainer.querySelector('.movie-posters');
+
+
 
       streamingMovies.forEach((movie) => {
         const posterImage = movie.mediaContent?.posterImage
