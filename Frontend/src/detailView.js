@@ -80,18 +80,7 @@ export function closeDetailOnEscape() {
   });
 }
 
- function closeDetailOnButtonClick() {
-    if (detailContainer.style.display === 'flex') {
-      closeDetailView();
 
-      if (detailOpenedFrom === 'home') {
-        showcase.style.backgroundImage = `url(${featuredMovie.backgroundGif})`;
-        showcase.style.backgroundRepeat = 'no-repeat';
-        showcase.style.backgroundSize = 'cover';
-        showcase.style.backgroundPosition = 'center';
-      }
-    }
-}
 
 function closeDetailView() {
   detailContainer.style.display = 'none';
