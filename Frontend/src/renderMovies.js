@@ -48,13 +48,18 @@ export async function renderMovies() {
 
       const postersContainer = genreContainer.querySelector('.movie-posters');
 
-      genreMovies.forEach(movie => {
+      genreMovies.forEach((movie) => {
+        const posterImage = movie.mediaContent?.posterImage
+          ? `../public/img/${movie.mediaContent.posterImage}.png`
+          : '../public/img/default-poster.png';
+
         const img = document.createElement('img');
-        img.src = `../public/img/${movie.mediaContent.posterImage}.png`;
+        img.src = posterImage;
         img.alt = movie.mediaContent?.title ?? 'Untitled';
         img.addEventListener('click', () => showMovieDetail(movie, 'movies'));
         postersContainer.appendChild(img);
       });
+
 
       popupContentBox.appendChild(genreContainer);
     });

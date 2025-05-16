@@ -23,6 +23,10 @@ public class MovieRepository
 
     public async Task<IEnumerable<Movie>> GetAllMovies()
     {
-        return await _context.Movies.ToListAsync();
+        return await _context.Movies
+            .Include(m => m.MediaContentStreamingServices)
+            .ThenInclude(mcs => mcs.StreamingService)
+            .ToListAsync();
+
     }
 }

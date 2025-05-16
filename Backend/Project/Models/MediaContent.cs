@@ -25,8 +25,8 @@ public abstract class MediaContent
     
     /* properties for frontend visual */
     
-    public string PosterImage { get; set; } = null!;
-    public string BackgroundImage { get; set; } = null!;
+    public string? PosterImage { get; set; }
+    public string? BackgroundImage { get; set; }
     
 
 

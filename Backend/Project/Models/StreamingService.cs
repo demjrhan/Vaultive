@@ -9,4 +9,8 @@ public class StreamingService
 
     public ICollection<Subscription> Subscriptions { get; set; } = new HashSet<Subscription>();
     public ICollection<MediaContentStreamingService> MediaContentStreamingServices { get; set; } = new HashSet<MediaContentStreamingService>();
+    
+    /* properties for frontend visual */
+    
+    public string LogoImage { get; set; } = null!;
 }

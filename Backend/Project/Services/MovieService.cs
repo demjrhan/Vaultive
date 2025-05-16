@@ -38,6 +38,12 @@ public class MovieService
                 Title = m.Title,
                 BackgroundImage = m.BackgroundImage,
                 PosterImage = m.PosterImage,
+                StreamingServices = m.StreamingServices.Select(s => new StreamingServiceResponseDTO()
+                {
+                    Country = s.Country,
+                    Description = s.Description,
+                    Name = s.Name
+                }).ToList()
             }
         }).ToList();
     }
@@ -57,7 +63,17 @@ public class MovieService
                 Title = m.Title,
                 BackgroundImage = m.BackgroundImage,
                 PosterImage = m.PosterImage,
+                StreamingServices = m.MediaContentStreamingServices
+                    .Select(mcs => new StreamingServiceResponseDTO
+                    {
+                        Country = mcs.StreamingService.Country,
+                        Description = mcs.StreamingService.Description,
+                        Name = mcs.StreamingService.Name,
+                        LogoImage = mcs.StreamingService.LogoImage
+                    }).ToList()
+
             }
         }).ToList();
+        
     }
 }

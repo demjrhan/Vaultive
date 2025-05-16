@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="vaultive" uuid="806848bb-7c9a-4dd8-8896-1a54dbaa93b4">
+    <data-source source="LOCAL" name="vaultive" uuid="5f435610-346c-4ff9-9981-4182a7ffcbb8">
       <driver-ref>sqlite.xerial</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
-      <jdbc-url>jdbc:sqlite:$PROJECT_DIR$/Project/vaultive.db</jdbc-url>
+      <jdbc-url>jdbc:sqlite:C:\Users\demir\Documents\personal\Vaultive\Backend\Project\vaultive.db</jdbc-url>
       <jdbc-additional-properties>
         <property name="com.intellij.clouds.kubernetes.db.enabled" value="false" />
       </jdbc-additional-properties>

@@ -11,5 +11,7 @@ public class MediaContentResponseDTO
     public int Duration { get; set; }
     public string BackgroundImage { get; set; }  = null!;
     public string PosterImage { get; set; }  = null!;
+    
+    public ICollection<StreamingServiceResponseDTO> StreamingServices { get; set; } = new HashSet<StreamingServiceResponseDTO>();
 
 }

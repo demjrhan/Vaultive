@@ -4,6 +4,7 @@ const detailContainer = document.querySelector('.main-container-detail');
 const mainContainer = document.querySelector('.main-container');
 const detailImage = document.querySelector('.movie-image-detail');
 const detailTitle = document.querySelector('.movie-title-detail');
+const platformLinksDetail = document.querySelector('.platform-links-detail');
 const detailDescription = document.querySelector(
   '.movie-text-description-detail',
 );
@@ -15,16 +16,38 @@ let detailOpenedFrom = 'home';
 export function showMovieDetail(movie, from = 'home') {
   detailOpenedFrom = from;
 
-  detailImage.innerHTML = `<img src="../public/img/${movie.mediaContent.posterImage}.png" alt="${movie.mediaContent?.title}">`;
+
+  const posterImage = movie.mediaContent?.posterImage
+    ? `../public/img/${movie.mediaContent.posterImage}.png`
+    : '../public/img/default-poster.png';
+
+  detailImage.innerHTML = `
+  <img src="${posterImage}" alt="${movie.mediaContent?.title}">
+  <div class="detail-button-group">
+    <button class="trailer-button">Watch Trailer</button>
+    <button class="review-button">Give Review</button>
+  </div>
+  <button class="close-button" id="close-detail-view">X</button>
+`;
+
   detailTitle.innerHTML = movie.mediaContent?.title ?? 'Untitled';
   detailDescription.innerHTML =
     movie.mediaContent?.description ?? 'No description available.';
 
 
-  detailImage.style.backgroundImage =`
-    linear-gradient(to bottom, rgba(0,0,0, 0) 0%, rgba(0,0,0, 1) 100%),
-  url(../public/img/${movie.mediaContent?.backgroundImage}.png)`
-  ;
+  const backgroundImage = movie.mediaContent?.backgroundImage
+    ? `../public/img/${movie.mediaContent.backgroundImage}.png`
+    : '../public/img/default-background.png';
+
+  detailImage.style.backgroundImage = `
+  linear-gradient(to bottom, rgba(0,0,0, 0) 0%, rgba(0,0,0, 1) 100%),
+  url(${backgroundImage})
+`;
+
+  platformLinksDetail.innerHTML = movie.mediaContent?.streamingServices?.map(s =>
+    `<img src="../public/img/streamers/${s.logoImage}.png" alt="${s.name}">`
+  ).join('') ?? '';
+
 
   detailContainer.style.display = 'flex';
 
