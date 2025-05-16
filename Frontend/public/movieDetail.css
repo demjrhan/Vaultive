@@ -136,40 +136,5 @@
 }
 
 
-.back-button {
-    position: absolute;
-    top: -3%;
-    left: -1%;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    width: 50px;
-    height: 50px;
-    padding: 0.5rem 1rem;
-    border: none;
-    border-radius: 0 15px 0 10px;
-    background-color: black;
-    color: white;
-    font-size: 0.9rem;
-    cursor: pointer;
-
-    box-shadow: 0 0 35px rgba(255, 255, 255, 0.5);
-    transition: transform 0.5s ease;
-
-}
-.back-button:hover {
-    transform: rotateZ(-15deg);
-}
-.back-button img {
-    width: 30px;
-    height: 30px;
-    padding: 0;
-    margin: 0;
-    bottom: auto;
-    left: auto;
-}
-
 
 

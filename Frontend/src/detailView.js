@@ -27,10 +27,6 @@ export function showMovieDetail(movie, from = 'home') {
     <button class="trailer-button">Watch Trailer</button>
     <button class="review-button">Give Review</button>
   </div>
-  
-    <button class="back-button" id="close-detail-view">
-      <img src="../public/icons/back.png" alt="back">
-    </button>
       
  
 `;
@@ -65,9 +61,6 @@ export function showMovieDetail(movie, from = 'home') {
     moviesPopupContainer.classList.add('overlay-disabled');
   }
 
-  document.getElementById("close-detail-view")?.addEventListener("click", () => {
-    closeDetailOnButtonClick();
-  });
 
   showcase.classList.add('overlay-disabled');
 }

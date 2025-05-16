@@ -3,6 +3,7 @@ import { featuredMovie } from './movieData.js';
 const moviesPopupContainer = document.querySelector('.movies-popup-container');
 const mainContainer = document.querySelector('.main-container');
 const showcase = mainContainer.querySelector('.showcase-container');
+const navigationBar = document.querySelector('.navigation-bar');
 
 export function openMoviesPopup() {
   moviesPopupContainer.style.display = 'flex';
@@ -17,14 +18,21 @@ function closeMoviesPopup() {
   mainContainer.style.filter = 'none';
   document.body.classList.remove('detail-view-open');
 }
+export function createNavigationBar() {
+  navigationBar.innerHTML = `
+    <div class="home-button" id="close-movies-popup">
+          <img src="../public/icons/home.png" alt="home">
+</div>
+  `;
 
+  document.getElementById('close-movies-popup')?.addEventListener('click', () => {
+    closeMoviesPopup();
+    showcase.style.backgroundImage = `url(${featuredMovie.backgroundGif})`;
+    showcase.style.backgroundRepeat = 'no-repeat';
+    showcase.style.backgroundSize = 'cover';
+    showcase.style.backgroundPosition = 'center';
+  });
+}
 
-document.getElementById('close-movies-popup')?.addEventListener('click', () => {
-  closeMoviesPopup();
-  showcase.style.backgroundImage = `url(${featuredMovie.backgroundGif})`;
-  showcase.style.backgroundRepeat = 'no-repeat';
-  showcase.style.backgroundSize = 'cover';
-  showcase.style.backgroundPosition = 'center';
-});
 
 
