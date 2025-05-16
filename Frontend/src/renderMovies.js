@@ -3,7 +3,7 @@ import { showMovieDetail } from './detailView.js';
 const API_BASE_URL = 'http://localhost:5034/Vaultive';
 
 export async function renderMovies() {
-  const popupContentBox = document.querySelector('.movies-popup-container .content-box');
+  const popupContentBox = document.querySelector('.movies-popup-container .content-box-moviePage');
   popupContentBox.innerHTML = '';
 
   try {

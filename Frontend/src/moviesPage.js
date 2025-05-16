@@ -3,7 +3,7 @@ import { featuredMovie } from './movieData.js';
 const moviesPopupContainer = document.querySelector('.movies-popup-container');
 const mainContainer = document.querySelector('.main-container');
 const showcase = mainContainer.querySelector('.showcase-container');
-const navigationBar = document.querySelector('.navigation-bar');
+const navigationBar = document.querySelector('.navigation-bar-moviePage');
 
 export function openMoviesPopup() {
   moviesPopupContainer.style.display = 'flex';
@@ -18,7 +18,7 @@ function closeMoviesPopup() {
   mainContainer.style.filter = 'none';
   document.body.classList.remove('detail-view-open');
 }
-export function createNavigationBar() {
+export function createNavigationBarMoviePage() {
   navigationBar.innerHTML = `
     <div class="home-button" id="close-movies-popup">
           <img src="../public/icons/home.png" alt="home">
