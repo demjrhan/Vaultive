@@ -16,7 +16,6 @@ namespace Project.Configurations
                         .Select(Enum.Parse<Topic>)
                         .ToList()
                 );
-            builder.Property(m => m.Length).IsRequired();
         }
     }
 }

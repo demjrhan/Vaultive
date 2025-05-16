@@ -11,6 +11,5 @@ public class MediaContentResponseDTO
     public int Duration { get; set; }
     public string BackgroundImage { get; set; }  = null!;
     public string PosterImage { get; set; }  = null!;
-    public ICollection<ReviewResponseDTO> Reviews { get; set; } = new HashSet<ReviewResponseDTO>();
 
 }

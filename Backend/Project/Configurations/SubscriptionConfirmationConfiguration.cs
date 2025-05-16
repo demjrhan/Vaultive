@@ -17,8 +17,14 @@ namespace Project.Configurations
                 .WithMany(u => u.Confirmations)
                 .HasForeignKey(sc => sc.SubscriptionId);
             
-            builder.Property(sc => sc.StartTime).IsRequired();
-            builder.Property(sc => sc.EndTime).IsRequired();
+            builder.Property(sc => sc.StartTime)
+                .IsRequired()
+                .HasColumnType("datetime");
+
+            builder.Property(sc => sc.EndTime)
+                .IsRequired()
+                .HasColumnType("datetime");
+
             builder.Property(sc => sc.PaymentMethod).HasMaxLength(25).IsRequired();
 
         }

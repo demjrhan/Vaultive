@@ -10,7 +10,7 @@ namespace Project.Configurations
         {
 
             builder.HasAlternateKey(wh => new { wh.UserId, wh.MediaTitle });
-            builder.Property(wh => wh.WatchDate).IsRequired();
+            builder.Property(wh => wh.WatchDate).IsRequired().HasColumnType("datetime");;
             builder.Property(wh => wh.TimeLeftOf).IsRequired();
             
             builder.HasOne(wh => wh.User)

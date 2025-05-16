@@ -38,15 +38,6 @@ public class MovieService
                 Title = m.Title,
                 BackgroundImage = m.BackgroundImage,
                 PosterImage = m.PosterImage,
-                Reviews = m.Reviews.Select(r => new ReviewResponseDTO()
-                {
-                    Comment = r.Comment,
-                    Rating = r.Rating,
-                    User = new UserResponseDTO()
-                    {
-                        Nickname = r.User.Nickname
-                    }
-                }).ToList()
             }
         }).ToList();
     }
@@ -66,15 +57,6 @@ public class MovieService
                 Title = m.Title,
                 BackgroundImage = m.BackgroundImage,
                 PosterImage = m.PosterImage,
-                Reviews = m.Reviews.Select(r => new ReviewResponseDTO()
-                {
-                    Comment = r.Comment,
-                    Rating = r.Rating,
-                    User = new UserResponseDTO()
-                    {
-                        Nickname = r.User.Nickname
-                    }
-                }).ToList()
             }
         }).ToList();
     }
