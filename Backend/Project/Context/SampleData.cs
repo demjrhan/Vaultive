@@ -105,7 +105,7 @@ public static class SampleData
                     OriginalLanguage = "English",
                     Country = "USA",
                     Duration = 101,
-                    BackgroundImage = "john-wick-background",
+                    TrailerId = "C0BMx-qxsP4",
                     PosterImage = "john-wick-poster",
                     Genres = new HashSet<Genre> { Genre.Action, Genre.Thriller },
                     SubtitleOption = new SubtitleOption
@@ -125,7 +125,7 @@ public static class SampleData
                     OriginalLanguage = "English",
                     Country = "USA",
                     Duration = 108,
-                    BackgroundImage = "deadpool-background",
+                    TrailerId = "VHAK-gU9gi0",
                     PosterImage = "deadpool-poster",
                     Genres = new HashSet<Genre> { Genre.Action, Genre.Comedy, Genre.Superhero },
                     SubtitleOption = new SubtitleOption
@@ -145,7 +145,7 @@ public static class SampleData
                     OriginalLanguage = "English",
                     Country = "USA",
                     Duration = 108,
-                    BackgroundImage = "spider-man-background",
+                    TrailerId = "t06RUxPbp_c",
                     PosterImage = "spider-man-poster",
                     Genres = new HashSet<Genre> { Genre.Action, Genre.Superhero },
                     SubtitleOption = new SubtitleOption
@@ -165,7 +165,7 @@ public static class SampleData
                     OriginalLanguage = "English",
                     Country = "USA",
                     Duration = 154,
-                    BackgroundImage = "pulpfiction-background",
+                    TrailerId = "s7EdQ4FqbhY",
                     PosterImage = "pulpfiction-poster",
                     Genres = new HashSet<Genre> { Genre.Crime, Genre.Drama },
                     SubtitleOption = new SubtitleOption
@@ -185,7 +185,7 @@ public static class SampleData
                     OriginalLanguage = "English",
                     Country = "USA",
                     Duration = 143,
-                    BackgroundImage = "avengers-background",
+                    TrailerId = "eOrNdBpGMv8&t=2s",
                     PosterImage = "avengers-poster",
                     Genres = new HashSet<Genre> { Genre.Action, Genre.Superhero, Genre.SciFi },
                     SubtitleOption = new SubtitleOption
@@ -206,7 +206,7 @@ public static class SampleData
                     OriginalLanguage = "English",
                     Country = "USA",
                     Duration = 175,
-                    BackgroundImage = "godfather-background",
+                    TrailerId = "UaVTIH8mujA",
                     PosterImage = "godfather-poster",
                     Genres = new HashSet<Genre> { Genre.Crime, Genre.Drama },
                     SubtitleOption = new SubtitleOption
@@ -221,12 +221,12 @@ public static class SampleData
                 new Movie
                 {
                     Title = "Scarface",
-                    Description = "Vaultive Special is a celebratory, self-aware tribute to the streaming platform's journey and vision. Blending stylized visuals, creator interviews, and community highlights, the film showcases how Vaultive empowers storytellers and brings viewers closer to cinema. From exclusive behind-the-scenes moments to audience testimonials, it’s a heartfelt cinematic message to fans and creators alike.",
+                    Description = "Is a gangster drama directed by Brian De Palma in 1983 - inspired by the famous 1932 Howard Hawks film - was not a box office success, but today it is considered one of the most important productions in the oeuvre of the author of \"Carrie\". The story of the rapid criminal career of a small-time thug and its even faster end has gained the status of a cult film for many viewers, the best proof of which is the fact that the special edition DVD with the film sold like hot cakes in the USA. The hero of \"Scarface\" is a Cuban, Antonio Montana, who in 1981, along with thousands of other emigrants, comes to the USA.",
                     ReleaseDate = new DateTime(1983, 12, 9),
                     OriginalLanguage = "English",
                     Country = "USA",
                     Duration = 170,
-                    BackgroundImage = "scarface-background",
+                    TrailerId = "cv276Wg3e7I",
                     PosterImage = "scarface-poster",
                     Genres = new HashSet<Genre> { Genre.Crime, Genre.Drama },
                     SubtitleOption = new SubtitleOption
@@ -240,18 +240,18 @@ public static class SampleData
                 },
                 new Movie
                 {
-                    Title = "Vaultive Special",
-                    Description = "We love this platform!",
+                    Title = "Vaultive",
+                    Description = "You were expecting plot, drama, maybe some explosions? Nope. Just smooth vocals and betrayal.",
                     ReleaseDate = new DateTime(2025, 5, 9),
                     OriginalLanguage = "English",
                     Country = "Turkish",
                     Duration = 125,
-                    BackgroundImage = "",
-                    PosterImage = "",
+                    TrailerId = "dQw4w9WgXcQ",
+                    PosterImage = null,
                     Genres = new HashSet<Genre> { Genre.Action },
                     SubtitleOption = new SubtitleOption
                     {
-                        MediaTitle = "Vaultive Special",
+                        MediaTitle = "Vaultive",
                         SubtitleLanguages = new List<SubtitleLanguage>
                         {
                             new() { Language = "English" }

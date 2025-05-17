@@ -26,7 +26,7 @@ public abstract class MediaContent
     /* properties for frontend visual */
     
     public string? PosterImage { get; set; }
-    public string? BackgroundImage { get; set; }
+    public string? TrailerId { get; set; }
     
 
 

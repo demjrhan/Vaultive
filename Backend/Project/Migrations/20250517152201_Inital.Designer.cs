@@ -11,7 +11,7 @@ using Project.Context;
 namespace Project.Migrations
 {
     [DbContext(typeof(MasterContext))]
-    [Migration("20250517140248_Inital")]
+    [Migration("20250517152201_Inital")]
     partial class Inital
     {
         /// <inheritdoc />
@@ -60,9 +60,6 @@ namespace Project.Migrations
                     b.Property<int>("AudioOptionId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("BackgroundImage")
-                        .HasColumnType("TEXT");
-
                     b.Property<string>("Country")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -94,6 +91,9 @@ namespace Project.Migrations
 
                     b.Property<int>("SubtitleOptionId")
                         .HasColumnType("INTEGER");
+
+                    b.Property<string>("TrailerId")
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Title");
 

@@ -36,7 +36,7 @@ public class MovieService
                 OriginalLanguage = m.OriginalLanguage,
                 ReleaseDate = m.ReleaseDate,
                 Title = m.Title,
-                BackgroundImage = m.BackgroundImage,
+                TrailerId = m.TrailerId,
                 PosterImage = m.PosterImage,
                 StreamingServices = m.StreamingServices.Select(s => new StreamingServiceResponseDTO()
                 {
@@ -61,7 +61,7 @@ public class MovieService
                 OriginalLanguage = m.OriginalLanguage,
                 ReleaseDate = m.ReleaseDate,
                 Title = m.Title,
-                BackgroundImage = m.BackgroundImage,
+                TrailerId = m.TrailerId,
                 PosterImage = m.PosterImage,
                 StreamingServices = m.MediaContentStreamingServices
                     .Select(mcs => new StreamingServiceResponseDTO

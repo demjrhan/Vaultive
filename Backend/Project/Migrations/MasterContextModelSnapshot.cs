@@ -57,9 +57,6 @@ namespace Project.Migrations
                     b.Property<int>("AudioOptionId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("BackgroundImage")
-                        .HasColumnType("TEXT");
-
                     b.Property<string>("Country")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -91,6 +88,9 @@ namespace Project.Migrations
 
                     b.Property<int>("SubtitleOptionId")
                         .HasColumnType("INTEGER");
+
+                    b.Property<string>("TrailerId")
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Title");
 

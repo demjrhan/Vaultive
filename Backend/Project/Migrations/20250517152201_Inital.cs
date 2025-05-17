@@ -24,7 +24,7 @@ namespace Project.Migrations
                     SubtitleOptionId = table.Column<int>(type: "INTEGER", nullable: false),
                     AudioOptionId = table.Column<int>(type: "INTEGER", nullable: false),
                     PosterImage = table.Column<string>(type: "TEXT", nullable: true),
-                    BackgroundImage = table.Column<string>(type: "TEXT", nullable: true),
+                    TrailerId = table.Column<string>(type: "TEXT", nullable: true),
                     Discriminator = table.Column<string>(type: "TEXT", maxLength: 13, nullable: false),
                     Topics = table.Column<string>(type: "TEXT", nullable: true),
                     Genres = table.Column<string>(type: "TEXT", nullable: true)

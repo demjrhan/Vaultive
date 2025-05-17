@@ -30,7 +30,7 @@ export function showMovieDetail(movie, from = 'home') {
   detailDescription.innerHTML =
     movie.mediaContent?.description ?? 'No description available.';
 
-  const trailerId = movie.mediaContent?.trailerId ?? 'Xithigfg7dA'; // fallback to Avengers trailer
+  const trailerId = movie.mediaContent?.trailerId ?? 'dQw4w9WgXcQ';
 
   detailImage.innerHTML = `
     <iframe
