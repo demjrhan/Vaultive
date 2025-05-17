@@ -11,8 +11,8 @@ using Project.Context;
 namespace Project.Migrations
 {
     [DbContext(typeof(MasterContext))]
-    [Migration("20250516170250_Initial")]
-    partial class Initial
+    [Migration("20250517140248_Inital")]
+    partial class Inital
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

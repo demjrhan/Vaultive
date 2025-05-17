@@ -10,6 +10,7 @@ const detailDescription = document.querySelector(
 );
 const showcase = mainContainer.querySelector('.showcase-container');
 const moviesPopupContainer = document.querySelector('.movies-popup-container');
+const streamingServicePopUpContainer = document.querySelector('.streaming-popup-container');
 
 let detailOpenedFrom = 'home';
 
@@ -48,7 +49,6 @@ export function showMovieDetail(movie, from = 'home') {
     `<img src="../public/img/streamers/${s.logoImage}.png" alt="${s.name}">`
   ).join('') ?? '';
 
-
   detailContainer.style.display = 'flex';
 
   mainContainer.style.filter = 'grayscale(100%) blur(5px)';
@@ -60,13 +60,15 @@ export function showMovieDetail(movie, from = 'home') {
     moviesPopupContainer.classList.add('overlay-disabled');
   }
 
+  if (from === 'streamingServices') {
+    streamingServicePopUpContainer.style.filter = 'grayscale(100%) blur(5px)';
+    streamingServicePopUpContainer.classList.add('overlay-disabled');
+  }
 
   const scrollY = window.scrollY;
   document.body.style.position = 'fixed';
   document.body.style.top = `-${scrollY}px`;
   document.body.style.width = '100%';
-  detailContainer.style.display = 'flex';
-
   showcase.classList.add('overlay-disabled');
 }
 
@@ -81,7 +83,6 @@ export function closeDetailOnEscape() {
       document.body.style.width = '';
       window.scrollTo(0, parseInt(scrollY || '0') * -1);
       detailContainer.style.display = 'none';
-
       if (detailOpenedFrom === 'home') {
         showcase.style.backgroundImage = `url(${featuredMovie.backgroundGif})`;
         showcase.style.backgroundRepeat = 'no-repeat';
@@ -95,11 +96,15 @@ export function closeDetailOnEscape() {
 
 
 function closeDetailView() {
+  detailContainer.scrollTop = 0;
   detailContainer.style.display = 'none';
 
   if (detailOpenedFrom === 'movies') {
     moviesPopupContainer.style.filter = 'none';
     moviesPopupContainer.classList.remove('overlay-disabled');
+  } else if(detailOpenedFrom === 'streamingServices') {
+    streamingServicePopUpContainer.style.filter = 'none';
+    streamingServicePopUpContainer.classList.remove('overlay-disabled');
   } else {
     mainContainer.style.filter = 'none';
 

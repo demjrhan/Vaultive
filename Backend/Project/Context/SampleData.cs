@@ -99,7 +99,8 @@ public static class SampleData
                 new Movie
                 {
                     Title = "John Wick",
-                    Description = "John Wick is a former assassin drawn back into the criminal underworld...",
+                    Description =
+                        "After the sudden death of his beloved wife, retired assassin John Wick receives one last gift from her—a beagle puppy named Daisy. But when a group of ruthless mobsters break into his home, steal his car, and kill Daisy, they unknowingly reawaken one of the deadliest killers the underworld has ever known. What follows is a relentless, high-octane tale of revenge as John Wick hunts down everyone involved, igniting a war against a powerful Russian crime syndicate.",
                     ReleaseDate = new DateTime(2014, 10, 24),
                     OriginalLanguage = "English",
                     Country = "USA",
@@ -119,7 +120,7 @@ public static class SampleData
                 new Movie
                 {
                     Title = "Deadpool",
-                    Description = "Deadpool tells the story of Wade Wilson, a former special forces operative...",
+                    Description = "Wade Wilson, a former Special Forces operative turned mercenary, is subjected to a rogue experiment that leaves him disfigured but with accelerated healing powers. Adopting the alter ego Deadpool, Wade embarks on a mission to hunt down the man who nearly destroyed his life. Known for his irreverent humor, fourth-wall-breaking antics, and ultra-violent combat skills, Deadpool is unlike any superhero you’ve seen before—raw, unfiltered, and wildly entertaining.",
                     ReleaseDate = new DateTime(2016, 2, 12),
                     OriginalLanguage = "English",
                     Country = "USA",
@@ -139,7 +140,7 @@ public static class SampleData
                 new Movie
                 {
                     Title = "Spiderman",
-                    Description = "Hero wearing red cape.",
+                    Description = "After being bitten by a genetically modified spider, awkward and intelligent teenager Peter Parker gains spider-like abilities. Struggling to balance his newfound powers, personal life, and responsibility, he takes on the mantle of Spider-Man to protect New York City from rising threats. As he battles foes and faces heartbreaking loss, Peter learns that with great power comes great responsibility.",
                     ReleaseDate = new DateTime(2017, 2, 12),
                     OriginalLanguage = "English",
                     Country = "USA",
@@ -159,7 +160,7 @@ public static class SampleData
                 new Movie
                 {
                     Title = "Pulp Fiction",
-                    Description = "Pulp Fiction is a cult classic directed by Quentin Tarantino...",
+                    Description = "Quentin Tarantino’s cult masterpiece weaves together several interrelated stories involving Los Angeles mobsters, fringe criminals, and a mysterious briefcase. From the philosophical hitmen Vincent and Jules, to the washed-up boxer Butch, and the volatile duo of Pumpkin and Honey Bunny, 'Pulp Fiction' is a darkly comedic, non-linear exploration of crime, redemption, and pop culture that redefined modern cinema.",
                     ReleaseDate = new DateTime(1994, 10, 14),
                     OriginalLanguage = "English",
                     Country = "USA",
@@ -179,7 +180,7 @@ public static class SampleData
                 new Movie
                 {
                     Title = "Avengers",
-                    Description = "Avengers brings together Marvel's greatest superheroes in an epic battle...",
+                    Description = "When an unexpected threat emerges to endanger global security, Nick Fury, director of S.H.I.E.L.D., assembles a team of extraordinary individuals: Iron Man, Captain America, Thor, Hulk, Black Widow, and Hawkeye. Together, they must overcome their personal differences and unite to stop Loki, the god of mischief, from enslaving Earth with an alien army. 'The Avengers' is a thrilling culmination of Marvel’s cinematic universe, delivering action, wit, and superhero spectacle.",
                     ReleaseDate = new DateTime(2012, 5, 4),
                     OriginalLanguage = "English",
                     Country = "USA",
@@ -199,8 +200,8 @@ public static class SampleData
                 new Movie
                 {
                     Title = "God Father",
-                    Description =
-                        "The Godfather is a cinematic masterpiece that chronicles the rise of Michael Corleone...",
+                    Description = "Regarded as one of the greatest films in cinematic history, 'The Godfather' chronicles the powerful Corleone crime family in post-war America. When patriarch Vito Corleone survives an assassination attempt, his reluctant son Michael is drawn into the brutal world of organized crime. As Michael rises to power, he transforms from an outsider to a ruthless mafia boss, sacrificing his morals and loved ones in the name of family loyalty and legacy.",
+
                     ReleaseDate = new DateTime(1972, 3, 24),
                     OriginalLanguage = "English",
                     Country = "USA",
@@ -220,7 +221,7 @@ public static class SampleData
                 new Movie
                 {
                     Title = "Scarface",
-                    Description = "Scarface follows the rise and fall of Tony Montana, a Cuban immigrant...",
+                    Description = "Vaultive Special is a celebratory, self-aware tribute to the streaming platform's journey and vision. Blending stylized visuals, creator interviews, and community highlights, the film showcases how Vaultive empowers storytellers and brings viewers closer to cinema. From exclusive behind-the-scenes moments to audience testimonials, it’s a heartfelt cinematic message to fans and creators alike.",
                     ReleaseDate = new DateTime(1983, 12, 9),
                     OriginalLanguage = "English",
                     Country = "USA",
@@ -336,7 +337,7 @@ public static class SampleData
                 mcStreaming.Add(new MediaContentStreamingService
                     { MediaTitle = vaultive.Title, StreamingServiceId = appleTV.Id });
             }
-            
+
             context.MediaContentStreamingServices.AddRange(mcStreaming);
             context.SaveChanges();
         }

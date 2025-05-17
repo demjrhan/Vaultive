@@ -54,7 +54,7 @@ export async function renderStreamingServices() {
         const img = document.createElement('img');
         img.src = posterImage;
         img.alt = movie.mediaContent?.title ?? 'Untitled';
-        img.addEventListener('click', () => showMovieDetail(movie, 'movies'));
+        img.addEventListener('click', () => showMovieDetail(movie, 'streamingServices'));
         postersContainer.appendChild(img);
       });
 
