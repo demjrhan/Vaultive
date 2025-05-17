@@ -23,13 +23,7 @@ export function showMovieDetail(movie, from = 'home') {
     : '../public/img/default-poster.png';
 
   detailImage.innerHTML = `
-  <img src="${posterImage}" alt="${movie.mediaContent?.title}">
-  <div class="detail-button-group">
-    <button class="review-button">Give Review</button>
-  </div>
-      
- 
-`;
+  <img src="${posterImage}" alt="${movie.mediaContent?.title}">`;
 
   detailTitle.innerHTML = movie.mediaContent?.title ?? 'Untitled';
   detailDescription.innerHTML =
@@ -40,10 +34,7 @@ export function showMovieDetail(movie, from = 'home') {
     ? `../public/img/${movie.mediaContent.backgroundImage}.png`
     : '../public/img/default-background.png';
 
-  detailImage.style.backgroundImage = `
-  linear-gradient(to bottom, rgba(0,0,0, 0) 0%, rgba(0,0,0, 1) 100%),
-  url(${backgroundImage})
-`;
+  detailImage.style.backgroundImage = `url(${backgroundImage})`;
 
   platformLinksDetail.innerHTML = movie.mediaContent?.streamingServices?.map(s =>
     `<img src="../public/img/streamers/${s.logoImage}.png" alt="${s.name}">`

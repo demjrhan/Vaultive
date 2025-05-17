@@ -32,9 +32,7 @@
 .movie-image-detail {
     border-top-right-radius: 25px;
     border-top-left-radius: 25px;
-    display: flex;
     position: relative;
-    flex-direction: column;
     flex: 2;
     max-height: 60vh;
     background-repeat: no-repeat;
@@ -47,7 +45,7 @@
     border-radius: 25px;
     width: 12em;
     height: 18em;
-    bottom: 0;
+    bottom: -7%;
     margin-left: 2em;
 }
 
@@ -61,30 +59,25 @@
     height: 100%;
 }
 
-.movie-title-detail {
-    align-self: flex-start;
-    font-size: 2rem;
-    margin-top: 1em;
-    margin-left: 1em;
-
-}
 
 .movie-description-detail {
     display: flex;
     flex-direction: column;
     width: 100%;
-    margin: 1rem;
+    margin: 4em 2em 2em 2em;
 }
 
+.movie-title-detail {
+    align-self: flex-start;
+    font-size: 2rem;
+}
+
+
 .movie-text-description-detail {
-    padding-left: 2em;
     font-size: 1em;
     text-align: justify;
 }
 
-.movie-description-detail p {
-    padding-right: 2em;
-}
 
 .platform-links-detail {
     display: flex;
@@ -115,35 +108,11 @@
     scale: 1.1;
 }
 
-.detail-button-group {
-    position: absolute;
-    bottom: 2em;
-    left: 15em;
-    display: flex;
-    flex-direction: row;
-    gap: 1em;
-    z-index: 1;
-}
 
-.detail-button-group button {
-    padding: 0.75em 1.5em;
-    background-color: rgba(255, 255, 255, 0.85);
-    color: black;
-    border: none;
-    border-radius: 12px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-.detail-button-group button:hover {
-    background-color: white;
-    transform: scale(1.05);
-}
 
 
 .review-wrapper {
-    padding: 2rem;
+    padding: 2em;
     background-color: #1a1a1a;
     color: white;
     font-family: sans-serif;
