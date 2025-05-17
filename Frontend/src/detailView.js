@@ -24,7 +24,6 @@ export function showMovieDetail(movie, from = 'home') {
   detailImage.innerHTML = `
   <img src="${posterImage}" alt="${movie.mediaContent?.title}">
   <div class="detail-button-group">
-    <button class="trailer-button">Watch Trailer</button>
     <button class="review-button">Give Review</button>
   </div>
       
@@ -62,6 +61,12 @@ export function showMovieDetail(movie, from = 'home') {
   }
 
 
+  const scrollY = window.scrollY;
+  document.body.style.position = 'fixed';
+  document.body.style.top = `-${scrollY}px`;
+  document.body.style.width = '100%';
+  detailContainer.style.display = 'flex';
+
   showcase.classList.add('overlay-disabled');
 }
 
@@ -69,6 +74,13 @@ export function closeDetailOnEscape() {
   window.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && detailContainer.style.display === 'flex') {
       closeDetailView();
+
+      const scrollY = document.body.style.top;
+      document.body.style.position = '';
+      document.body.style.top = '';
+      document.body.style.width = '';
+      window.scrollTo(0, parseInt(scrollY || '0') * -1);
+      detailContainer.style.display = 'none';
 
       if (detailOpenedFrom === 'home') {
         showcase.style.backgroundImage = `url(${featuredMovie.backgroundGif})`;
