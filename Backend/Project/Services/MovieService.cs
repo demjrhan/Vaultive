@@ -36,8 +36,8 @@ public class MovieService
                 OriginalLanguage = m.OriginalLanguage,
                 ReleaseDate = m.ReleaseDate,
                 Title = m.Title,
-                TrailerId = m.TrailerId,
-                PosterImage = m.PosterImage,
+                YoutubeTrailerURL = m.YoutubeTrailerURL,
+                PosterImageName = m.PosterImageName,
                 StreamingServices = m.StreamingServices.Select(s => new StreamingServiceResponseDTO()
                 {
                     Country = s.Country,
@@ -61,8 +61,8 @@ public class MovieService
                 OriginalLanguage = m.OriginalLanguage,
                 ReleaseDate = m.ReleaseDate,
                 Title = m.Title,
-                TrailerId = m.TrailerId,
-                PosterImage = m.PosterImage,
+                YoutubeTrailerURL = m.YoutubeTrailerURL,
+                PosterImageName = m.PosterImageName,
                 StreamingServices = m.MediaContentStreamingServices
                     .Select(mcs => new StreamingServiceResponseDTO
                     {

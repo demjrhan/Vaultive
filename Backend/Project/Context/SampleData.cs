@@ -105,8 +105,8 @@ public static class SampleData
                     OriginalLanguage = "English",
                     Country = "USA",
                     Duration = 101,
-                    TrailerId = "C0BMx-qxsP4",
-                    PosterImage = "john-wick-poster",
+                    YoutubeTrailerURL = "C0BMx-qxsP4",
+                    PosterImageName = "john-wick-poster",
                     Genres = new HashSet<Genre> { Genre.Action, Genre.Thriller },
                     SubtitleOption = new SubtitleOption
                     {
@@ -125,8 +125,8 @@ public static class SampleData
                     OriginalLanguage = "English",
                     Country = "USA",
                     Duration = 108,
-                    TrailerId = "VHAK-gU9gi0",
-                    PosterImage = "deadpool-poster",
+                    YoutubeTrailerURL = "VHAK-gU9gi0",
+                    PosterImageName = "deadpool-poster",
                     Genres = new HashSet<Genre> { Genre.Action, Genre.Comedy, Genre.Superhero },
                     SubtitleOption = new SubtitleOption
                     {
@@ -145,8 +145,8 @@ public static class SampleData
                     OriginalLanguage = "English",
                     Country = "USA",
                     Duration = 108,
-                    TrailerId = "t06RUxPbp_c",
-                    PosterImage = "spider-man-poster",
+                    YoutubeTrailerURL = "t06RUxPbp_c",
+                    PosterImageName = "spider-man-poster",
                     Genres = new HashSet<Genre> { Genre.Action, Genre.Superhero },
                     SubtitleOption = new SubtitleOption
                     {
@@ -165,8 +165,8 @@ public static class SampleData
                     OriginalLanguage = "English",
                     Country = "USA",
                     Duration = 154,
-                    TrailerId = "s7EdQ4FqbhY",
-                    PosterImage = "pulpfiction-poster",
+                    YoutubeTrailerURL = "s7EdQ4FqbhY",
+                    PosterImageName = "pulpfiction-poster",
                     Genres = new HashSet<Genre> { Genre.Crime, Genre.Drama },
                     SubtitleOption = new SubtitleOption
                     {
@@ -185,8 +185,8 @@ public static class SampleData
                     OriginalLanguage = "English",
                     Country = "USA",
                     Duration = 143,
-                    TrailerId = "eOrNdBpGMv8&t=2s",
-                    PosterImage = "avengers-poster",
+                    YoutubeTrailerURL = "eOrNdBpGMv8&t=2s",
+                    PosterImageName = "avengers-poster",
                     Genres = new HashSet<Genre> { Genre.Action, Genre.Superhero, Genre.SciFi },
                     SubtitleOption = new SubtitleOption
                     {
@@ -206,8 +206,8 @@ public static class SampleData
                     OriginalLanguage = "English",
                     Country = "USA",
                     Duration = 175,
-                    TrailerId = "UaVTIH8mujA",
-                    PosterImage = "godfather-poster",
+                    YoutubeTrailerURL = "UaVTIH8mujA",
+                    PosterImageName = "godfather-poster",
                     Genres = new HashSet<Genre> { Genre.Crime, Genre.Drama },
                     SubtitleOption = new SubtitleOption
                     {
@@ -226,8 +226,8 @@ public static class SampleData
                     OriginalLanguage = "English",
                     Country = "USA",
                     Duration = 170,
-                    TrailerId = "cv276Wg3e7I",
-                    PosterImage = "scarface-poster",
+                    YoutubeTrailerURL = "cv276Wg3e7I",
+                    PosterImageName = "scarface-poster",
                     Genres = new HashSet<Genre> { Genre.Crime, Genre.Drama },
                     SubtitleOption = new SubtitleOption
                     {
@@ -246,8 +246,8 @@ public static class SampleData
                     OriginalLanguage = "English",
                     Country = "Turkish",
                     Duration = 125,
-                    TrailerId = "dQw4w9WgXcQ",
-                    PosterImage = null,
+                    YoutubeTrailerURL = "dQw4w9WgXcQ",
+                    PosterImageName = null,
                     Genres = new HashSet<Genre> { Genre.Action },
                     SubtitleOption = new SubtitleOption
                     {

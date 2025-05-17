@@ -80,7 +80,7 @@ namespace Project.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("PosterImage")
+                    b.Property<string>("PosterImageName")
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("ReleaseDate")
@@ -89,7 +89,7 @@ namespace Project.Migrations
                     b.Property<int>("SubtitleOptionId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("TrailerId")
+                    b.Property<string>("YoutubeTrailerURL")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Title");
