@@ -10,13 +10,14 @@ const detailDescription = document.querySelector(
 );
 const showcase = mainContainer.querySelector('.showcase-container');
 const moviesPopupContainer = document.querySelector('.movies-popup-container');
-const streamingServicePopUpContainer = document.querySelector('.streaming-popup-container');
+const streamingServicePopUpContainer = document.querySelector(
+  '.streaming-popup-container',
+);
 
 let detailOpenedFrom = 'home';
 
 export function showMovieDetail(movie, from = 'home') {
   detailOpenedFrom = from;
-
 
   const posterImage = movie.mediaContent?.posterImage
     ? `../public/img/${movie.mediaContent.posterImage}.png`
@@ -29,30 +30,39 @@ export function showMovieDetail(movie, from = 'home') {
   detailDescription.innerHTML =
     movie.mediaContent?.description ?? 'No description available.';
 
+  const trailerId = movie.mediaContent?.trailerId ?? 'Xithigfg7dA'; // fallback to Avengers trailer
 
-  const backgroundImage = movie.mediaContent?.backgroundImage
-    ? `../public/img/${movie.mediaContent.backgroundImage}.png`
-    : '../public/img/default-background.png';
+  detailImage.innerHTML = `
+    <iframe
+      class="trailer-iframe"
+      src="https://www.youtube.com/embed/${trailerId}?autoplay=1&controls=0&loop=1"
+      allow="autoplay; encrypted-media"
+      allowfullscreen>
+      </iframe>
+    <img src="${posterImage}" alt="${movie.mediaContent?.title}">
+  `;
 
-  detailImage.style.backgroundImage = `url(${backgroundImage})`;
-
-  platformLinksDetail.innerHTML = movie.mediaContent?.streamingServices?.map(s =>
-    `<img src="../public/img/streamers/${s.logoImage}.png" alt="${s.name}">`
-  ).join('') ?? '';
+  platformLinksDetail.innerHTML =
+    movie.mediaContent?.streamingServices
+      ?.map(
+        (s) =>
+          `<img src="../public/img/streamers/${s.logoImage}.png" alt="${s.name}">`,
+      )
+      .join('') ?? '';
 
   detailContainer.style.display = 'flex';
 
-  mainContainer.style.filter = 'grayscale(100%) blur(5px)';
+  mainContainer.style.filter = 'grayscale(100%) blur(10px)';
   showcase.style.backgroundImage = `linear-gradient(to bottom, rgba(0, 0, 0, 0.55) 0%, rgba(0, 0, 0, 1) 100%),
                                     url(${featuredMovie.backgroundHolder})`;
 
   if (from === 'movies') {
-    moviesPopupContainer.style.filter = 'grayscale(100%) blur(5px)';
+    moviesPopupContainer.style.filter = 'grayscale(100%) blur(10px)';
     moviesPopupContainer.classList.add('overlay-disabled');
   }
 
   if (from === 'streamingServices') {
-    streamingServicePopUpContainer.style.filter = 'grayscale(100%) blur(5px)';
+    streamingServicePopUpContainer.style.filter = 'grayscale(100%) blur(10px)';
     streamingServicePopUpContainer.classList.add('overlay-disabled');
   }
 
@@ -84,23 +94,20 @@ export function closeDetailOnEscape() {
   });
 }
 
-
-
 function closeDetailView() {
   detailContainer.scrollTop = 0;
+  detailImage.innerHTML = '';
   detailContainer.style.display = 'none';
 
   if (detailOpenedFrom === 'movies') {
     moviesPopupContainer.style.filter = 'none';
     moviesPopupContainer.classList.remove('overlay-disabled');
-  } else if(detailOpenedFrom === 'streamingServices') {
+  } else if (detailOpenedFrom === 'streamingServices') {
     streamingServicePopUpContainer.style.filter = 'none';
     streamingServicePopUpContainer.classList.remove('overlay-disabled');
   } else {
     mainContainer.style.filter = 'none';
-
   }
-
 
   showcase.classList.remove('overlay-disabled');
 }

@@ -2,11 +2,12 @@
 .main-container-detail {
     display: none;
     flex-direction: column;
-    width: 80vw;
+    width: 60vw;
     height: 80vh;
     position: fixed;
     top: 10%;
-    left: 10%;
+    left: 50%;
+    transform: translate(-50%, 0);
     background-color: transparent;
     z-index: 2000;
     border-radius: 25px;
@@ -30,6 +31,7 @@
 }
 
 .movie-image-detail {
+    background-color: black;
     border-top-right-radius: 25px;
     border-top-left-radius: 25px;
     position: relative;
@@ -136,4 +138,12 @@
     padding-right: 1em;
 }
 
-
+.trailer-iframe {
+    position: absolute;
+    width: 97%;
+    height: 100%;
+    border: none;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
