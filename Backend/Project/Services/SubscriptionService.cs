@@ -178,13 +178,13 @@ public class SubscriptionService
         if (confirmation == null)
             throw new SubscriptionConfirmationNotFoundException(subscriptionId);
 
+        var today = DateTime.Today;
         return new SubscriptionConfirmationResponseDTO
         {
             Id = confirmation.Id,
             PaymentMethod = confirmation.PaymentMethod,
             Price = confirmation.Price,
-            StartTime = confirmation.StartTime,
-            EndTime = confirmation.EndTime,
+            DurationInDays = (confirmation.EndTime - confirmation.StartTime).Days,
             UserId = confirmation.UserId,
             SubscriptionId = confirmation.SubscriptionId,
             UserStatus = confirmation.User.Status.ToString(),
@@ -201,14 +201,14 @@ public class SubscriptionService
 
         if (confirmations == null)
             throw new SubscriptionConfirmationNotFoundException(subscription.Id);
+        var today = DateTime.Today;
 
         return confirmations.Select(confirmation => new SubscriptionConfirmationResponseDTO()
         {
             Id = confirmation.Id,
             PaymentMethod = confirmation.PaymentMethod,
             Price = confirmation.Price,
-            StartTime = confirmation.StartTime,
-            EndTime = confirmation.EndTime,
+            DurationInDays = (confirmation.EndTime - confirmation.StartTime).Days,
             UserId = confirmation.UserId,
             SubscriptionId = confirmation.SubscriptionId,
             UserStatus = confirmation.User.Status.ToString(),

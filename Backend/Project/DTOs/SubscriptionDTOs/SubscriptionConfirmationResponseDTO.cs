@@ -8,8 +8,7 @@ public class SubscriptionConfirmationResponseDTO
 
     public decimal Price { get; set; }
 
-    public DateTime StartTime { get; set; }
-    public DateTime EndTime { get; set; }
+    public int DurationInDays { get; set; }
 
     public int UserId { get; set; }
 
