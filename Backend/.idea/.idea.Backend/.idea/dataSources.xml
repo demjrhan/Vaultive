@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="vaultive" uuid="5f435610-346c-4ff9-9981-4182a7ffcbb8">
+    <data-source source="LOCAL" name="vaultive" uuid="c4d75c82-ea49-4454-8311-ba138ba41b3f">
       <driver-ref>sqlite.xerial</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.sqlite.JDBC</jdbc-driver>

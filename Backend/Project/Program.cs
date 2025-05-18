@@ -37,6 +37,8 @@ builder.Services.AddScoped<MovieService>();
 builder.Services.AddScoped<SubscriptionService>();
 builder.Services.AddScoped<StreamingServiceRepository>();
 builder.Services.AddScoped<SubscriptionConfirmationRepository>();
+builder.Services.AddScoped<ReviewService>();
+builder.Services.AddScoped<ReviewRepository>();
 
 
 var app = builder.Build();

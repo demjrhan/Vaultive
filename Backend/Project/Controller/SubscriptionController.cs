@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Project.DTOs.SubscriptionDTOs;
-using Project.Exceptions;
-using Project.Models;
 using Project.Services;
 
 namespace Project.Controllers;

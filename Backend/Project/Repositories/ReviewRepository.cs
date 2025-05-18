@@ -51,6 +51,8 @@ public class ReviewRepository
     public async Task<IEnumerable<Review>> GetReviewsForMediaAsync(string mediaTitle)
     {
         return await _context.Reviews
+            .Include(r => r.User)
+            .Include(r => r.WatchHistory)
             .Where(r => r.MediaTitle == mediaTitle)
             .ToListAsync();
     }
