@@ -445,7 +445,7 @@ public static class SampleData
             if (demir != null)
             {
                 var demirMovies = watchedMovies
-                    .Where(m => m.Title == "John Wick" || m.Title == "Avengers" || m.Title == "Pulp Fiction")
+                    .Where(m => m.Title == "John Wick" || m.Title == "Avengers" || m.Title == "Pulp Fiction" || m.Title == "Deadpool")
                     .ToList();
 
                 foreach (var movie in demirMovies)
@@ -463,7 +463,7 @@ public static class SampleData
             if (aiko != null)
             {
                 var aikoMovies = watchedMovies
-                    .Where(m => m.Title == "Deadpool" || m.Title == "Spiderman")
+                    .Where(m => m.Title == "John Wick" || m.Title == "Deadpool" || m.Title == "Spiderman" || m.Title == "Pulp Fiction")
                     .ToList();
 
                 foreach (var movie in aikoMovies)

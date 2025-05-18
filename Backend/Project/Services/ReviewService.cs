@@ -94,7 +94,7 @@ public class ReviewService
             var watchHistory = await _watchHistoryRepository.GetByUserAndMediaAsync(dto.UserId, dto.MediaTitle)
                 ?? throw new WatchHistoryNotFoundException(dto.UserId);
 
-            var existingReview = await GetReviewOfUserToMediaContentAsync(dto.UserId, dto.MediaTitle);
+            var existingReview = await _reviewRepository.GetReviewOfUserToMediaContentAsync(dto.UserId,dto.MediaTitle);
             if (existingReview != null) throw new DuplicateReviewException(user.Nickname, dto.MediaTitle);
             
             var review = new Review
