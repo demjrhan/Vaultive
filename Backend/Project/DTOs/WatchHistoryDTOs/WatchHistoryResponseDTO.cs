@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace Project.DTOs;
+namespace Project.DTOs.WatchHistoryDTOs;
 
 public class WatchHistoryResponseDTO
 {

@@ -1,4 +1,6 @@
-namespace Project.DTOs;
+using Project.DTOs.UserDTOs;
+
+namespace Project.DTOs.ReviewDTOs;
 
 public class ReviewResponseDTO
 {

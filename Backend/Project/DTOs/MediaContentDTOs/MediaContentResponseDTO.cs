@@ -1,5 +1,7 @@
 
-namespace Project.DTOs;
+using Project.DTOs.StreamingServiceDTOs;
+
+namespace Project.DTOs.MediaContentDTOs;
 
 public class MediaContentResponseDTO
 {

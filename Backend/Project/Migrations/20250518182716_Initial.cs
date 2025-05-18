@@ -78,6 +78,7 @@ namespace Project.Migrations
                     Name = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
                     Country = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
                     Description = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
+                    DefaultPrice = table.Column<decimal>(type: "decimal(5,2)", nullable: false),
                     LogoImage = table.Column<string>(type: "TEXT", nullable: false),
                     MediaContentTitle = table.Column<string>(type: "TEXT", nullable: true)
                 },
@@ -187,7 +188,6 @@ namespace Project.Migrations
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    DefaultPrice = table.Column<double>(type: "REAL", nullable: false),
                     StreamingServiceId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
@@ -262,7 +262,7 @@ namespace Project.Migrations
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     PaymentMethod = table.Column<string>(type: "TEXT", maxLength: 25, nullable: false),
-                    Price = table.Column<double>(type: "decimal(5,2)", nullable: false),
+                    Price = table.Column<decimal>(type: "decimal(5,2)", nullable: false),
                     StartTime = table.Column<DateTime>(type: "datetime", nullable: false),
                     EndTime = table.Column<DateTime>(type: "datetime", nullable: false),
                     UserId = table.Column<int>(type: "INTEGER", nullable: false),

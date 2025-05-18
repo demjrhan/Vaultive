@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Project.Context;
-using Project.DTOs;
+using Project.DTOs.UserDTOs;
 using Project.Exceptions;
 using Project.Models;
 
@@ -14,16 +14,19 @@ public class UserRepository
     {
         _context = masterContext;
     }
-
+    public async Task SaveChangesAsync()
+    {
+        await _context.SaveChangesAsync();
+    }
     public async Task<User?> GetUserWithIdAsync(int userId)
     {
         return await _context.Users.Where(u => u.Id == userId).FirstOrDefaultAsync();
     }
     public async Task AddUserAsync(User user)
     {
-        _context.Users.Add(user);
-        await _context.SaveChangesAsync();
+        await _context.Users.AddAsync(user);
     }
+   
     public async Task UpdateUserAsync(User existing, UpdateUserDTO updatedUser)
     {
         existing.Firstname = updatedUser.Firstname;
@@ -42,7 +45,6 @@ public class UserRepository
         if (user == null) throw new UserNotFoundException(userId);
 
         _context.Users.Remove(user);
-        await _context.SaveChangesAsync();
     }
     public async Task<User?> GetUserByEmailAsync(string email)
     {

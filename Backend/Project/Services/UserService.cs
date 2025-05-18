@@ -1,4 +1,6 @@
 ﻿using Project.DTOs;
+using Project.DTOs.UserDTOs;
+using Project.DTOs.WatchHistoryDTOs;
 using Project.Exceptions;
 using Project.Models;
 using Project.Models.Enumerations;
@@ -114,6 +116,8 @@ public class UserService
         };
 
         await _userRepository.AddUserAsync(createdUser);
+        await _userRepository.SaveChangesAsync();
+
     }
     public async Task DeleteUserAsync(int userId)
     {
@@ -124,6 +128,8 @@ public class UserService
         }
 
         await _userRepository.DeleteUserAsync(userId);
+        await _userRepository.SaveChangesAsync();
+
     }
 
     public async Task UpdateUserAsync(UpdateUserDTO updatedUser)
@@ -158,6 +164,7 @@ public class UserService
             throw new NoChangesDetectedException();
 
         await _userRepository.UpdateUserAsync(existing, updatedUser);
+        await _userRepository.SaveChangesAsync();
     }
     private bool IsUserUpdateRequired(User existing, UpdateUserDTO updated)
     {

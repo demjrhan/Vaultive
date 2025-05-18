@@ -14,20 +14,22 @@ public class SubscriptionRepository
         _context = masterContext;
     }
 
-    public async Task AddSubscriptionAsync(Subscription subscription)
+    public async Task SaveChangesAsync()
     {
-        _context.Subscriptions.Add(subscription);
         await _context.SaveChangesAsync();
     }
-    
+    public async Task AddSubscriptionAsync(Subscription subscription)
+    {
+       await _context.Subscriptions.AddAsync(subscription);
+    }
 
+    
     public async Task DeleteSubscriptionAsync(int subscriptionId)
     {
         var subscription = await _context.Subscriptions.FindAsync(subscriptionId);
         if (subscription == null) throw new SubscriptionsNotFoundException(subscriptionId);
 
         _context.Subscriptions.Remove(subscription);
-        await _context.SaveChangesAsync();
     }
 
     public async Task<Subscription?> GetSubscriptionByIdAsync(int subscriptionId)

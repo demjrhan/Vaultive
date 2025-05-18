@@ -14,7 +14,10 @@ public class ReviewRepository
         _context = masterContext;
     }
 
-    
+    public async Task SaveChangesAsync()
+    {
+        await _context.SaveChangesAsync();
+    }
     public async Task<IEnumerable<Review>> GetReviewsOfUserIdAsync(int userId)
     {
         return (await _context.Reviews.ToListAsync())
@@ -23,8 +26,7 @@ public class ReviewRepository
     
     public async Task AddReviewAsync(Review review)
     {
-        _context.Reviews.Add(review);
-        await _context.SaveChangesAsync();
+        await _context.Reviews.AddAsync(review);
     }
     public async Task UpdateReviewAsync(Review updatedReview)
     {
@@ -33,7 +35,6 @@ public class ReviewRepository
 
         existingReview.Rating = updatedReview.Rating;
         existingReview.Comment = updatedReview.Comment;
-        await _context.SaveChangesAsync();
     }
     public async Task DeleteReviewAsync(int reviewId)
     {
@@ -41,7 +42,6 @@ public class ReviewRepository
         if (review == null) throw new ReviewNotFoundException(reviewId);
 
         _context.Reviews.Remove(review);
-        await _context.SaveChangesAsync();
     }
     public async Task<Review?> GetReviewByIdAsync(int reviewId)
     {

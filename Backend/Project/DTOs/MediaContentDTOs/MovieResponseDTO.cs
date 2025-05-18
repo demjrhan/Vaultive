@@ -1,4 +1,4 @@
-namespace Project.DTOs;
+namespace Project.DTOs.MediaContentDTOs;
 
 public class MovieResponseDTO
 {

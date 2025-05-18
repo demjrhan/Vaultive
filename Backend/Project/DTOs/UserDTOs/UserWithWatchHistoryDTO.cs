@@ -1,4 +1,6 @@
-﻿namespace Project.DTOs;
+﻿using Project.DTOs.WatchHistoryDTOs;
+
+namespace Project.DTOs.UserDTOs;
 
 public class UserWithWatchHistoryDTO
 {

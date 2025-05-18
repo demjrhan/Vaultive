@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Project.DTOs.SubscriptionDTOs;
 using Project.Exceptions;
 using Project.Models;
 using Project.Services;
@@ -73,7 +74,7 @@ public class SubscriptionController : ControllerBase
     }
 
     [HttpPost("Add")]
-    public async Task<IActionResult> Add([FromBody] Subscription subscription)
+    public async Task<IActionResult> Add([FromBody] AddSubscriptionDTO subscription)
     {
         try
         {

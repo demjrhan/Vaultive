@@ -1,4 +1,4 @@
-﻿namespace Project.DTOs;
+﻿namespace Project.DTOs.UserDTOs;
 
 public class UserResponseDTO
 {

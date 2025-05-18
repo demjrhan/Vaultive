@@ -11,7 +11,7 @@ using Project.Context;
 namespace Project.Migrations
 {
     [DbContext(typeof(MasterContext))]
-    [Migration("20250518163846_Initial")]
+    [Migration("20250518182716_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -164,6 +164,9 @@ namespace Project.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("TEXT");
 
+                    b.Property<decimal>("DefaultPrice")
+                        .HasColumnType("decimal(5,2)");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -194,9 +197,6 @@ namespace Project.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<double>("DefaultPrice")
-                        .HasColumnType("REAL");
-
                     b.Property<int>("StreamingServiceId")
                         .HasColumnType("INTEGER");
 
@@ -221,7 +221,7 @@ namespace Project.Migrations
                         .HasMaxLength(25)
                         .HasColumnType("TEXT");
 
-                    b.Property<double>("Price")
+                    b.Property<decimal>("Price")
                         .HasColumnType("decimal(5,2)");
 
                     b.Property<DateTime>("StartTime")

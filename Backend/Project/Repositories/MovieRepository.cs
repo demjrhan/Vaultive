@@ -14,10 +14,13 @@ public class MovieRepository
     {
         _context = masterContext;
     }
+    public async Task SaveChangesAsync()
+    {
+        await _context.SaveChangesAsync();
+    }
     public async Task AddMovieAsync(Movie movie)
     {
-        _context.Movies.Add(movie);
-        await _context.SaveChangesAsync();
+        await _context.Movies.AddAsync(movie);
     }
     public async Task DeleteMovieAsync(string title)
     {
@@ -25,7 +28,6 @@ public class MovieRepository
         if (movie == null) throw new MovieNotFoundException(title);
 
         _context.Movies.Remove(movie);
-        await _context.SaveChangesAsync();
     }
     public async Task<Movie?> GetMovieByTitleAsync(string title)
     {
@@ -65,8 +67,6 @@ public class MovieRepository
         existing.Genres = updatedMovie.Genres;
         existing.SubtitleOptionId = updatedMovie.SubtitleOptionId;
         existing.AudioOptionId = updatedMovie.AudioOptionId;
-
-        await _context.SaveChangesAsync();
     }
 
 }

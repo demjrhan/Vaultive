@@ -1,4 +1,6 @@
-﻿namespace Project.DTOs;
+﻿using Project.DTOs.SubscriptionDTOs;
+
+namespace Project.DTOs.UserDTOs;
 
 public class UserWithSubscriptionsDTO
 {

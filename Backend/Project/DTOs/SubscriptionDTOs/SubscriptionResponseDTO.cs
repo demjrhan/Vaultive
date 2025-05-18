@@ -1,4 +1,4 @@
-﻿namespace Project.DTOs;
+﻿namespace Project.DTOs.SubscriptionDTOs;
 
 public class SubscriptionResponseDTO
 {

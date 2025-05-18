@@ -1,10 +1,12 @@
-﻿namespace Project.DTOs;
+﻿namespace Project.DTOs.StreamingServiceDTOs;
 
 public class StreamingServiceResponseDTO
 {
     public string Name { get; set; } = null!;
     public string Country { get; set; } = null!;
     public string Description { get; set; } = null!;
+    
+    public decimal DefaultPrice { get; set; }
     
     public string LogoImage { get; set; } = null!;
 }

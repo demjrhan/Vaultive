@@ -1,10 +1,9 @@
 ﻿using Project.Models.Enumerations;
 
-namespace Project.DTOs;
+namespace Project.DTOs.UserDTOs;
 
-public class UpdateUserDTO
+public class CreateUserDTO
 {
-    public int Id { get; set; }
     public string? Firstname { get; set; }
     public string? Lastname { get; set; }
     public string Nickname { get; set; } = null!;

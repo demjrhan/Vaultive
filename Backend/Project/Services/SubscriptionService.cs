@@ -1,5 +1,7 @@
-﻿using Project.DTOs;
+﻿using Project.Context;
+using Project.DTOs.SubscriptionDTOs;
 using Project.Exceptions;
+using Project.Helper;
 using Project.Models;
 using Project.Repositories;
 
@@ -7,19 +9,81 @@ namespace Project.Services;
 
 public class SubscriptionService
 {
+    
     private readonly SubscriptionRepository _subscriptionRepository;
-
-    public SubscriptionService(SubscriptionRepository subscriptionRepository)
+    private readonly MovieRepository _movieRepository;
+    private readonly UserRepository _userRepository;
+    private readonly WatchHistoryRepository _watchHistoryRepository;
+    private readonly StreamingServiceRepository _streamingServiceRepository;
+    private readonly SubscriptionConfirmationRepository _subscriptionConfirmationRepository;
+    private readonly MasterContext _context;
+    public SubscriptionService(
+        MasterContext context,
+        MovieRepository movieRepository,
+        UserRepository userRepository,
+        SubscriptionRepository subscriptionRepository,
+        WatchHistoryRepository watchHistoryRepository,
+        StreamingServiceRepository streamingServiceRepository,
+        SubscriptionConfirmationRepository subscriptionConfirmationRepository)
     {
+        _context = context;
+        _movieRepository = movieRepository;
+        _userRepository = userRepository;
         _subscriptionRepository = subscriptionRepository;
+        _watchHistoryRepository = watchHistoryRepository;
+        _streamingServiceRepository = streamingServiceRepository;
+        _subscriptionConfirmationRepository = subscriptionConfirmationRepository;
     }
-
-    public async Task AddSubscriptionAsync(Subscription subscription)
+    
+    public async Task AddSubscriptionAsync(AddSubscriptionDTO s)
     {
-      
+        using var transaction = await _context.Database.BeginTransactionAsync();
+
+        try
+        {
+            var streamingService = await _streamingServiceRepository.GetStreamingServiceById(s.StreamingServiceId);
+            if (streamingService == null)
+                throw new StreamingServiceNotFoundException(s.StreamingServiceId);
+
+            var user = await _userRepository.GetUserWithIdAsync(s.UserId);
+            if (user == null)
+                throw new UserNotFoundException(s.UserId);
+            var userSubscriptions = user.
+            var subscription = new Subscription
+            {
+                StreamingServiceId = s.StreamingServiceId,
+                StreamingService = streamingService
+            };
+            await _subscriptionRepository.AddSubscriptionAsync(subscription);
+
+            var today = DateTime.Today;
+            var confirmation = new SubscriptionConfirmation
+            {
+                StartTime = today,
+                EndTime = today.AddMonths(s.DurationInMonth),
+                PaymentMethod = s.PaymentMethod,
+                Price = SubscriptionPriceCalculator.CalculateAmount(streamingService.DefaultPrice, user),
+                Subscription = subscription,
+                SubscriptionId = subscription.Id,
+                User = user,
+                UserId = user.Id
+            };
+            await _subscriptionConfirmationRepository.AddSubscriptionConfirmationAsync(confirmation);
+
+            await _context.SaveChangesAsync();
+
+            await transaction.CommitAsync();
+        }
+        catch (Exception ex)
+        {
+            await transaction.RollbackAsync();
+            throw;
+        }
     }
 
-   
+
+
+    
     public async Task DeleteSubscriptionAsync(int subscriptionId)
     {
         var existing = await _subscriptionRepository.GetSubscriptionByIdAsync(subscriptionId);
@@ -27,6 +91,7 @@ public class SubscriptionService
             throw new SubscriptionsNotFoundException(subscriptionId);
 
         await _subscriptionRepository.DeleteSubscriptionAsync(subscriptionId);
+        await _userRepository.SaveChangesAsync();
     }
 
     public async Task<SubscriptionResponseDTO> GetSubscriptionByIdAsync(int subscriptionId)

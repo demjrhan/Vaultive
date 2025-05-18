@@ -1,4 +1,6 @@
 using Project.DTOs;
+using Project.DTOs.MediaContentDTOs;
+using Project.DTOs.StreamingServiceDTOs;
 using Project.Models;
 using Project.Models.Enumerations;
 using Project.Repositories;
@@ -83,10 +85,13 @@ public class MovieService
         if (existing == null)
         {
             await _watchHistoryRepository.AddAsync(newHistory);
+            await _watchHistoryRepository.SaveChangesAsync();
         }
         else if (existing.TimeLeftOf != newHistory.TimeLeftOf || existing.WatchDate != newHistory.WatchDate)
         {
             await _watchHistoryRepository.UpdateAsync(existing, newHistory);
+            await _watchHistoryRepository.SaveChangesAsync();
+
         }
         
     }
