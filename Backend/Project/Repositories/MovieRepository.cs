@@ -14,10 +14,7 @@ public class MovieRepository
     {
         _context = masterContext;
     }
-    public async Task SaveChangesAsync()
-    {
-        await _context.SaveChangesAsync();
-    }
+
     public async Task AddMovieAsync(Movie movie)
     {
         await _context.Movies.AddAsync(movie);

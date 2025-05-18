@@ -12,10 +12,7 @@ public class StreamingServiceRepository
     {
         _context = masterContext;
     }
-    public async Task SaveChangesAsync()
-    {
-        await _context.SaveChangesAsync();
-    }
+
     public async Task<StreamingService?> GetStreamingServiceById(int streamingServiceId)
     {
        return await _context.StreamingServices.FirstOrDefaultAsync(s => s.Id == streamingServiceId);

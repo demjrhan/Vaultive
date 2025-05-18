@@ -1,4 +1,5 @@
-﻿using Project.Context;
+﻿using Microsoft.EntityFrameworkCore;
+using Project.Context;
 using Project.DTOs.SubscriptionDTOs;
 using Project.Exceptions;
 using Project.Helper;
@@ -37,7 +38,7 @@ public class SubscriptionService
     
     public async Task AddSubscriptionAsync(AddSubscriptionDTO s)
     {
-        using var transaction = await _context.Database.BeginTransactionAsync();
+        await using var transaction = await _context.Database.BeginTransactionAsync();
 
         try
         {
@@ -48,7 +49,13 @@ public class SubscriptionService
             var user = await _userRepository.GetUserWithIdAsync(s.UserId);
             if (user == null)
                 throw new UserNotFoundException(s.UserId);
-            var userSubscriptions = user.
+
+
+            if (await _subscriptionConfirmationRepository.HasUserConfirmedSubscriptionAsync(user.Id,s.StreamingServiceId))
+                throw new SubscriptionAlreadyExistsException(user.Id,streamingService.Id);
+
+            
+            
             var subscription = new Subscription
             {
                 StreamingServiceId = s.StreamingServiceId,
@@ -86,12 +93,27 @@ public class SubscriptionService
     
     public async Task DeleteSubscriptionAsync(int subscriptionId)
     {
-        var existing = await _subscriptionRepository.GetSubscriptionByIdAsync(subscriptionId);
-        if (existing == null)
-            throw new SubscriptionsNotFoundException(subscriptionId);
+        await using var transaction = await _context.Database.BeginTransactionAsync();
 
-        await _subscriptionRepository.DeleteSubscriptionAsync(subscriptionId);
-        await _userRepository.SaveChangesAsync();
+        try
+        {
+            var existing = await _subscriptionRepository.GetSubscriptionByIdAsync(subscriptionId);
+            if (existing == null)
+                throw new SubscriptionsNotFoundException(subscriptionId);
+
+            await _subscriptionRepository.DeleteSubscriptionAsync(subscriptionId);
+
+            await _context.SaveChangesAsync();
+            await transaction.CommitAsync();
+
+        }
+        catch (Exception ex)
+        {
+            await transaction.RollbackAsync();
+            throw;
+        }
+        
+        
     }
 
     public async Task<SubscriptionResponseDTO> GetSubscriptionByIdAsync(int subscriptionId)
@@ -100,6 +122,7 @@ public class SubscriptionService
         if (subscription == null) throw new SubscriptionsNotFoundException(subscriptionId);
         return new SubscriptionResponseDTO()
         {
+            Id = subscription.Id,
             DaysLeft = subscription.DurationInDays,
             Price = subscription.StreamingService.DefaultPrice,
             StreamingServiceName = subscription.StreamingService.Name
@@ -116,6 +139,7 @@ public class SubscriptionService
         var result = subscriptions
             .Select(s => new SubscriptionResponseDTO()
             {
+                Id = s.Id,
                 DaysLeft = s.DurationInDays, 
                 Price = s.StreamingService.DefaultPrice, 
                 StreamingServiceName = s.StreamingService.Name
@@ -136,7 +160,8 @@ public class SubscriptionService
 
         var result = activeConfirmations.Select(c => new SubscriptionResponseDTO
         {
-            DaysLeft = (c.EndTime - DateTime.UtcNow).Days,
+            Id = c.Id,
+            DaysLeft = c.Subscription.DurationInDays,
             StreamingServiceName = c.Subscription.StreamingService.Name,
             Price = c.Price
         });

@@ -14,10 +14,7 @@ public class ReviewRepository
         _context = masterContext;
     }
 
-    public async Task SaveChangesAsync()
-    {
-        await _context.SaveChangesAsync();
-    }
+   
     public async Task<IEnumerable<Review>> GetReviewsOfUserIdAsync(int userId)
     {
         return (await _context.Reviews.ToListAsync())

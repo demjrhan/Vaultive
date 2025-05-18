@@ -2,6 +2,7 @@
 
 public class SubscriptionResponseDTO
 {
+    public int Id { get; set; }
 
     public decimal Price { get; set; }
     public int DaysLeft { get; set; }

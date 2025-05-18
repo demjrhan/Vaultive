@@ -14,10 +14,7 @@ public class UserRepository
     {
         _context = masterContext;
     }
-    public async Task SaveChangesAsync()
-    {
-        await _context.SaveChangesAsync();
-    }
+    
     public async Task<User?> GetUserWithIdAsync(int userId)
     {
         return await _context.Users.Where(u => u.Id == userId).FirstOrDefaultAsync();

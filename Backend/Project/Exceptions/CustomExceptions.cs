@@ -18,7 +18,7 @@
     }
     public class SubscriptionsNotFoundException : Exception
     {
-        public SubscriptionsNotFoundException(int subscriptionId) : base($"Subscription not found with given userId {subscriptionId}.") { }
+        public SubscriptionsNotFoundException(int subscriptionId) : base($"Subscription not found with given Id {subscriptionId}.") { }
     }
     public class UserNotFoundException : Exception
     {
@@ -99,4 +99,5 @@
         public NoSubscriptionExistsException() 
             : base("There is no subscription exists in database.") { }
     }
+    
 }

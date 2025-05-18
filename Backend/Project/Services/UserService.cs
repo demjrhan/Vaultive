@@ -1,4 +1,5 @@
-﻿using Project.DTOs;
+﻿using Project.Context;
+using Project.DTOs;
 using Project.DTOs.UserDTOs;
 using Project.DTOs.WatchHistoryDTOs;
 using Project.Exceptions;
@@ -15,13 +16,17 @@ public class UserService
     private readonly SubscriptionRepository _subscriptionRepository;
     private readonly SubscriptionService _subscriptionService;
     private readonly WatchHistoryRepository _watchHistoryRepository;
+    private readonly MasterContext _context;
 
-    public UserService(MovieRepository movieRepository,
+    public UserService(
+        MasterContext context,
+        MovieRepository movieRepository,
         UserRepository userRepository,
         SubscriptionRepository subscriptionRepository,
         SubscriptionService subscriptionService,
         WatchHistoryRepository watchHistoryRepository)
     {
+        _context = context;
         _movieRepository = movieRepository;
         _userRepository = userRepository;
         _subscriptionRepository = subscriptionRepository;
@@ -36,8 +41,6 @@ public class UserService
             throw new UserNotFoundException(userId);
         var subscriptions = await _subscriptionService.GetActiveSubscriptionsOfUserIdAsync(userId);
 
-
-       
 
         return new UserWithSubscriptionsDTO
         {
@@ -83,93 +86,129 @@ public class UserService
             }).ToList()
         };
     }
+
     public async Task AddUserAsync(CreateUserDTO user)
     {
-        if (string.IsNullOrWhiteSpace(user.Nickname))
-            throw new ArgumentException("Nickname is required.");
 
-        if (string.IsNullOrWhiteSpace(user.Email))
-            throw new ArgumentException("Email is required.");
-
-        if (string.IsNullOrWhiteSpace(user.Country))
-            throw new ArgumentException("Country is required.");
-
-        var existingByEmail = await _userRepository.GetUserByEmailAsync(user.Email);
-        if (existingByEmail != null)
-            throw new EmailAlreadyExistsException(user.Email);
-
-        var allUsers = await _userRepository.GetAllUsersAsync();
-        if (allUsers.Any(u => u.Nickname == user.Nickname))
-            throw new NicknameAlreadyExistsException(user.Nickname);
-
-        if (!Enum.IsDefined(typeof(Status), user.Status))
-            throw new InvalidUserStatusException(user.Status.ToString());
-
-        var createdUser = new User()
+        await using var transaction = await _context.Database.BeginTransactionAsync();
+        try
         {
-            Country = user.Country,
-            Email = user.Email,
-            Firstname = user.Firstname,
-            Lastname = user.Lastname,
-            Nickname = user.Nickname,
-            Status = user.Status
-        };
+            if (string.IsNullOrWhiteSpace(user.Nickname))
+                throw new ArgumentException("Nickname is required.");
 
-        await _userRepository.AddUserAsync(createdUser);
-        await _userRepository.SaveChangesAsync();
+            if (string.IsNullOrWhiteSpace(user.Email))
+                throw new ArgumentException("Email is required.");
 
+            if (string.IsNullOrWhiteSpace(user.Country))
+                throw new ArgumentException("Country is required.");
+
+            var existingByEmail = await _userRepository.GetUserByEmailAsync(user.Email);
+            if (existingByEmail != null)
+                throw new EmailAlreadyExistsException(user.Email);
+
+            var allUsers = await _userRepository.GetAllUsersAsync();
+            if (allUsers.Any(u => u.Nickname == user.Nickname))
+                throw new NicknameAlreadyExistsException(user.Nickname);
+
+            if (!Enum.IsDefined(typeof(Status), user.Status))
+                throw new InvalidUserStatusException(user.Status.ToString());
+
+            var createdUser = new User()
+            {
+                Country = user.Country,
+                Email = user.Email,
+                Firstname = user.Firstname,
+                Lastname = user.Lastname,
+                Nickname = user.Nickname,
+                Status = user.Status
+            };
+
+            await _userRepository.AddUserAsync(createdUser);
+            await _context.SaveChangesAsync();
+            await transaction.CommitAsync();
+        }
+        catch (Exception ex)
+        {
+            await transaction.RollbackAsync();
+            throw;
+        }
     }
+
     public async Task DeleteUserAsync(int userId)
     {
-        var existing = await _userRepository.GetUserWithIdAsync(userId);
-        if (existing == null)
+        await using var transaction = await _context.Database.BeginTransactionAsync();
+
+        try
         {
-            throw new UserNotFoundException(userId);
+            var existing = await _userRepository.GetUserWithIdAsync(userId);
+            if (existing == null)
+            {
+                throw new UserNotFoundException(userId);
+            }
+
+            await _userRepository.DeleteUserAsync(userId);
+            await _context.SaveChangesAsync();
+            await transaction.CommitAsync();
         }
-
-        await _userRepository.DeleteUserAsync(userId);
-        await _userRepository.SaveChangesAsync();
-
+        catch (Exception ex)
+        {
+            await transaction.RollbackAsync();
+            throw;
+        }
     }
 
     public async Task UpdateUserAsync(UpdateUserDTO updatedUser)
     {
-        var existing = await _userRepository.GetUserWithIdAsync(updatedUser.Id);
-        if (existing == null)
+        await using var transaction = await _context.Database.BeginTransactionAsync();
+
+        try
         {
-            throw new UserNotFoundException(updatedUser.Id);
+            var existing = await _userRepository.GetUserWithIdAsync(updatedUser.Id);
+            if (existing == null)
+            {
+                throw new UserNotFoundException(updatedUser.Id);
+            }
+
+            if (string.IsNullOrWhiteSpace(updatedUser.Nickname))
+                throw new ArgumentException("Nickname is required.");
+
+            if (string.IsNullOrWhiteSpace(updatedUser.Email))
+                throw new ArgumentException("Email is required.");
+
+            if (string.IsNullOrWhiteSpace(updatedUser.Country))
+                throw new ArgumentException("Country is required.");
+
+            var userWithEmail = await _userRepository.GetUserByEmailAsync(updatedUser.Email);
+            if (userWithEmail != null && userWithEmail.Id != updatedUser.Id)
+                throw new EmailAlreadyExistsException(updatedUser.Email);
+
+            var allUsers = await _userRepository.GetAllUsersAsync();
+            if (allUsers.Any(u => u.Nickname == updatedUser.Nickname && u.Id != updatedUser.Id))
+                throw new NicknameAlreadyExistsException(updatedUser.Nickname);
+
+            if (!Enum.IsDefined(typeof(Status), updatedUser.Status))
+                throw new InvalidUserStatusException(updatedUser.Status.ToString());
+
+            if (!IsUserUpdateRequired(existing, updatedUser))
+                throw new NoChangesDetectedException();
+
+            await _userRepository.UpdateUserAsync(existing, updatedUser);
+
+            await _context.SaveChangesAsync();
+            await transaction.CommitAsync();
         }
-
-        if (string.IsNullOrWhiteSpace(updatedUser.Nickname))
-            throw new ArgumentException("Nickname is required.");
-
-        if (string.IsNullOrWhiteSpace(updatedUser.Email))
-            throw new ArgumentException("Email is required.");
-
-        if (string.IsNullOrWhiteSpace(updatedUser.Country))
-            throw new ArgumentException("Country is required.");
-
-        var userWithEmail = await _userRepository.GetUserByEmailAsync(updatedUser.Email);
-        if (userWithEmail != null && userWithEmail.Id != updatedUser.Id)
-            throw new EmailAlreadyExistsException(updatedUser.Email);
-
-        var allUsers = await _userRepository.GetAllUsersAsync();
-        if (allUsers.Any(u => u.Nickname == updatedUser.Nickname && u.Id != updatedUser.Id))
-            throw new NicknameAlreadyExistsException(updatedUser.Nickname);
-
-        if (!Enum.IsDefined(typeof(Status), updatedUser.Status))
-            throw new InvalidUserStatusException(updatedUser.Status.ToString());
-
-        if (!IsUserUpdateRequired(existing, updatedUser))
-            throw new NoChangesDetectedException();
-
-        await _userRepository.UpdateUserAsync(existing, updatedUser);
-        await _userRepository.SaveChangesAsync();
+        catch (Exception ex)
+        {
+            await transaction.RollbackAsync();
+            throw;
+        }
     }
+
     private bool IsUserUpdateRequired(User existing, UpdateUserDTO updated)
     {
         bool AreEqual(string? a, string? b) =>
             string.Equals(a?.Trim(), b?.Trim(), StringComparison.OrdinalIgnoreCase);
+
         return
             !AreEqual(existing.Firstname, updated.Firstname) ||
             !AreEqual(existing.Lastname, updated.Lastname) ||
@@ -178,5 +217,4 @@ public class UserService
             !AreEqual(existing.Country, updated.Country) ||
             existing.Status != updated.Status;
     }
-
 }

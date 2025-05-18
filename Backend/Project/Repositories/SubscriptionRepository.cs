@@ -14,10 +14,7 @@ public class SubscriptionRepository
         _context = masterContext;
     }
 
-    public async Task SaveChangesAsync()
-    {
-        await _context.SaveChangesAsync();
-    }
+   
     public async Task AddSubscriptionAsync(Subscription subscription)
     {
        await _context.Subscriptions.AddAsync(subscription);
@@ -41,6 +38,14 @@ public class SubscriptionRepository
     }
 
     public async Task<IEnumerable<Subscription>> GetAllSubscriptionsAsync()
+    {
+        return await _context.Subscriptions
+            .Include(s => s.Confirmations)
+            .Include(s => s.StreamingService)
+            .ToListAsync();
+    }
+    
+    public async Task<IEnumerable<Subscription>> GetAllSubscriptionsByUsedIdAsync(int userId)
     {
         return await _context.Subscriptions
             .Include(s => s.Confirmations)

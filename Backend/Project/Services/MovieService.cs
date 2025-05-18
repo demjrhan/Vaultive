@@ -1,3 +1,4 @@
+using Project.Context;
 using Project.DTOs;
 using Project.DTOs.MediaContentDTOs;
 using Project.DTOs.StreamingServiceDTOs;
@@ -13,12 +14,16 @@ public class MovieService
     private readonly UserRepository _userRepository;
     private readonly SubscriptionRepository _subscriptionRepository;
     private readonly WatchHistoryRepository _watchHistoryRepository;
+    private readonly MasterContext _context;
 
-    public MovieService(MovieRepository movieRepository,
+    public MovieService(
+        MasterContext context,
+        MovieRepository movieRepository,
         UserRepository userRepository,
         SubscriptionRepository subscriptionRepository,
         WatchHistoryRepository watchHistoryRepository)
     {
+        _context = context;
         _movieRepository = movieRepository;
         _userRepository = userRepository;
         _subscriptionRepository = subscriptionRepository;
@@ -80,19 +85,33 @@ public class MovieService
     }
     public async Task AddOrUpdateWatchHistoryAsync(WatchHistory newHistory)
     {
-        var existing = await _watchHistoryRepository.GetByUserAndMediaAsync(newHistory.UserId, newHistory.MediaTitle);
 
-        if (existing == null)
+        await using var transaction = await _context.Database.BeginTransactionAsync();
+        try
         {
-            await _watchHistoryRepository.AddAsync(newHistory);
-            await _watchHistoryRepository.SaveChangesAsync();
-        }
-        else if (existing.TimeLeftOf != newHistory.TimeLeftOf || existing.WatchDate != newHistory.WatchDate)
-        {
-            await _watchHistoryRepository.UpdateAsync(existing, newHistory);
-            await _watchHistoryRepository.SaveChangesAsync();
+            var existing =
+                await _watchHistoryRepository.GetByUserAndMediaAsync(newHistory.UserId, newHistory.MediaTitle);
 
+            if (existing == null)
+            {
+                await _watchHistoryRepository.AddAsync(newHistory);
+            }
+            else if (existing.TimeLeftOf != newHistory.TimeLeftOf || existing.WatchDate != newHistory.WatchDate)
+            {
+                await _watchHistoryRepository.UpdateAsync(existing, newHistory);
+
+            }
+            
+            await _context.SaveChangesAsync();
+
+            await transaction.CommitAsync();
         }
+        catch (Exception ex)
+        {
+            await transaction.RollbackAsync();
+            throw;
+        }
+      
         
     }
 
