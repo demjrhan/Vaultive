@@ -34,6 +34,7 @@ builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<WatchHistoryRepository>();
 builder.Services.AddScoped<MovieRepository>();
 builder.Services.AddScoped<MovieService>();
+builder.Services.AddScoped<SubscriptionService>();
 
 
 var app = builder.Build();

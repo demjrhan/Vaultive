@@ -70,7 +70,7 @@ public class UserService
     public async Task<UserWithWatchHistoryDTO> GetUserWithWatchHistory(int userId)
     {
         var user = await _userRepository.GetUserWithIdAsync(userId);
-        var watchHistory = await _watchHistoryRepository.GetWatchHistoryOfUserId(userId);
+        var watchHistory = await _watchHistoryRepository.GetWatchHistoriesOfUserId(userId);
 
         if (user == null)
         {

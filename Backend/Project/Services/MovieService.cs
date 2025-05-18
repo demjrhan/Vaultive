@@ -1,4 +1,5 @@
 using Project.DTOs;
+using Project.Models;
 using Project.Models.Enumerations;
 using Project.Repositories;
 
@@ -75,4 +76,19 @@ public class MovieService
         }).ToList();
         
     }
+    public async Task AddOrUpdateWatchHistoryAsync(WatchHistory newHistory)
+    {
+        var existing = await _watchHistoryRepository.GetByUserAndMediaAsync(newHistory.UserId, newHistory.MediaTitle);
+
+        if (existing == null)
+        {
+            await _watchHistoryRepository.AddAsync(newHistory);
+        }
+        else if (existing.TimeLeftOf != newHistory.TimeLeftOf || existing.WatchDate != newHistory.WatchDate)
+        {
+            await _watchHistoryRepository.UpdateAsync(existing, newHistory);
+        }
+        
+    }
+
 }
