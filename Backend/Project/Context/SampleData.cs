@@ -1,4 +1,5 @@
-﻿using Project.Models.Enumerations;
+﻿using Project.Helper;
+using Project.Models.Enumerations;
 using Project.Models;
 
 namespace Project.Context;
@@ -18,7 +19,7 @@ public static class SampleData
                 new()
                 {
                     Firstname = "Demirhan", Lastname = "Yalcin", Nickname = "Demir", Email = "demirhan@example.com",
-                    Country = "TR", Status = Status.Normal
+                    Country = "TR", Status = Status.Student
                 },
             };
             context.Users.AddRange(users);
@@ -75,7 +76,8 @@ public static class SampleData
                     SubscriptionId = subscriptions[0].Id,
                     PaymentMethod = "CreditCard",
                     StartTime = DateTime.UtcNow.AddDays(-5),
-                    EndTime = DateTime.UtcNow.AddDays(25)
+                    EndTime = DateTime.UtcNow.AddDays(25),
+                    Price = SubscriptionPriceCalculator.CalculateAmount(subscriptions[0].DefaultPrice, demirhan)
                 });
 
                 confirmations.Add(new SubscriptionConfirmation
@@ -84,7 +86,9 @@ public static class SampleData
                     SubscriptionId = subscriptions[1].Id,
                     PaymentMethod = "PayPal",
                     StartTime = DateTime.UtcNow.AddMonths(-1),
-                    EndTime = DateTime.UtcNow.AddMonths(2)
+                    EndTime = DateTime.UtcNow.AddMonths(2),
+                    Price = SubscriptionPriceCalculator.CalculateAmount(subscriptions[1].DefaultPrice, demirhan)
+
                 });
             }
 

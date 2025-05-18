@@ -11,8 +11,8 @@ using Project.Context;
 namespace Project.Migrations
 {
     [DbContext(typeof(MasterContext))]
-    [Migration("20250517152201_Inital")]
-    partial class Inital
+    [Migration("20250518152419_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -83,7 +83,7 @@ namespace Project.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("PosterImage")
+                    b.Property<string>("PosterImageName")
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("ReleaseDate")
@@ -92,7 +92,7 @@ namespace Project.Migrations
                     b.Property<int>("SubtitleOptionId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("TrailerId")
+                    b.Property<string>("YoutubeTrailerURL")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Title");
@@ -220,6 +220,9 @@ namespace Project.Migrations
                         .IsRequired()
                         .HasMaxLength(25)
                         .HasColumnType("TEXT");
+
+                    b.Property<double>("Price")
+                        .HasColumnType("REAL");
 
                     b.Property<DateTime>("StartTime")
                         .HasColumnType("datetime");

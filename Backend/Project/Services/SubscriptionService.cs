@@ -1,4 +1,5 @@
-﻿using Project.Exceptions;
+﻿using Project.DTOs;
+using Project.Exceptions;
 using Project.Models;
 using Project.Repositories;
 
@@ -30,7 +31,7 @@ public class SubscriptionService
         if (existing.DefaultPrice == updatedSubscription.DefaultPrice &&
             existing.StreamingServiceId == updatedSubscription.StreamingServiceId)
         {
-            throw new NoChangesDetectedException(); 
+            throw new NoChangesDetectedException();
         }
 
         await _subscriptionRepository.UpdateSubscriptionAsync(updatedSubscription);
@@ -45,36 +46,98 @@ public class SubscriptionService
         await _subscriptionRepository.DeleteSubscriptionAsync(subscriptionId);
     }
 
-    public async Task<Subscription?> GetSubscriptionByIdAsync(int subscriptionId)
+    public async Task<SubscriptionResponseDTO> GetSubscriptionByIdAsync(int subscriptionId)
     {
         var subscription = await _subscriptionRepository.GetSubscriptionByIdAsync(subscriptionId);
-        if (subscription == null)
-            throw new SubscriptionsNotFoundException(subscriptionId);
-
-        return subscription;
+        if (subscription == null) throw new SubscriptionsNotFoundException(subscriptionId);
+        return new SubscriptionResponseDTO()
+        {
+            DaysLeft = subscription.DurationInDays,
+            Price = subscription.DefaultPrice,
+            StreamingServiceName = subscription.StreamingService.Name
+        };
     }
 
-    public async Task<IEnumerable<Subscription>> GetAllSubscriptionsAsync()
+
+
+
+    public async Task<IEnumerable<SubscriptionResponseDTO>> GetAllSubscriptionsAsync()
     {
-        return await _subscriptionRepository.GetAllSubscriptionsAsync();
+        var subscriptions = await _subscriptionRepository.GetAllSubscriptionsAsync();
+        
+        var result = subscriptions
+            .Select(s => new SubscriptionResponseDTO()
+            {
+                DaysLeft = s.DurationInDays, 
+                Price = s.DefaultPrice, 
+                StreamingServiceName = s.StreamingService.Name
+            });
+
+        return result;
+
     }
 
-    public async Task<IEnumerable<Subscription>> GetActiveSubscriptionsOfUserIdAsync(int userId)
+    public async Task<IEnumerable<SubscriptionResponseDTO>> GetActiveSubscriptionsOfUserIdAsync(int userId)
     {
-        var result = await _subscriptionRepository.GetActiveSubscriptionsOfUserIdAsync(userId);
-        if (!result.Any())
-            throw new SubscriptionsNotFoundException(userId);
+        var subscriptions = await _subscriptionRepository.GetActiveSubscriptionsOfUserIdAsync(userId);
+        var result = subscriptions.Select(s => new SubscriptionResponseDTO()
+        {
+            DaysLeft = s.DurationInDays,
+            StreamingServiceName = s.StreamingService.Name,
+            Price = s.Confirmations.FirstOrDefault().Price
+            
+        });
+
+        
 
         return result;
     }
 
-    public async Task<SubscriptionConfirmation?> GetLatestConfirmationForUserAsync(int userId, int subscriptionId)
+
+    public async Task<SubscriptionConfirmationResponseDTO?> GetLatestConfirmationForUserAsync(int userId,
+        int subscriptionId)
     {
-        return await _subscriptionRepository.GetLatestConfirmationForUserAsync(userId, subscriptionId);
+        var confirmation = await _subscriptionRepository.GetLatestConfirmationForUserAsync(userId, subscriptionId);
+
+        if (confirmation == null)
+            throw new SubscriptionConfirmationNotFoundException(subscriptionId);
+
+        return new SubscriptionConfirmationResponseDTO
+        {
+            Id = confirmation.Id,
+            PaymentMethod = confirmation.PaymentMethod,
+            Price = confirmation.Price,
+            StartTime = confirmation.StartTime,
+            EndTime = confirmation.EndTime,
+            UserId = confirmation.UserId,
+            SubscriptionId = confirmation.SubscriptionId,
+            UserStatus = confirmation.User.Status.ToString(),
+            UserCountry = confirmation.User.Country,
+            StreamingServiceName = confirmation.Subscription.StreamingService.Name
+        };
     }
 
-    public async Task<SubscriptionConfirmation?> GetConfirmationDetailsOfSubscriptionAsync(Subscription subscription)
+
+    public async Task<SubscriptionConfirmationResponseDTO?> GetConfirmationDetailsOfSubscriptionAsync(
+        Subscription subscription)
     {
-        return await _subscriptionRepository.GetConfirmationDetailsOfSubscription(subscription);
+        var confirmation = await _subscriptionRepository.GetConfirmationDetailsOfSubscription(subscription);
+
+        if (confirmation == null)
+            throw new SubscriptionConfirmationNotFoundException(subscription.Id);
+
+        return new SubscriptionConfirmationResponseDTO
+        {
+            Id = confirmation.Id,
+            PaymentMethod = confirmation.PaymentMethod,
+            Price = confirmation.Price,
+            StartTime = confirmation.StartTime,
+            EndTime = confirmation.EndTime,
+            UserId = confirmation.UserId,
+            SubscriptionId = confirmation.SubscriptionId,
+            UserStatus = confirmation.User.Status.ToString(),
+            UserCountry = confirmation.User.Country,
+            StreamingServiceName = confirmation.Subscription.StreamingService.Name
+        };
     }
 }

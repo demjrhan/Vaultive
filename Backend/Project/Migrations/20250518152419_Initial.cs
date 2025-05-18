@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Project.Migrations
 {
     /// <inheritdoc />
-    public partial class Inital : Migration
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -23,8 +23,8 @@ namespace Project.Migrations
                     Duration = table.Column<int>(type: "INTEGER", nullable: false),
                     SubtitleOptionId = table.Column<int>(type: "INTEGER", nullable: false),
                     AudioOptionId = table.Column<int>(type: "INTEGER", nullable: false),
-                    PosterImage = table.Column<string>(type: "TEXT", nullable: true),
-                    TrailerId = table.Column<string>(type: "TEXT", nullable: true),
+                    PosterImageName = table.Column<string>(type: "TEXT", nullable: true),
+                    YoutubeTrailerURL = table.Column<string>(type: "TEXT", nullable: true),
                     Discriminator = table.Column<string>(type: "TEXT", maxLength: 13, nullable: false),
                     Topics = table.Column<string>(type: "TEXT", nullable: true),
                     Genres = table.Column<string>(type: "TEXT", nullable: true)
@@ -262,6 +262,7 @@ namespace Project.Migrations
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     PaymentMethod = table.Column<string>(type: "TEXT", maxLength: 25, nullable: false),
+                    Price = table.Column<double>(type: "REAL", nullable: false),
                     StartTime = table.Column<DateTime>(type: "datetime", nullable: false),
                     EndTime = table.Column<DateTime>(type: "datetime", nullable: false),
                     UserId = table.Column<int>(type: "INTEGER", nullable: false),

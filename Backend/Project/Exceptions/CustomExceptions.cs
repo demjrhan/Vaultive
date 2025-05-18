@@ -94,4 +94,9 @@
         public NoChangesDetectedException() 
             : base("The provided data is identical to the current user information. No changes were made.") { }
     }
+    public class NoSubscriptionExistsException : Exception
+    {
+        public NoSubscriptionExistsException() 
+            : base("There is no subscription exists in database.") { }
+    }
 }

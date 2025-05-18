@@ -15,7 +15,7 @@ namespace Project.Configurations
             
             builder.HasOne(sc => sc.User)
                 .WithMany(u => u.Confirmations)
-                .HasForeignKey(sc => sc.SubscriptionId);
+                .HasForeignKey(sc => sc.UserId);
             
             builder.Property(sc => sc.StartTime)
                 .IsRequired()

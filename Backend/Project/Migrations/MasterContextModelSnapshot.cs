@@ -218,6 +218,9 @@ namespace Project.Migrations
                         .HasMaxLength(25)
                         .HasColumnType("TEXT");
 
+                    b.Property<double>("Price")
+                        .HasColumnType("REAL");
+
                     b.Property<DateTime>("StartTime")
                         .HasColumnType("datetime");
 

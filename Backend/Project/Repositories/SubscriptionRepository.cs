@@ -58,18 +58,25 @@ public class SubscriptionRepository
     public async Task<SubscriptionConfirmation?> GetLatestConfirmationForUserAsync(int userId, int subscriptionId)
     {
         return await _context.SubscriptionConfirmations
+            .Include(sc => sc.User)
+            .Include(sc => sc.Subscription)
+            .ThenInclude(s => s.StreamingService)
             .Where(sc => sc.UserId == userId && sc.SubscriptionId == subscriptionId)
             .OrderByDescending(sc => sc.StartTime)
             .FirstOrDefaultAsync();
     }
 
+
     public async Task<IEnumerable<Subscription>> GetActiveSubscriptionsOfUserIdAsync(int userId)
     {
         var subscriptions = await _context.Subscriptions
             .Include(s => s.Confirmations)
+            .ThenInclude(c => c.User) 
+            .Include(s => s.Confirmations)
             .Include(s => s.StreamingService)
             .Where(s => s.Confirmations.Any(c => c.UserId == userId))
             .ToListAsync();
+
 
         return subscriptions
             .Where(s =>
@@ -85,8 +92,12 @@ public class SubscriptionRepository
     public async Task<SubscriptionConfirmation?> GetConfirmationDetailsOfSubscription(Subscription subscription)
     {
         return await _context.SubscriptionConfirmations
+            .Include(sc => sc.User)
+            .Include(sc => sc.Subscription)
+            .ThenInclude(s => s.StreamingService)
             .Where(sc => sc.SubscriptionId == subscription.Id)
             .OrderByDescending(sc => sc.StartTime)
             .FirstOrDefaultAsync();
     }
+
 }

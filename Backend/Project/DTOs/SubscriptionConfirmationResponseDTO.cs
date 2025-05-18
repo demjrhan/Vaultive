@@ -1,21 +1,21 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using Project.Models.Enumerations;
+﻿namespace Project.DTOs;
 
-namespace Project.Models;
-
-public class SubscriptionConfirmation
+public class SubscriptionConfirmationResponseDTO
 {
     public int Id { get; set; }
 
     public string PaymentMethod { get; set; } = null!;
 
     public double Price { get; set; }
+
     public DateTime StartTime { get; set; }
     public DateTime EndTime { get; set; }
 
     public int UserId { get; set; }
-    public User User { get; set; } = null!;
 
     public int SubscriptionId { get; set; }
-    public Subscription Subscription { get; set; } = null!;
+
+    public string UserStatus { get; set; } = null!;
+    public string UserCountry { get; set; } = null!;
+    public string StreamingServiceName { get; set; } = null!;
 }
