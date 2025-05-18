@@ -69,7 +69,6 @@ public class MovieService
                         Country = mcs.StreamingService.Country,
                         Description = mcs.StreamingService.Description,
                         Name = mcs.StreamingService.Name,
-                        LogoImage = mcs.StreamingService.LogoImage
                     }).ToList()
 
             }

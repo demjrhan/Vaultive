@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Project.Context;
+using Project.DTOs;
 using Project.Exceptions;
+using Project.Models;
 using Project.Models.Enumerations;
 using Project.Repositories;
 using Project.Services;
@@ -31,14 +33,11 @@ public class Vaultive : ControllerBase
             var result = await _userService.GetUserWithSubscriptions(userId);
             return Ok(result);
         }
-        catch (UserNotFoundException ex)
+        catch (Exception ex)
         {
             return BadRequest(ex.Message);
         }
-        catch (SubscriptionsNotFoundException ex)
-        {
-            return BadRequest(ex.Message);
-        }
+       
     }
     [HttpGet("GetUserWithWatchHistory/{userId}")]
     public async Task<IActionResult> GetUserWithWatchHistory(int userId)
@@ -48,14 +47,11 @@ public class Vaultive : ControllerBase
             var result = await _userService.GetUserWithWatchHistory(userId);
             return Ok(result);
         }
-        catch (UserNotFoundException ex)
+        catch (Exception ex)
         {
             return BadRequest(ex.Message);
         }
-        catch (SubscriptionsNotFoundException ex)
-        {
-            return BadRequest(ex.Message);
-        }
+        
     }
     
     [HttpGet("GetMoviesWithGivenGenre/{genre}")]
@@ -89,5 +85,47 @@ public class Vaultive : ControllerBase
             return BadRequest(ex.Message);
         }
     }
-    
+
+
+    [HttpPost("AddUser")]
+    public async Task<IActionResult> AddUser([FromBody] CreateUserDTO user)
+    {
+        try
+        {
+            await _userService.AddUserAsync(user);
+            return Ok("User added successfully.");
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+
+    [HttpDelete("DeleteUser/{userId}")]
+    public async Task<IActionResult> DeleteUser(int userId)
+    {
+        try
+        {
+            await _userService.DeleteUserAsync(userId);
+            return Ok($"User with ID {userId} deleted.");
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+    [HttpPut("UpdateUser")]
+    public async Task<IActionResult> UpdateUser([FromBody] UpdateUserDTO updatedUser)
+    {
+        try
+        {
+            await _userService.UpdateUserAsync(updatedUser);
+            return Ok($"User with ID {updatedUser.Id} updated successfully.");
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+
 }

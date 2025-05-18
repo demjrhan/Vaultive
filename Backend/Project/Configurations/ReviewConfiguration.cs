@@ -16,6 +16,7 @@ namespace Project.Configurations
                 .WithMany(m => m.Reviews)
                 .HasForeignKey(r =>  r.MediaTitle );
 
+            /* Delete the review if the watch history gets deleted */
             builder.HasOne(r => r.WatchHistory)
                 .WithMany() 
                 .HasForeignKey(r => new { r.UserId, r.MediaTitle })

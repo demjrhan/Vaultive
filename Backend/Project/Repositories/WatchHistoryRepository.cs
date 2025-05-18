@@ -13,7 +13,7 @@ public class WatchHistoryRepository
         _context = masterContext;
     }
 
-    public async Task<IEnumerable<WatchHistory>> GetWatchHistoryForUsedId(int userId)
+    public async Task<IEnumerable<WatchHistory>> GetWatchHistoryOfUserId(int userId)
     {
         return await _context.WatchHistories.Where(w => w.UserId == userId).ToListAsync();
     }
