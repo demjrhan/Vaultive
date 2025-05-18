@@ -26,6 +26,8 @@ namespace Project.Configurations
                 .HasColumnType("datetime");
 
             builder.Property(sc => sc.PaymentMethod).HasMaxLength(25).IsRequired();
+            builder.Property(sc => sc.Price).HasColumnType("decimal(5,2)");
+
 
         }
     }

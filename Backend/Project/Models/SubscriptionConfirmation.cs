@@ -9,7 +9,7 @@ public class SubscriptionConfirmation
 
     public string PaymentMethod { get; set; } = null!;
 
-    public double Price { get; set; }
+    public decimal Price { get; set; }
     public DateTime StartTime { get; set; }
     public DateTime EndTime { get; set; }
 

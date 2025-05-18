@@ -11,7 +11,7 @@ using Project.Context;
 namespace Project.Migrations
 {
     [DbContext(typeof(MasterContext))]
-    [Migration("20250518152419_Initial")]
+    [Migration("20250518163846_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -222,7 +222,7 @@ namespace Project.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<double>("Price")
-                        .HasColumnType("REAL");
+                        .HasColumnType("decimal(5,2)");
 
                     b.Property<DateTime>("StartTime")
                         .HasColumnType("datetime");

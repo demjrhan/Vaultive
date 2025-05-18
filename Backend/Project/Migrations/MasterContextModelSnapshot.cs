@@ -219,7 +219,7 @@ namespace Project.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<double>("Price")
-                        .HasColumnType("REAL");
+                        .HasColumnType("decimal(5,2)");
 
                     b.Property<DateTime>("StartTime")
                         .HasColumnType("datetime");

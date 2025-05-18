@@ -53,9 +53,9 @@ public static class SampleData
         {
             var subs = new List<Subscription>
             {
-                new() { DefaultPrice = 9.99, StreamingServiceId = context.StreamingServices.First().Id },
-                new() { DefaultPrice = 24.99, StreamingServiceId = context.StreamingServices.Skip(1).First().Id },
-                new() { DefaultPrice = 5.99, StreamingServiceId = context.StreamingServices.First().Id },
+                new() { DefaultPrice = 9.99m, StreamingServiceId = context.StreamingServices.First().Id },
+                new() { DefaultPrice = 24.99m, StreamingServiceId = context.StreamingServices.Skip(1).First().Id },
+                new() { DefaultPrice = 5.99m, StreamingServiceId = context.StreamingServices.First().Id },
             };
             context.Subscriptions.AddRange(subs);
             context.SaveChanges();
@@ -266,7 +266,7 @@ public static class SampleData
             context.Movies.AddRange(movies);
             context.SaveChanges();
         }
-
+        
         if (!context.MediaContentStreamingServices.Any())
         {
             var appleTV = context.StreamingServices.FirstOrDefault(s => s.Name == "Apple TV");
@@ -345,5 +345,33 @@ public static class SampleData
             context.MediaContentStreamingServices.AddRange(mcStreaming);
             context.SaveChanges();
         }
+
+        if (!context.WatchHistories.Any())
+        {
+            var demirhan = context.Users.FirstOrDefault(u => u.Email == "demirhan@example.com");
+            var watchedMovies = context.Movies
+                .Where(m => m.Title == "John Wick" || m.Title == "Avengers" || m.Title == "Pulp Fiction")
+                .ToList();
+
+            var histories = new List<WatchHistory>();
+
+            if (demirhan != null)
+            {
+                foreach (var movie in watchedMovies)
+                {
+                    histories.Add(new WatchHistory
+                    {
+                        UserId = demirhan.Id,
+                        MediaTitle = movie.Title,
+                        WatchDate = DateTime.UtcNow.AddDays(-watchedMovies.IndexOf(movie) - 1),
+                        TimeLeftOf = movie.Duration - 20 
+                    });
+                }
+            }
+
+            context.WatchHistories.AddRange(histories);
+            context.SaveChanges();
+        }
+
     }
 }
