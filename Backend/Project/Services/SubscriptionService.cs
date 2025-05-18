@@ -79,16 +79,19 @@ public class SubscriptionService
 
     public async Task<IEnumerable<SubscriptionResponseDTO>> GetActiveSubscriptionsOfUserIdAsync(int userId)
     {
-        var subscriptions = await _subscriptionRepository.GetActiveSubscriptionsOfUserIdAsync(userId);
-        var result = subscriptions.Select(s => new SubscriptionResponseDTO()
-        {
-            DaysLeft = s.DurationInDays,
-            StreamingServiceName = s.StreamingService.Name,
-            Price = s.Confirmations.FirstOrDefault().Price
-            
-        });
+        var confirmations = await _subscriptionRepository.GetUserSubscriptionConfirmationsAsync(userId);
 
-        
+        var activeConfirmations = confirmations
+            .GroupBy(c => c.SubscriptionId)
+            .Select(g => g.OrderByDescending(c => c.StartTime).First())
+            .Where(latest => latest.EndTime > DateTime.UtcNow);
+
+        var result = activeConfirmations.Select(c => new SubscriptionResponseDTO
+        {
+            DaysLeft = (c.EndTime - DateTime.UtcNow).Days,
+            StreamingServiceName = c.Subscription.StreamingService.Name,
+            Price = c.Price
+        });
 
         return result;
     }
@@ -118,15 +121,15 @@ public class SubscriptionService
     }
 
 
-    public async Task<SubscriptionConfirmationResponseDTO?> GetConfirmationDetailsOfSubscriptionAsync(
+    public async Task<IEnumerable<SubscriptionConfirmationResponseDTO?>> GetConfirmationDetailsOfSubscriptionAsync(
         Subscription subscription)
     {
-        var confirmation = await _subscriptionRepository.GetConfirmationDetailsOfSubscription(subscription);
+        var confirmations = await _subscriptionRepository.GetConfirmationDetailsOfSubscription(subscription);
 
-        if (confirmation == null)
+        if (confirmations == null)
             throw new SubscriptionConfirmationNotFoundException(subscription.Id);
 
-        return new SubscriptionConfirmationResponseDTO
+        return confirmations.Select(confirmation => new SubscriptionConfirmationResponseDTO()
         {
             Id = confirmation.Id,
             PaymentMethod = confirmation.PaymentMethod,
@@ -138,6 +141,6 @@ public class SubscriptionService
             UserStatus = confirmation.User.Status.ToString(),
             UserCountry = confirmation.User.Country,
             StreamingServiceName = confirmation.Subscription.StreamingService.Name
-        };
+        });
     }
 }

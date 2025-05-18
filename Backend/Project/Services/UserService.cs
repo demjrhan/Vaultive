@@ -11,49 +11,31 @@ public class UserService
     private readonly MovieRepository _movieRepository;
     private readonly UserRepository _userRepository;
     private readonly SubscriptionRepository _subscriptionRepository;
+    private readonly SubscriptionService _subscriptionService;
     private readonly WatchHistoryRepository _watchHistoryRepository;
 
     public UserService(MovieRepository movieRepository,
         UserRepository userRepository,
         SubscriptionRepository subscriptionRepository,
+        SubscriptionService subscriptionService,
         WatchHistoryRepository watchHistoryRepository)
     {
         _movieRepository = movieRepository;
         _userRepository = userRepository;
         _subscriptionRepository = subscriptionRepository;
+        _subscriptionService = subscriptionService;
         _watchHistoryRepository = watchHistoryRepository;
     }
 
     public async Task<UserWithSubscriptionsDTO> GetUserWithSubscriptions(int userId)
     {
         var user = await _userRepository.GetUserWithIdAsync(userId);
-        var activeSubscriptions = await _subscriptionRepository.GetActiveSubscriptionsOfUserIdAsync(userId);
-
         if (user == null)
-        {
             throw new UserNotFoundException(userId);
-        }
+        var subscriptions = await _subscriptionService.GetActiveSubscriptionsOfUserIdAsync(userId);
 
-        if (activeSubscriptions == null)
-        {
-            throw new SubscriptionsNotFoundException(userId);
-        }
 
-        var subscriptionDtos = await Task.WhenAll(activeSubscriptions.Select(async s =>
-        {
-            var confirmation = await _subscriptionRepository.GetConfirmationDetailsOfSubscription(s);
-            if (confirmation == null)
-            {
-                throw new SubscriptionConfirmationNotFoundException(s.Id);
-            }
-
-            return new SubscriptionResponseDTO
-            {
-                DaysLeft = s.DurationInDays,
-                Price = confirmation.Price,
-                StreamingServiceName = s.StreamingService.Name
-            };
-        }));
+       
 
         return new UserWithSubscriptionsDTO
         {
@@ -63,9 +45,10 @@ public class UserService
                 Nickname = user.Nickname,
                 Status = user.Status.ToString()
             },
-            Subscriptions = subscriptionDtos.ToList()
+            Subscriptions = subscriptions.ToList()
         };
     }
+
 
     public async Task<UserWithWatchHistoryDTO> GetUserWithWatchHistory(int userId)
     {
