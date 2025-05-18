@@ -69,9 +69,19 @@ export function showMovieDetail(movie, from = 'home') {
 
 
   reviewContent.innerHTML = '';
-  const reviewParagraph = document.createElement('p');
-  reviewParagraph.textContent = 'This is a sample review. Loved the cinematography!';
-  reviewContent.appendChild(reviewParagraph);
+
+  if (movie.mediaContent?.reviews && movie.mediaContent?.reviews.length > 0) {
+    movie.mediaContent?.reviews.forEach((review) => {
+      const p = document.createElement('p');
+      p.innerHTML = `<strong>${review.nickname}</strong> (${review.rating}/5): ${review.comment}`;
+      reviewContent.appendChild(p);
+    });
+  } else {
+    const p = document.createElement('p');
+    p.textContent = 'No reviews yet. Be the first to write one!';
+    reviewContent.appendChild(p);
+  }
+
 
   const scrollY = window.scrollY;
   document.body.style.position = 'fixed';
