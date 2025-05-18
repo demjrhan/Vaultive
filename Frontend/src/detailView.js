@@ -72,9 +72,20 @@ export function showMovieDetail(movie, from = 'home') {
 
   if (movie.mediaContent?.reviews && movie.mediaContent?.reviews.length > 0) {
     movie.mediaContent?.reviews.forEach((review) => {
-      const p = document.createElement('p');
-      p.innerHTML = `<strong>${review.nickname}</strong> (${review.rating}/5): ${review.comment}`;
-      reviewContent.appendChild(p);
+      const reviewWrapper = document.createElement('div');
+      reviewWrapper.classList.add('review-item');
+
+      const nickname = document.createElement('div');
+      nickname.classList.add('review-nickname');
+      nickname.textContent = review.nickname;
+
+      const comment = document.createElement('div');
+      comment.classList.add('review-comment');
+      comment.textContent = review.comment;
+
+      reviewWrapper.appendChild(nickname);
+      reviewWrapper.appendChild(comment);
+      reviewContent.appendChild(reviewWrapper);
     });
   } else {
     const p = document.createElement('p');
