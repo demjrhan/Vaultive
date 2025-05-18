@@ -32,17 +32,17 @@ public static class SampleData
             {
                 new()
                 {
-                    Name = "Apple TV", Country = "US", Description = "Premium streaming by Apple",
+                    Name = "Apple TV", Country = "US", Description = "Premium streaming by Apple", DefaultPrice = 5.99m,
                     LogoImage = "apple-tv-logo"
                 },
                 new()
                 {
-                    Name = "Disney Plus", Country = "US", Description = "Family and Marvel content",
+                    Name = "Disney Plus", Country = "US", Description = "Family and Marvel content", DefaultPrice = 24.99m,
                     LogoImage = "disney-plus-logo"
                 },
                 new()
                 {
-                    Name = "HBO Max", Country = "US", Description = "HBO Originals and more", LogoImage = "max-logo"
+                    Name = "HBO Max", Country = "US", Description = "HBO Originals and more", LogoImage = "max-logo",DefaultPrice = 9.99m,
                 },
             };
             context.StreamingServices.AddRange(services);
@@ -53,9 +53,8 @@ public static class SampleData
         {
             var subs = new List<Subscription>
             {
-                new() { DefaultPrice = 9.99m, StreamingServiceId = context.StreamingServices.First().Id },
-                new() { DefaultPrice = 24.99m, StreamingServiceId = context.StreamingServices.Skip(1).First().Id },
-                new() { DefaultPrice = 5.99m, StreamingServiceId = context.StreamingServices.First().Id },
+                new() {  StreamingServiceId = context.StreamingServices.First().Id },
+                new() {  StreamingServiceId = context.StreamingServices.Skip(1).First().Id },
             };
             context.Subscriptions.AddRange(subs);
             context.SaveChanges();
@@ -77,7 +76,7 @@ public static class SampleData
                     PaymentMethod = "CreditCard",
                     StartTime = DateTime.UtcNow.AddDays(-5),
                     EndTime = DateTime.UtcNow.AddDays(25),
-                    Price = SubscriptionPriceCalculator.CalculateAmount(subscriptions[0].DefaultPrice, demirhan)
+                    Price = SubscriptionPriceCalculator.CalculateAmount(context.StreamingServices.First().DefaultPrice, demirhan)
                 });
 
                 confirmations.Add(new SubscriptionConfirmation
@@ -87,7 +86,7 @@ public static class SampleData
                     PaymentMethod = "PayPal",
                     StartTime = DateTime.UtcNow.AddMonths(-1),
                     EndTime = DateTime.UtcNow.AddMonths(2),
-                    Price = SubscriptionPriceCalculator.CalculateAmount(subscriptions[1].DefaultPrice, demirhan)
+                    Price = SubscriptionPriceCalculator.CalculateAmount(context.StreamingServices.Skip(1).First().DefaultPrice, demirhan)
 
                 });
             }

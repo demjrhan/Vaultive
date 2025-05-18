@@ -6,7 +6,6 @@ public class Subscription
 {
     public int Id { get; set; }
 
-    public decimal DefaultPrice { get; set; }
     
     [NotMapped]
     public int DurationInDays

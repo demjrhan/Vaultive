@@ -18,10 +18,7 @@ namespace Project.Configurations
                 .HasForeignKey(s => s.StreamingServiceId)
                 .IsRequired()
                 .OnDelete(DeleteBehavior.Cascade); 
-
-
-            builder.Property(s => s.DefaultPrice).IsRequired();
-
+            
         }
     }
 }

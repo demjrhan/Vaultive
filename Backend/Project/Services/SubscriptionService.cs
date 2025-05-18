@@ -16,27 +16,10 @@ public class SubscriptionService
 
     public async Task AddSubscriptionAsync(Subscription subscription)
     {
-        if (subscription.DefaultPrice <= 0)
-            throw new ArgumentException("Default price must be greater than 0.");
-
-        await _subscriptionRepository.AddSubscriptionAsync(subscription);
+      
     }
 
-    public async Task UpdateSubscriptionAsync(Subscription updatedSubscription)
-    {
-        var existing = await _subscriptionRepository.GetSubscriptionByIdAsync(updatedSubscription.Id);
-        if (existing == null)
-            throw new SubscriptionsNotFoundException(updatedSubscription.Id);
-
-        if (existing.DefaultPrice == updatedSubscription.DefaultPrice &&
-            existing.StreamingServiceId == updatedSubscription.StreamingServiceId)
-        {
-            throw new NoChangesDetectedException();
-        }
-
-        await _subscriptionRepository.UpdateSubscriptionAsync(updatedSubscription);
-    }
-
+   
     public async Task DeleteSubscriptionAsync(int subscriptionId)
     {
         var existing = await _subscriptionRepository.GetSubscriptionByIdAsync(subscriptionId);
@@ -53,7 +36,7 @@ public class SubscriptionService
         return new SubscriptionResponseDTO()
         {
             DaysLeft = subscription.DurationInDays,
-            Price = subscription.DefaultPrice,
+            Price = subscription.StreamingService.DefaultPrice,
             StreamingServiceName = subscription.StreamingService.Name
         };
     }
@@ -69,7 +52,7 @@ public class SubscriptionService
             .Select(s => new SubscriptionResponseDTO()
             {
                 DaysLeft = s.DurationInDays, 
-                Price = s.DefaultPrice, 
+                Price = s.StreamingService.DefaultPrice, 
                 StreamingServiceName = s.StreamingService.Name
             });
 

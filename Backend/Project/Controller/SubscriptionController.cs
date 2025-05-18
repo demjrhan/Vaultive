@@ -86,19 +86,6 @@ public class SubscriptionController : ControllerBase
         }
     }
 
-    [HttpPut("Update")]
-    public async Task<IActionResult> Update([FromBody] Subscription subscription)
-    {
-        try
-        {
-            await _subscriptionService.UpdateSubscriptionAsync(subscription);
-            return Ok("Subscription updated.");
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(ex.Message);
-        }
-    }
 
     [HttpDelete("Delete/{id}")]
     public async Task<IActionResult> Delete(int id)

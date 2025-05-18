@@ -22,6 +22,7 @@ namespace Project.Configurations
             builder.Property(ss => ss.Country).HasMaxLength(50).IsRequired();
             builder.Property(ss => ss.Description).HasMaxLength(100).IsRequired();
             builder.Property(ss => ss.LogoImage).IsRequired();
+            builder.Property(s => s.DefaultPrice).IsRequired().HasColumnType("decimal(5,2)");
         }
     }
 }

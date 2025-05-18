@@ -19,16 +19,7 @@ public class SubscriptionRepository
         _context.Subscriptions.Add(subscription);
         await _context.SaveChangesAsync();
     }
-
-    public async Task UpdateSubscriptionAsync(Subscription updatedSubscription)
-    {
-        var existing = await _context.Subscriptions.FindAsync(updatedSubscription.Id);
-        if (existing == null) throw new SubscriptionsNotFoundException(updatedSubscription.Id);
-
-        existing.DefaultPrice = updatedSubscription.DefaultPrice;
-        existing.StreamingServiceId = updatedSubscription.StreamingServiceId;
-        await _context.SaveChangesAsync();
-    }
+    
 
     public async Task DeleteSubscriptionAsync(int subscriptionId)
     {

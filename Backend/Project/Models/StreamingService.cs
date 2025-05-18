@@ -7,6 +7,8 @@ public class StreamingService
     public string Country { get; set; } = null!;
     public string Description { get; set; } = null!;
 
+    public decimal DefaultPrice { get; set; }
+
     public ICollection<Subscription> Subscriptions { get; set; } = new HashSet<Subscription>();
     public ICollection<MediaContentStreamingService> MediaContentStreamingServices { get; set; } = new HashSet<MediaContentStreamingService>();
     
