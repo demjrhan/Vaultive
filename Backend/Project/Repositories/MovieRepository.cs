@@ -46,6 +46,9 @@ public class MovieRepository
         return await _context.Movies
             .Include(m => m.MediaContentStreamingServices)
             .ThenInclude(mcs => mcs.StreamingService)
+            .Include(m => m.Reviews)
+            .Include(m => m.WatchHistories)
+            .ThenInclude(wh => wh.User )
             .ToListAsync();
 
     }

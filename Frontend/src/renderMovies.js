@@ -1,13 +1,14 @@
 import { showMovieDetail } from './detailView.js';
 
-const API_BASE_URL = 'http://localhost:5034/Vaultive';
+const API_BASE_URL = 'http://localhost:5034/api';
+
 
 export async function renderMovies() {
   const popupContentBox = document.querySelector('.movies-popup-container .content-box-moviePage');
   popupContentBox.innerHTML = '';
 
   try {
-    const response = await fetch(`${API_BASE_URL}/GetAllMovies`);
+    const response = await fetch(`${API_BASE_URL}/Movie/All`);
     if (!response.ok) throw new Error('Failed to fetch movies');
     const movies = await response.json();
 
@@ -23,11 +24,11 @@ export async function renderMovies() {
       });
     });
 
-    // Shuffle genre names
-    const shuffledGenres = [...genreMap.keys()]
-      .sort(() => Math.random() - 0.5); // Simple shuffle
 
-    // Render genres in random order
+    const shuffledGenres = [...genreMap.keys()]
+      .sort(() => Math.random() - 0.5);
+
+
     shuffledGenres.forEach(genreName => {
       const genreMovies = genreMap.get(genreName);
       const genreContainer = document.createElement('div');
@@ -49,8 +50,8 @@ export async function renderMovies() {
       const postersContainer = genreContainer.querySelector('.movie-posters');
 
       genreMovies.forEach((movie) => {
-        const posterImage = movie.mediaContent?.posterImage
-          ? `../public/img/${movie.mediaContent.posterImage}.png`
+        const posterImage = movie.mediaContent?.posterImageName
+          ? `../public/img/${movie.mediaContent.posterImageName}.png`
           : '../public/img/default-poster.png';
 
         const img = document.createElement('img');

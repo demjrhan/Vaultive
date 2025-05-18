@@ -279,7 +279,7 @@ public static class SampleData
             var pulpFiction = context.Movies.FirstOrDefault(m => m.Title == "Pulp Fiction");
             var scarface = context.Movies.FirstOrDefault(m => m.Title == "Scarface");
             var spiderman = context.Movies.FirstOrDefault(m => m.Title == "Spiderman");
-            var vaultive = context.Movies.FirstOrDefault(m => m.Title == "Vaultive Special");
+            var vaultive = context.Movies.FirstOrDefault(m => m.Title == "Vaultive");
 
             var mcStreaming = new List<MediaContentStreamingService>();
 

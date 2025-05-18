@@ -6,11 +6,12 @@ export async function renderRecommendations() {
   const movieCardsContainer = document.querySelector('.movie-cards');
   movieCardsContainer.innerHTML = '';
 
-  const API_BASE_URL = 'http://localhost:5034/Vaultive';
+  const API_BASE_URL = 'http://localhost:5034/api/Movie';
   try {
-    const response = await fetch(`${API_BASE_URL}/GetAllMovies`);
+    const response = await fetch(`${API_BASE_URL}/All`);
     if (!response.ok) throw new Error('Failed to fetch recommendations');
     const movies = await response.json();
+    console.log(movies);
 
     function getMoviesPerPage() {
       const width = window.innerWidth;
@@ -24,7 +25,6 @@ export async function renderRecommendations() {
       }
     }
 
-    console.log(getMoviesPerPage());
 
 
     const visibleMovies = movies.slice(0,getMoviesPerPage());
@@ -32,7 +32,7 @@ export async function renderRecommendations() {
     visibleMovies.forEach(movie => {
       const img = document.createElement('img');
       img.className = 'movie-cards-img';
-      img.src = `../public/img/${movie.mediaContent.posterImage}.png`;
+      img.src = `../public/img/${movie.mediaContent.posterImageName}.png`;
       img.alt = movie.mediaContent?.title;
       img.addEventListener('click', () => showMovieDetail(movie, 'home'));
       movieCardsContainer.appendChild(img);

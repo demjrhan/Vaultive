@@ -1,6 +1,7 @@
 using Project.Context;
 using Project.DTOs;
 using Project.DTOs.MediaContentDTOs;
+using Project.DTOs.ReviewDTOs;
 using Project.DTOs.StreamingServiceDTOs;
 using Project.Models;
 using Project.Models.Enumerations;
@@ -50,7 +51,9 @@ public class MovieService
                 {
                     Country = s.Country,
                     Description = s.Description,
-                    Name = s.Name
+                    Name = s.Name,
+                    LogoImage = s.LogoImage
+
                 }).ToList()
             }
         }).ToList();
@@ -77,7 +80,17 @@ public class MovieService
                         Country = mcs.StreamingService.Country,
                         Description = mcs.StreamingService.Description,
                         Name = mcs.StreamingService.Name,
-                    }).ToList()
+                        LogoImage = mcs.StreamingService.LogoImage
+                    }).ToList(),
+                Reviews = m.Reviews.Select(r => new ReviewResponseDTO()
+                {
+                    Id = r.Id,
+                    Comment = r.Comment,
+                    MediaTitle = r.MediaTitle,
+                    Rating = r.Rating,
+                    Nickname = r.User.Nickname,
+                    WatchedOn = r.WatchHistory?.WatchDate.ToString("yyyy-MM-dd")
+                }).ToList()
 
             }
         }).ToList();

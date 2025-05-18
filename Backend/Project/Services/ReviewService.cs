@@ -38,7 +38,7 @@ public class ReviewService
             Id = r.Id,
             Rating = r.Rating,
             Comment = r.Comment,
-            Username = r.User.Nickname,
+            Nickname = r.User.Nickname,
             MediaTitle = r.MediaTitle,
             WatchedOn = r.WatchHistory?.WatchDate.ToString("yyyy-MM-dd")
         }).ToList();
@@ -53,9 +53,25 @@ public class ReviewService
             Id = r.Id,
             Rating = r.Rating,
             Comment = r.Comment,
+            Nickname = r.User.Nickname,
             MediaTitle = r.MediaTitle,
             WatchedOn = r.WatchHistory?.WatchDate.ToString("yyyy-MM-dd")
         }).ToList();
+    }
+    
+    public async Task<ReviewResponseDTO> GetReviewOfUserToMediaContentAsync(int userId, string mediaTitle)
+    {
+        var review = await _reviewRepository.GetReviewOfUserToMediaContentAsync(userId,mediaTitle);
+        if (review == null) throw new UserReviewNotFoundToMediaContentException(userId, mediaTitle);
+        return new ReviewResponseDTO()
+        {
+            Id = review.Id,
+            Rating = review.Rating,
+            Comment = review.Comment,
+            Nickname = review.User.Nickname,
+            MediaTitle = review.MediaTitle,
+            WatchedOn = review.WatchHistory?.WatchDate.ToString("yyyy-MM-dd")
+        };
     }
 
     public async Task AddReviewAsync(AddReviewDTO dto)
@@ -66,12 +82,17 @@ public class ReviewService
         {
             var user = await _userRepository.GetUserWithIdAsync(dto.UserId)
                        ?? throw new UserNotFoundException(dto.UserId);
+            
 
             var media = await _movieRepository.GetMovieByTitleAsync(dto.MediaTitle)
                         ?? throw new MovieNotFoundException(dto.MediaTitle);
 
-            var watchHistory = await _watchHistoryRepository.GetByUserAndMediaAsync(dto.UserId, dto.MediaTitle);
+            var watchHistory = await _watchHistoryRepository.GetByUserAndMediaAsync(dto.UserId, dto.MediaTitle)
+                ?? throw new WatchHistoryNotFoundException(dto.UserId);
 
+            var existingReview = await GetReviewOfUserToMediaContentAsync(dto.UserId, dto.MediaTitle);
+            if (existingReview != null) throw new DuplicateReviewException(user.Nickname, dto.MediaTitle);
+            
             var review = new Review
             {
                 Rating = dto.Rating,

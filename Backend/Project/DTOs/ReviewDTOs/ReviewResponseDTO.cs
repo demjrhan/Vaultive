@@ -1,5 +1,3 @@
-using Project.DTOs.UserDTOs;
-
 namespace Project.DTOs.ReviewDTOs;
 
 public class ReviewResponseDTO
@@ -8,6 +6,6 @@ public class ReviewResponseDTO
     public string MediaTitle { get; set; } = null!;
     public double Rating { get; set; }
     public string? Comment { get; set; }
-    public string? Username { get; set; }
+    public string? Nickname { get; set; }
     public string? WatchedOn { get; set; }
 }

@@ -13,14 +13,15 @@ const moviesPopupContainer = document.querySelector('.movies-popup-container');
 const streamingServicePopUpContainer = document.querySelector(
   '.streaming-popup-container',
 );
+const reviewContent = document.querySelector('.review-content');
 
 let detailOpenedFrom = 'home';
 
 export function showMovieDetail(movie, from = 'home') {
   detailOpenedFrom = from;
 
-  const posterImage = movie.mediaContent?.posterImage
-    ? `../public/img/${movie.mediaContent.posterImage}.png`
+  const posterImage = movie.mediaContent?.posterImageName
+    ? `../public/img/${movie.mediaContent.posterImageName}.png`
     : '../public/img/default-poster.png';
 
   detailImage.innerHTML = `
@@ -30,7 +31,7 @@ export function showMovieDetail(movie, from = 'home') {
   detailDescription.innerHTML =
     movie.mediaContent?.description ?? 'No description available.';
 
-  const trailerId = movie.mediaContent?.trailerId ?? 'dQw4w9WgXcQ';
+  const trailerId = movie.mediaContent?.youtubeTrailerURL ?? 'dQw4w9WgXcQ';
 
   detailImage.innerHTML = `
     <iframe
@@ -65,6 +66,12 @@ export function showMovieDetail(movie, from = 'home') {
     streamingServicePopUpContainer.style.filter = 'grayscale(100%) blur(10px)';
     streamingServicePopUpContainer.classList.add('overlay-disabled');
   }
+
+
+  reviewContent.innerHTML = '';
+  const reviewParagraph = document.createElement('p');
+  reviewParagraph.textContent = 'This is a sample review. Loved the cinematography!';
+  reviewContent.appendChild(reviewParagraph);
 
   const scrollY = window.scrollY;
   document.body.style.position = 'fixed';

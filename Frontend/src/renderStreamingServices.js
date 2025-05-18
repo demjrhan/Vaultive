@@ -1,13 +1,13 @@
 import { showMovieDetail } from './detailView.js';
 
-const API_BASE_URL = 'http://localhost:5034/Vaultive';
+const API_BASE_URL = 'http://localhost:5034/api/Movie';
 
 export async function renderStreamingServices() {
   const popupContentBox = document.querySelector('.streaming-popup-container .content-box-streaming');
   popupContentBox.innerHTML = '';
 
   try {
-    const response = await fetch(`${API_BASE_URL}/GetAllMovies`);
+    const response = await fetch(`${API_BASE_URL}/All`);
     if (!response.ok) throw new Error('Failed to fetch movies');
     const movies = await response.json();
     const streamingMap = new Map();
@@ -47,8 +47,8 @@ export async function renderStreamingServices() {
 
 
       streamingMovies.forEach((movie) => {
-        const posterImage = movie.mediaContent?.posterImage
-          ? `../public/img/${movie.mediaContent.posterImage}.png`
+        const posterImage = movie.mediaContent?.posterImageName
+          ? `../public/img/${movie.mediaContent.posterImageName}.png`
           : '../public/img/default-poster.png';
 
         const img = document.createElement('img');

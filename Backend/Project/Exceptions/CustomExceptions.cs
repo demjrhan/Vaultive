@@ -44,8 +44,8 @@
 
     public class DuplicateReviewException : Exception
     {
-        public DuplicateReviewException(int userId, string mediaTitle)
-            : base($"User {userId} has already reviewed '{mediaTitle}'.") { }
+        public DuplicateReviewException(string nickname, string mediaTitle)
+            : base($"{nickname} has already reviewed '{mediaTitle}'.") { }
     }
 
     public class InvalidUserStatusException : Exception
@@ -99,5 +99,11 @@
         public NoSubscriptionExistsException() 
             : base("There is no subscription exists in database.") { }
     }
+   
     
+    public class UserReviewNotFoundToMediaContentException : Exception 
+    {
+        public UserReviewNotFoundToMediaContentException(int userId, string mediaTitle)
+            : base($"User with ID {userId} has not submitted a review for '{mediaTitle}'.") { }
+    }
 }

@@ -17,10 +17,23 @@ public class ReviewRepository
    
     public async Task<IEnumerable<Review>> GetReviewsOfUserIdAsync(int userId)
     {
-        return (await _context.Reviews.ToListAsync())
-            .Where(r => r.UserId == userId);
+        return await _context.Reviews
+            .Where(r => r.UserId == userId)
+            .Include(r => r.User)
+            .Include(r => r.MediaContent)
+            .Include(r => r.WatchHistory)
+            .ToListAsync();
     }
-    
+
+    public async Task<Review?> GetReviewOfUserToMediaContentAsync(int userId, string mediaTitle)
+    {
+        return await _context.Reviews
+            .Include(r => r.User)
+            .Include(r => r.MediaContent)
+            .Include(r => r.WatchHistory)
+            .FirstOrDefaultAsync(r => r.UserId == userId && r.MediaTitle == mediaTitle);
+    }
+
     public async Task AddReviewAsync(Review review)
     {
         await _context.Reviews.AddAsync(review);

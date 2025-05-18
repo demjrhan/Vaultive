@@ -1,4 +1,5 @@
 
+using Project.DTOs.ReviewDTOs;
 using Project.DTOs.StreamingServiceDTOs;
 
 namespace Project.DTOs.MediaContentDTOs;
@@ -15,5 +16,7 @@ public class MediaContentResponseDTO
     public string PosterImageName { get; set; }  = null!;
     
     public ICollection<StreamingServiceResponseDTO> StreamingServices { get; set; } = new HashSet<StreamingServiceResponseDTO>();
+
+    public ICollection<ReviewResponseDTO> Reviews { get; set; } = new HashSet<ReviewResponseDTO>();
 
 }
