@@ -104,7 +104,6 @@ export function showMovieDetail(movie, from = 'home') {
   submitReview.addEventListener('mouseover', () => {
     textarea.style.filter = 'blur(2px)';
 
-    textarea.parentElement.appendChild(overlay);
     textarea.readOnly = true;
   });
 
@@ -120,17 +119,21 @@ export function showMovieDetail(movie, from = 'home') {
     const isVisible = addReviewContainer.classList.contains('visible');
 
     if (isVisible) {
+      addReview.style.boxShadow = ' 0 0 35px rgba(255, 255, 255, 1)';
       addReviewContainer.classList.remove('visible');
       setTimeout(() => {
         addReviewContainer.style.display = 'none';
       }, 300);
+      addReview.innerText = 'Add';
     } else {
       addReviewContainer.style.display = 'flex';
+      addReview.style.boxShadow = '0 0 0 0 rgba(0, 0, 0, 1)';
 
       requestAnimationFrame(() => {
         addReviewContainer.classList.add('visible');
       });
       textarea.focus();
+      addReview.innerText = 'Close';
     }
   });
 

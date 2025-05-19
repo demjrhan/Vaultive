@@ -227,6 +227,7 @@
     overflow-y: auto;
     /* Hide scrollbar for Firefox */
     scrollbar-width: none;
+    margin-bottom: 1em;
 }
 
 /* Hide scrollbar for WebKit (Chrome, Safari, Edge) */
@@ -242,23 +243,25 @@
     width: 95%;
 }
 #submit-review-button {
-    width: 100px;
-    height: 30px;
+    width: 70px;
+    height: 25px;
     font-size: 1rem;
     color: white;
     border: none;
-    border-radius: 0 0 5px 5px;
-    background-color:#a599ff;
-    background-image:
-            radial-gradient(at 17% 25%, hsla(233,61%,73%,1) 0px, transparent 50%),
-            radial-gradient(at 100% 100%, hsla(309,79%,67%,1) 0px, transparent 50%);
+    border-radius: 10px;
+    background-color: black;;
+    box-shadow: 0 0 35px white;
     transition: all .6s ease;
+    align-self: flex-end;
+    margin-right: 25px;
+    margin-bottom: 25px;
 }
 #submit-review-button:hover {
     background-color: #14532d;
     background-image:
             radial-gradient(at 17% 25%, hsla(140, 61%, 25%, 1) 0px, transparent 50%),
             radial-gradient(at 100% 100%, hsla(160, 79%, 23%, 1) 0px, transparent 50%);
+    box-shadow: 0 0 35px #14532d;
 }
 .add-review.visible {
     max-height: 300px;
