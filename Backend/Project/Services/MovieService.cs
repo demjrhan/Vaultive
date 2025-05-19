@@ -87,7 +87,6 @@ public class MovieService
                     Id = r.Id,
                     Comment = r.Comment,
                     MediaTitle = r.MediaTitle,
-                    Rating = r.Rating,
                     Nickname = r.User.Nickname,
                     WatchedOn = r.WatchHistory?.WatchDate.ToString("yyyy-MM-dd")
                 }).ToList()

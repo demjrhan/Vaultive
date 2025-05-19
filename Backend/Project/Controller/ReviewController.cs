@@ -50,11 +50,5 @@ namespace Project.Controller
             return Ok(new { message = "Review deleted successfully" });
         }
 
-        [HttpGet("average-rating/{mediaTitle}")]
-        public async Task<IActionResult> GetAverageRating(string mediaTitle)
-        {
-            var rating = await _reviewService.GetAverageRatingForMediaAsync(mediaTitle);
-            return Ok(rating);
-        }
     }
 }

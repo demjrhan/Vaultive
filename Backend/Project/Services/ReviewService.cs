@@ -36,7 +36,6 @@ public class ReviewService
         return reviews.Select(r => new ReviewResponseDTO
         {
             Id = r.Id,
-            Rating = r.Rating,
             Comment = r.Comment,
             Nickname = r.User.Nickname,
             MediaTitle = r.MediaTitle,
@@ -51,7 +50,6 @@ public class ReviewService
         return reviews.Select(r => new ReviewResponseDTO
         {
             Id = r.Id,
-            Rating = r.Rating,
             Comment = r.Comment,
             Nickname = r.User.Nickname,
             MediaTitle = r.MediaTitle,
@@ -66,7 +64,6 @@ public class ReviewService
         return new ReviewResponseDTO()
         {
             Id = review.Id,
-            Rating = review.Rating,
             Comment = review.Comment,
             Nickname = review.User.Nickname,
             MediaTitle = review.MediaTitle,
@@ -99,7 +96,6 @@ public class ReviewService
             
             var review = new Review
             {
-                Rating = dto.Rating,
                 Comment = dto.Comment,
                 UserId = user.Id,
                 User = user,
@@ -128,7 +124,6 @@ public class ReviewService
             var updatedReview = new Review
             {
                 Id = dto.Id,
-                Rating = dto.Rating,
                 Comment = dto.Comment
             };
 
@@ -160,8 +155,4 @@ public class ReviewService
         }
     }
 
-    public async Task<double?> GetAverageRatingForMediaAsync(string mediaTitle)
-    {
-        return await _reviewRepository.GetAverageRatingForMediaAsync(mediaTitle);
-    }
 }

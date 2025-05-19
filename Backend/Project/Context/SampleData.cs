@@ -501,7 +501,6 @@ public static class SampleData
                         {
                             UserId = demir.Id,
                             MediaTitle = title,
-                            Rating = title == "Pulp Fiction" ? 4 : 5,
                             Comment = title switch
                             {
                                 "John Wick" =>
@@ -532,7 +531,6 @@ public static class SampleData
                         {
                             UserId = aiko.Id,
                             MediaTitle = title,
-                            Rating = title == "Spiderman" ? 4 : 5,
                             Comment = title switch
                             {
                                 "Deadpool" =>
@@ -561,7 +559,6 @@ public static class SampleData
                         {
                             UserId = michal.Id,
                             MediaTitle = title,
-                            Rating = 3,
                             Comment = title switch
                             {
                                 "God Father" =>

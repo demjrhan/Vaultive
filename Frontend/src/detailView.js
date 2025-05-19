@@ -115,6 +115,12 @@ export function showMovieDetail(movie, from = 'home') {
     textarea.readOnly = false;
   })
 
+  submitReview.addEventListener('click', () => {
+    const reviewText = textarea.value;
+    console.log(reviewText);
+    console.log(movie.mediaContent.title);
+  })
+
   addReview.addEventListener('click', () => {
     const isVisible = addReviewContainer.classList.contains('visible');
 

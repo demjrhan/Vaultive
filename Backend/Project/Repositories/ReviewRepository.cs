@@ -43,7 +43,6 @@ public class ReviewRepository
         var existingReview = await _context.Reviews.FindAsync(updatedReview.Id);
         if (existingReview == null) throw new ReviewNotFoundException(updatedReview.Id);
 
-        existingReview.Rating = updatedReview.Rating;
         existingReview.Comment = updatedReview.Comment;
     }
     public async Task DeleteReviewAsync(int reviewId)
@@ -69,14 +68,7 @@ public class ReviewRepository
             .Where(r => r.MediaTitle == mediaTitle)
             .ToListAsync();
     }
-    public async Task<double?> GetAverageRatingForMediaAsync(string mediaTitle)
-    {
-        return await _context.Reviews
-            .Where(r => r.MediaTitle == mediaTitle)
-            .Select(r => r.Rating)
-            .DefaultIfEmpty()
-            .AverageAsync();
-    }
+   
 
 
 }

@@ -25,7 +25,6 @@ namespace Project.Configurations
             
             builder.HasKey(r => r.Id);
             builder.Property(r => r.Comment).HasMaxLength(50).IsRequired();
-            builder.Property(r => r.Rating).IsRequired();
             
             
         }
