@@ -138,6 +138,7 @@
     flex-direction: column;
     gap: 1em;
     padding-right: 1em;
+
 }
 
 .review-item {
@@ -166,6 +167,8 @@
 .review-comment {
     font-size: 1rem;
     color :white;
+    width: 100%;
+
 }
 
 
