@@ -273,7 +273,7 @@ public static class SampleData
                     OriginalLanguage = "English",
                     Country = "USA",
                     Duration = 143,
-                    YoutubeTrailerURL = "eOrNdBpGMv8&t=2s",
+                    YoutubeTrailerURL = "6ZfuNTqbHE8",
                     PosterImageName = "avengers-poster",
                     Genres = new HashSet<Genre> { Genre.Action, Genre.Superhero, Genre.SciFi },
                     SubtitleOption = new SubtitleOption
