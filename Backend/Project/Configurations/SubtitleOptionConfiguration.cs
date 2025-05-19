@@ -13,6 +13,7 @@ namespace Project.Configurations
             builder.HasOne(so => so.MediaContent)
                 .WithOne(m => m.SubtitleOption)
                 .HasForeignKey<SubtitleOption>(so => so.MediaTitle)
+                .IsRequired()
                 .OnDelete(DeleteBehavior.Cascade);
 
         }
