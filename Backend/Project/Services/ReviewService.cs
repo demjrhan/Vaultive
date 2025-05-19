@@ -78,8 +78,6 @@ public class ReviewService
         try
         {
 
-            if (dto.Rating > 5 || dto.Rating < 0)
-                throw new ArgumentException("Review score is either too low or too high. Must be between 0 and 5.");
             
             var user = await _userRepository.GetUserWithIdAsync(dto.UserId)
                        ?? throw new UserNotFoundException(dto.UserId);

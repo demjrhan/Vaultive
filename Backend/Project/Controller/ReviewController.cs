@@ -29,14 +29,14 @@ namespace Project.Controller
             return Ok(reviews);
         }
 
-        [HttpPost]
+        [HttpPost("Add")]
         public async Task<IActionResult> AddReview([FromBody] AddReviewDTO dto)
         {
             await _reviewService.AddReviewAsync(dto);
             return Ok(new { message = "Review added successfully" });
         }
 
-        [HttpPut]
+        [HttpPut("Update")]
         public async Task<IActionResult> UpdateReview([FromBody] UpdateReviewDTO dto)
         {
             await _reviewService.UpdateReviewAsync(dto);

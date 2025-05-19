@@ -132,19 +132,17 @@
     flex-direction: column;
     gap: 1em;
     padding-right: 1em;
-
 }
 
 .review-item {
     border-bottom: rgb(100, 100, 100) 1px solid;
-    border-top: rgb(100, 100, 100) 1px solid;
     display: flex;
     flex-direction: row;
     gap: 1rem;
     padding-bottom: 1rem;
     padding-top: 1rem;
-    align-items: center; /* vertical alignment in a row */
-    justify-content: center;
+    align-items: center;
+    justify-content: flex-start;
 }
 
 .title-wrapper {
@@ -153,7 +151,6 @@
     align-items: center;
     justify-content: flex-start;
     gap: 1rem;
-    width: 100%;
 }
 .review-wrapper {
     display: flex;

@@ -19,6 +19,7 @@ const addReview = document.getElementById('add-review-button');
 const addReviewContainer = document.getElementById('add-review');
 const textarea = document.getElementById('review-textarea');
 
+const API_BASE_URL = 'http://localhost:5034/api';
 
 
 
@@ -103,7 +104,6 @@ export function showMovieDetail(movie, from = 'home') {
 
   submitReview.addEventListener('mouseover', () => {
     textarea.style.filter = 'blur(2px)';
-
     textarea.readOnly = true;
   });
 
@@ -115,11 +115,50 @@ export function showMovieDetail(movie, from = 'home') {
     textarea.readOnly = false;
   })
 
-  submitReview.addEventListener('click', () => {
-    const reviewText = textarea.value;
-    console.log(reviewText);
-    console.log(movie.mediaContent.title);
-  })
+
+  submitReview.addEventListener('click', async () => {
+    try {
+      const comment = textarea.value?.trim();
+      const mediaTitle = movie?.mediaContent?.title?.trim();
+
+      if (!comment || !mediaTitle) {
+        console.warn('Cannot send empty or undefined review data');
+        return;
+      }
+
+      const response = await fetch(`${API_BASE_URL}/Review/Add`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          userId: 1,
+          mediaTitle: mediaTitle,
+          comment: comment,
+        })
+      });
+
+      if (!response.ok) {
+        setTimeout(() => {
+          textarea.value = 'Unfortunately, we were unable to submit your review. Please try again later.';
+          textarea.style.color = 'red';
+
+          setTimeout(() => {
+            textarea.value = reviewText;
+            textarea.style.color = 'white';
+          }, 5000);
+        }, 1);
+      } else {
+        appendReviewToUI({ comment });
+
+        textarea.value = '';
+      }
+
+    } catch (error) {
+      console.error('Error submitting review:', error);
+    }
+  });
+
 
   addReview.addEventListener('click', () => {
     const isVisible = addReviewContainer.classList.contains('visible');
@@ -148,6 +187,24 @@ export function showMovieDetail(movie, from = 'home') {
   document.body.style.top = `-${scrollY}px`;
   document.body.style.width = '100%';
   showcase.classList.add('overlay-disabled');
+}
+
+/* Hardcoded now. */
+function appendReviewToUI(review) {
+  const reviewWrapper = document.createElement('div');
+  reviewWrapper.classList.add('review-item');
+
+  const nickname = document.createElement('div');
+  nickname.classList.add('review-nickname');
+  nickname.textContent = 'Demir';
+
+  const comment = document.createElement('div');
+  comment.classList.add('review-comment');
+  comment.textContent = review.comment;
+
+  reviewWrapper.appendChild(nickname);
+  reviewWrapper.appendChild(comment);
+  reviewContent.appendChild(reviewWrapper);
 }
 
 export function closeDetailOnEscape() {

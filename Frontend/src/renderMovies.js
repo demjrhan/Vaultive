@@ -12,7 +12,6 @@ export async function renderMovies() {
     if (!response.ok) throw new Error('Failed to fetch movies');
     const movies = await response.json();
 
-    // Group movies by genre
     const genreMap = new Map();
 
     movies.forEach(movie => {

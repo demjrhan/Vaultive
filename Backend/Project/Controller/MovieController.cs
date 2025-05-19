@@ -2,7 +2,7 @@
 using Project.Models.Enumerations;
 using Project.Services;
 
-namespace Project.Controllers;
+namespace Project.Controller;
 
 [Route("api/[controller]")]
 [ApiController]

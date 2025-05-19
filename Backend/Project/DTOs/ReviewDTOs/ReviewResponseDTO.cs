@@ -4,7 +4,6 @@ public class ReviewResponseDTO
 {
     public int Id { get; set; }
     public string MediaTitle { get; set; } = null!;
-    public double Rating { get; set; }
     public string? Comment { get; set; }
     public string? Nickname { get; set; }
     public string? WatchedOn { get; set; }
