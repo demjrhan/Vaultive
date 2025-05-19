@@ -17,31 +17,13 @@ namespace Project.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.4");
 
-            modelBuilder.Entity("Project.Models.AudioLanguage", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Language")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("MediaTitle")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("MediaTitle");
-
-                    b.ToTable("AudioLanguages");
-                });
-
             modelBuilder.Entity("Project.Models.AudioOption", b =>
                 {
                     b.Property<string>("MediaTitle")
+                        .HasColumnType("TEXT");
+
+                    b.PrimitiveCollection<string>("Languages")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("MediaTitle");
@@ -233,31 +215,13 @@ namespace Project.Migrations
                     b.ToTable("SubscriptionConfirmations");
                 });
 
-            modelBuilder.Entity("Project.Models.SubtitleLanguage", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Language")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("MediaTitle")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("MediaTitle");
-
-                    b.ToTable("SubtitleLanguages");
-                });
-
             modelBuilder.Entity("Project.Models.SubtitleOption", b =>
                 {
                     b.Property<string>("MediaTitle")
+                        .HasColumnType("TEXT");
+
+                    b.PrimitiveCollection<string>("Languages")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("MediaTitle");
@@ -359,17 +323,6 @@ namespace Project.Migrations
                     b.HasDiscriminator().HasValue("Movie");
                 });
 
-            modelBuilder.Entity("Project.Models.AudioLanguage", b =>
-                {
-                    b.HasOne("Project.Models.AudioOption", "AudioOption")
-                        .WithMany("AudioLanguages")
-                        .HasForeignKey("MediaTitle")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("AudioOption");
-                });
-
             modelBuilder.Entity("Project.Models.AudioOption", b =>
                 {
                     b.HasOne("Project.Models.MediaContent", "MediaContent")
@@ -465,17 +418,6 @@ namespace Project.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Project.Models.SubtitleLanguage", b =>
-                {
-                    b.HasOne("Project.Models.SubtitleOption", "SubtitleOption")
-                        .WithMany("SubtitleLanguages")
-                        .HasForeignKey("MediaTitle")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("SubtitleOption");
-                });
-
             modelBuilder.Entity("Project.Models.SubtitleOption", b =>
                 {
                     b.HasOne("Project.Models.MediaContent", "MediaContent")
@@ -506,11 +448,6 @@ namespace Project.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Project.Models.AudioOption", b =>
-                {
-                    b.Navigation("AudioLanguages");
-                });
-
             modelBuilder.Entity("Project.Models.MediaContent", b =>
                 {
                     b.Navigation("AudioOption")
@@ -538,11 +475,6 @@ namespace Project.Migrations
             modelBuilder.Entity("Project.Models.Subscription", b =>
                 {
                     b.Navigation("Confirmations");
-                });
-
-            modelBuilder.Entity("Project.Models.SubtitleOption", b =>
-                {
-                    b.Navigation("SubtitleLanguages");
                 });
 
             modelBuilder.Entity("Project.Models.User", b =>

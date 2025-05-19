@@ -54,7 +54,8 @@ namespace Project.Migrations
                 name: "AudioOptions",
                 columns: table => new
                 {
-                    MediaTitle = table.Column<string>(type: "TEXT", nullable: false)
+                    MediaTitle = table.Column<string>(type: "TEXT", nullable: false),
+                    Languages = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -94,7 +95,8 @@ namespace Project.Migrations
                 name: "SubtitleOptions",
                 columns: table => new
                 {
-                    MediaTitle = table.Column<string>(type: "TEXT", nullable: false)
+                    MediaTitle = table.Column<string>(type: "TEXT", nullable: false),
+                    Languages = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -133,26 +135,6 @@ namespace Project.Migrations
                         column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "AudioLanguages",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Language = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
-                    MediaTitle = table.Column<string>(type: "TEXT", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AudioLanguages", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_AudioLanguages_AudioOptions_MediaTitle",
-                        column: x => x.MediaTitle,
-                        principalTable: "AudioOptions",
-                        principalColumn: "MediaTitle",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -196,26 +178,6 @@ namespace Project.Migrations
                         column: x => x.StreamingServiceId,
                         principalTable: "StreamingServices",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "SubtitleLanguages",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Language = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
-                    MediaTitle = table.Column<string>(type: "TEXT", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_SubtitleLanguages", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_SubtitleLanguages_SubtitleOptions_MediaTitle",
-                        column: x => x.MediaTitle,
-                        principalTable: "SubtitleOptions",
-                        principalColumn: "MediaTitle",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -284,11 +246,6 @@ namespace Project.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_AudioLanguages_MediaTitle",
-                table: "AudioLanguages",
-                column: "MediaTitle");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_MediaContents_OriginalLanguage",
                 table: "MediaContents",
                 column: "OriginalLanguage");
@@ -334,11 +291,6 @@ namespace Project.Migrations
                 column: "StreamingServiceId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_SubtitleLanguages_MediaTitle",
-                table: "SubtitleLanguages",
-                column: "MediaTitle");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Users_Email",
                 table: "Users",
                 column: "Email",
@@ -365,7 +317,7 @@ namespace Project.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "AudioLanguages");
+                name: "AudioOptions");
 
             migrationBuilder.DropTable(
                 name: "MediaContentStreamingServices");
@@ -377,19 +329,13 @@ namespace Project.Migrations
                 name: "SubscriptionConfirmations");
 
             migrationBuilder.DropTable(
-                name: "SubtitleLanguages");
-
-            migrationBuilder.DropTable(
-                name: "AudioOptions");
+                name: "SubtitleOptions");
 
             migrationBuilder.DropTable(
                 name: "WatchHistories");
 
             migrationBuilder.DropTable(
                 name: "Subscriptions");
-
-            migrationBuilder.DropTable(
-                name: "SubtitleOptions");
 
             migrationBuilder.DropTable(
                 name: "Users");

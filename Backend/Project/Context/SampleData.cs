@@ -203,10 +203,8 @@ public static class SampleData
                     SubtitleOption = new SubtitleOption
                     {
                         MediaTitle = "John Wick",
-                        SubtitleLanguages = new List<SubtitleLanguage>
-                        {
-                            new() { Language = "English" }
-                        }
+                        Languages = new List<string>() {"English" }
+
                     }
                 },
                 new Movie
@@ -224,10 +222,8 @@ public static class SampleData
                     SubtitleOption = new SubtitleOption
                     {
                         MediaTitle = "Deadpool",
-                        SubtitleLanguages = new List<SubtitleLanguage>
-                        {
-                            new() { Language = "English" }
-                        }
+                        Languages = new List<string>() {"English" }
+
                     }
                 },
                 new Movie
@@ -245,10 +241,8 @@ public static class SampleData
                     SubtitleOption = new SubtitleOption
                     {
                         MediaTitle = "Spiderman",
-                        SubtitleLanguages = new List<SubtitleLanguage>
-                        {
-                            new() { Language = "English" }
-                        }
+                        Languages = new List<string>() {"English" }
+
                     }
                 },
                 new Movie
@@ -266,10 +260,8 @@ public static class SampleData
                     SubtitleOption = new SubtitleOption
                     {
                         MediaTitle = "Pulp Fiction",
-                        SubtitleLanguages = new List<SubtitleLanguage>
-                        {
-                            new() { Language = "English" }
-                        }
+                        Languages = new List<string>() {"English" }
+
                     }
                 },
                 new Movie
@@ -287,10 +279,7 @@ public static class SampleData
                     SubtitleOption = new SubtitleOption
                     {
                         MediaTitle = "Avengers",
-                        SubtitleLanguages = new List<SubtitleLanguage>
-                        {
-                            new() { Language = "English" }
-                        }
+                        Languages = new List<string>() {"English" }
                     }
                 },
                 new Movie
@@ -309,10 +298,7 @@ public static class SampleData
                     SubtitleOption = new SubtitleOption
                     {
                         MediaTitle = "God Father",
-                        SubtitleLanguages = new List<SubtitleLanguage>
-                        {
-                            new() { Language = "English" }
-                        }
+                        Languages = new List<string>() {"English" }
                     }
                 },
                 new Movie
@@ -330,10 +316,8 @@ public static class SampleData
                     SubtitleOption = new SubtitleOption
                     {
                         MediaTitle = "Scarface",
-                        SubtitleLanguages = new List<SubtitleLanguage>
-                        {
-                            new() { Language = "English" }
-                        }
+                        Languages = new List<string>() {"English" }
+
                     }
                 },
                 new Movie
@@ -351,10 +335,8 @@ public static class SampleData
                     SubtitleOption = new SubtitleOption
                     {
                         MediaTitle = "Vaultive",
-                        SubtitleLanguages = new List<SubtitleLanguage>
-                        {
-                            new() { Language = "English" }
-                        }
+                        Languages = new List<string>() {"English" }
+
                     }
                 }
             };
