@@ -17,10 +17,8 @@ public abstract class MediaContent
     public ICollection<StreamingService> StreamingServices { get; set; } = new HashSet<StreamingService>();
 
     public SubtitleOption SubtitleOption { get; set; } = null!;
-    public int SubtitleOptionId { get; set; }
     
     public AudioOption AudioOption { get; set; } = null!;
-    public int AudioOptionId { get; set; }
     
     
     /* properties for frontend visual */

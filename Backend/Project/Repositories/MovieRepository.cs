@@ -65,8 +65,6 @@ public class MovieRepository
         existing.PosterImageName = updatedMovie.PosterImageName;
         existing.YoutubeTrailerURL = updatedMovie.YoutubeTrailerURL;
         existing.Genres = updatedMovie.Genres;
-        existing.SubtitleOptionId = updatedMovie.SubtitleOptionId;
-        existing.AudioOptionId = updatedMovie.AudioOptionId;
     }
 
 }
