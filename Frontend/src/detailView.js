@@ -14,6 +14,14 @@ const streamingServicePopUpContainer = document.querySelector(
   '.streaming-popup-container',
 );
 const reviewContent = document.querySelector('.review-content');
+const submitReview = document.getElementById('submit-review-button');
+const addReview = document.getElementById('add-review-button');
+const addReviewContainer = document.getElementById('add-review');
+const textarea = document.getElementById('review-textarea');
+
+
+
+
 
 let detailOpenedFrom = 'home';
 
@@ -93,6 +101,38 @@ export function showMovieDetail(movie, from = 'home') {
     reviewContent.appendChild(p);
   }
 
+  submitReview.addEventListener('mouseover', () => {
+    textarea.style.filter = 'blur(2px)';
+
+    textarea.parentElement.appendChild(overlay);
+    textarea.readOnly = true;
+  });
+
+
+  submitReview.addEventListener('mouseout', () => {
+    textarea.style.filter = 'blur(0px)';
+    const existingOverlay = document.getElementById('blur-overlay');
+    if (existingOverlay) existingOverlay.remove();
+    textarea.readOnly = false;
+  })
+
+  addReview.addEventListener('click', () => {
+    const isVisible = addReviewContainer.classList.contains('visible');
+
+    if (isVisible) {
+      addReviewContainer.classList.remove('visible');
+      setTimeout(() => {
+        addReviewContainer.style.display = 'none';
+      }, 300);
+    } else {
+      addReviewContainer.style.display = 'flex';
+
+      requestAnimationFrame(() => {
+        addReviewContainer.classList.add('visible');
+      });
+      textarea.focus();
+    }
+  });
 
   const scrollY = window.scrollY;
   document.body.style.position = 'fixed';
