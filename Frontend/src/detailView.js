@@ -78,6 +78,8 @@ export function showMovieDetail(movie, from = 'home') {
     streamingServicePopUpContainer.classList.add('overlay-disabled');
   }
 
+  textarea.value = '';
+  textarea.style.color = 'white';
 
   reviewContent.innerHTML = '';
 
@@ -179,6 +181,8 @@ export function showMovieDetail(movie, from = 'home') {
       requestAnimationFrame(() => {
         addReviewContainer.classList.add('visible');
       });
+      textarea.value = '';
+      textarea.style.color = 'white';
       textarea.focus();
       addReview.innerText = 'Close';
     }
