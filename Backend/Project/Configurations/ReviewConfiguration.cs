@@ -8,6 +8,10 @@ namespace Project.Configurations
     {
         public void Configure(EntityTypeBuilder<Review> builder)
         {
+            
+            builder.HasKey(r => r.Id);
+
+            
             builder.HasOne(r => r.User)
                 .WithMany(u => u.Reviews)
                 .HasForeignKey(r => r.UserId);
@@ -16,14 +20,13 @@ namespace Project.Configurations
                 .WithMany(m => m.Reviews)
                 .HasForeignKey(r =>  r.MediaId);
 
-            /* Delete the review if the watch history gets deleted */
+            /* Do not let deleting the review if the watch history exists. */
             builder.HasOne(r => r.WatchHistory)
                 .WithMany() 
                 .HasForeignKey(r => new { r.UserId, r.MediaId })
                 .HasPrincipalKey(w => new { w.UserId, w.MediaId })
                 .OnDelete(DeleteBehavior.Restrict);
             
-            builder.HasKey(r => r.Id);
             builder.Property(r => r.Comment).HasMaxLength(50).IsRequired();
             
             

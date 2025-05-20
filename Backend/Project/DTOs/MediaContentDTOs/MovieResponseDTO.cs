@@ -4,4 +4,6 @@ public class MovieResponseDTO
 {
     public MediaContentDTO MediaContent { get; set; }
     public List<string> Genres { get; set; }
+    
+    
 }

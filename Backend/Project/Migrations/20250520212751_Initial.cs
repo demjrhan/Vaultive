@@ -293,11 +293,6 @@ namespace Project.Migrations
                 name: "IX_WatchHistories_MediaId",
                 table: "WatchHistories",
                 column: "MediaId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_WatchHistories_TimeLeftOf",
-                table: "WatchHistories",
-                column: "TimeLeftOf");
         }
 
         /// <inheritdoc />

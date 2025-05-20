@@ -31,7 +31,7 @@ public class MediaContentService
         _watchHistoryRepository = watchHistoryRepository;
     }
 
-    public async Task<List<MovieResponseDTO>> GetAllMovies()
+    public async Task<List<MovieResponseDTO>> GetAllMoviesFrontEnd()
     {
         var movies = await _mediaContentRepository.GetAllMovies();
         return movies.Select(m => new MovieResponseDTO
@@ -40,29 +40,20 @@ public class MediaContentService
             MediaContent = new MediaContentDTO()
             {
                 Title = m.Title,
-                Country = m.Country,
                 Description = m.Description,
-                Duration = m.Duration,
-                OriginalLanguage = m.OriginalLanguage,
-                ReleaseDate = m.ReleaseDate,
                 YoutubeTrailerURL = m.YoutubeTrailerURL,
                 PosterImageName = m.PosterImageName,
                 StreamingServices = m.StreamingServices
                     .Select(ss => new StreamingServiceResponseDTO
                     {
-                        Id = ss.Id,
-                        Country = ss.Country,
-                        Description = ss.Description,
                         Name = ss.Name,
                         LogoImage = ss.LogoImage,
                         WebsiteLink = ss.WebsiteLink
                     }).ToList(),
                 Reviews = m.Reviews.Select(r => new ReviewResponseDTO()
                 {
-                    Id = r.Id,
                     Comment = r.Comment,
                     Nickname = r.User.Nickname,
-                    WatchedOn = r.WatchHistory?.WatchDate.ToString("yyyy-MM-dd")
                 }).ToList()
 
             }

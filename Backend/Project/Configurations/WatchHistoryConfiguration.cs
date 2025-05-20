@@ -21,7 +21,6 @@ namespace Project.Configurations
                 .WithMany(mc => mc.WatchHistories)
                 .HasForeignKey(w => w.MediaId );
             
-            builder.HasIndex(wh => wh.TimeLeftOf);
 
         }
     }

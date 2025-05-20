@@ -20,7 +20,7 @@ public class MovieController : ControllerBase
     {
         try
         {
-            var result = await _mediaContentService.GetAllMovies();
+            var result = await _mediaContentService.GetAllMoviesFrontEnd();
             return Ok(result);
         }
         catch (Exception ex)

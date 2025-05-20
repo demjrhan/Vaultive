@@ -293,8 +293,6 @@ namespace Project.Migrations
 
                     b.HasIndex("MediaId");
 
-                    b.HasIndex("TimeLeftOf");
-
                     b.ToTable("WatchHistories");
                 });
 

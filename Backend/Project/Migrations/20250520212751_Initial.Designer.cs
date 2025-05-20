@@ -11,7 +11,7 @@ using Project.Context;
 namespace Project.Migrations
 {
     [DbContext(typeof(MasterContext))]
-    [Migration("20250520202020_Initial")]
+    [Migration("20250520212751_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -295,8 +295,6 @@ namespace Project.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("MediaId");
-
-                    b.HasIndex("TimeLeftOf");
 
                     b.ToTable("WatchHistories");
                 });
