@@ -9,6 +9,7 @@ namespace Project.Configurations
         public void Configure(EntityTypeBuilder<MediaContent> builder)
         {
             builder.HasKey(m => m.Title);
+            
             builder.HasMany(m => m.Reviews)
                 .WithOne(r => r.MediaContent)
                 .HasForeignKey(r => r.MediaTitle);
@@ -33,9 +34,10 @@ namespace Project.Configurations
             builder.Property(m => m.OriginalLanguage).HasMaxLength(50).IsRequired();
             builder.Property(m => m.Country).HasMaxLength(50).IsRequired();
             builder.Property(m => m.Duration).IsRequired();
-
-            builder.HasIndex(m => m.OriginalLanguage);
-            builder.HasIndex(m => m.ReleaseDate);
+            builder.Property(m => m.Title).HasMaxLength(50).IsRequired();
+            
+            
+            builder.HasIndex(m => m.Title).IsUnique();
         }
     }
 }

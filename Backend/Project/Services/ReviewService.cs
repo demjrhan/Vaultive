@@ -11,7 +11,7 @@ public class ReviewService
 {
     private readonly ReviewRepository _reviewRepository;
     private readonly UserRepository _userRepository;
-    private readonly MovieRepository _movieRepository;
+    private readonly MediaContentRepository _mediaContentRepository;
     private readonly WatchHistoryRepository _watchHistoryRepository;
     private readonly MasterContext _context;
 
@@ -19,13 +19,13 @@ public class ReviewService
         MasterContext context,
         ReviewRepository reviewRepository,
         UserRepository userRepository,
-        MovieRepository movieRepository,
+        MediaContentRepository mediaContentRepository,
         WatchHistoryRepository watchHistoryRepository)
     {
         _context = context;
         _reviewRepository = reviewRepository;
         _userRepository = userRepository;
-        _movieRepository = movieRepository;
+        _mediaContentRepository = mediaContentRepository;
         _watchHistoryRepository = watchHistoryRepository;
     }
 
@@ -83,7 +83,7 @@ public class ReviewService
                        ?? throw new UserNotFoundException(dto.UserId);
             
 
-            var media = await _movieRepository.GetMovieByTitleAsync(dto.MediaTitle)
+            var media = await _mediaContentRepository.GetMovieByTitleAsync(dto.MediaTitle)
                         ?? throw new MovieNotFoundException(dto.MediaTitle);
 
             var watchHistory = await _watchHistoryRepository.GetByUserAndMediaAsync(dto.UserId, dto.MediaTitle)

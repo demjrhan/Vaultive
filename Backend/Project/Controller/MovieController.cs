@@ -8,11 +8,11 @@ namespace Project.Controller;
 [ApiController]
 public class MovieController : ControllerBase
 {
-    private readonly MovieService _movieService;
+    private readonly MediaContentService _mediaContentService;
 
-    public MovieController(MovieService movieService)
+    public MovieController(MediaContentService mediaContentService)
     {
-        _movieService = movieService;
+        _mediaContentService = mediaContentService;
     }
 
     [HttpGet("All")]
@@ -20,7 +20,7 @@ public class MovieController : ControllerBase
     {
         try
         {
-            var result = await _movieService.GetAllMovies();
+            var result = await _mediaContentService.GetAllMovies();
             return Ok(result);
         }
         catch (Exception ex)
@@ -37,7 +37,7 @@ public class MovieController : ControllerBase
             if (!Enum.TryParse<Genre>(genre, true, out var parsedGenre))
                 return BadRequest($"Invalid genre: {genre}");
 
-            var result = await _movieService.GetMoviesWithGivenGenre(parsedGenre);
+            var result = await _mediaContentService.GetMoviesWithGivenGenre(parsedGenre);
             return Ok(result);
         }
         catch (Exception ex)

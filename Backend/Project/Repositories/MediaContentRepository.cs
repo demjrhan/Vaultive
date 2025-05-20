@@ -6,11 +6,11 @@ using Project.Models.Enumerations;
 
 namespace Project.Repositories;
 
-public class MovieRepository
+public class MediaContentRepository
 {
     private readonly MasterContext _context;
 
-    public MovieRepository(MasterContext masterContext)
+    public MediaContentRepository(MasterContext masterContext)
     {
         _context = masterContext;
     }

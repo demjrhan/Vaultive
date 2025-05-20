@@ -9,23 +9,23 @@ using Project.Repositories;
 
 namespace Project.Services;
 
-public class MovieService
+public class MediaContentService
 {
-    private readonly MovieRepository _movieRepository;
+    private readonly MediaContentRepository _mediaContentRepository;
     private readonly UserRepository _userRepository;
     private readonly SubscriptionRepository _subscriptionRepository;
     private readonly WatchHistoryRepository _watchHistoryRepository;
     private readonly MasterContext _context;
 
-    public MovieService(
+    public MediaContentService(
         MasterContext context,
-        MovieRepository movieRepository,
+        MediaContentRepository mediaContentRepository,
         UserRepository userRepository,
         SubscriptionRepository subscriptionRepository,
         WatchHistoryRepository watchHistoryRepository)
     {
         _context = context;
-        _movieRepository = movieRepository;
+        _mediaContentRepository = mediaContentRepository;
         _userRepository = userRepository;
         _subscriptionRepository = subscriptionRepository;
         _watchHistoryRepository = watchHistoryRepository;
@@ -33,7 +33,7 @@ public class MovieService
 
     public async Task<List<MovieResponseDTO>> GetMoviesWithGivenGenre(Genre genre)
     {
-        var movies = await _movieRepository.GetMoviesWithGivenGenre(genre);
+        var movies = await _mediaContentRepository.GetMoviesWithGivenGenre(genre);
         return movies.Select(m => new MovieResponseDTO
         {
             Genres = m.Genres.Select(g => g.ToString()).ToList(),
@@ -60,7 +60,7 @@ public class MovieService
     }
     public async Task<List<MovieResponseDTO>> GetAllMovies()
     {
-        var movies = await _movieRepository.GetAllMovies();
+        var movies = await _mediaContentRepository.GetAllMovies();
         return movies.Select(m => new MovieResponseDTO
         {
             Genres = m.Genres.Select(g => g.ToString()).ToList(),

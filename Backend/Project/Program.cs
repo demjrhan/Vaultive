@@ -29,14 +29,21 @@ builder.Services.AddCors(options =>
 });
 builder.Services.AddDbContext<MasterContext>(options => options.UseSqlite("Data Source=vaultive.db"));
 builder.Services.AddScoped<UserRepository>();
-builder.Services.AddScoped<SubscriptionRepository>();
 builder.Services.AddScoped<UserService>();
+
 builder.Services.AddScoped<WatchHistoryRepository>();
-builder.Services.AddScoped<MovieRepository>();
-builder.Services.AddScoped<MovieService>();
-builder.Services.AddScoped<SubscriptionService>();
+
+builder.Services.AddScoped<MediaContentRepository>();
+builder.Services.AddScoped<MediaContentService>();
+
 builder.Services.AddScoped<StreamingServiceRepository>();
+builder.Services.AddScoped<StreamingServiceService>();
+
+builder.Services.AddScoped<SubscriptionService>();
+builder.Services.AddScoped<SubscriptionRepository>();
 builder.Services.AddScoped<SubscriptionConfirmationRepository>();
+
+
 builder.Services.AddScoped<ReviewService>();
 builder.Services.AddScoped<ReviewRepository>();
 

@@ -11,7 +11,7 @@ namespace Project.Services;
 
 public class UserService
 {
-    private readonly MovieRepository _movieRepository;
+    private readonly MediaContentRepository _mediaContentRepository;
     private readonly UserRepository _userRepository;
     private readonly SubscriptionRepository _subscriptionRepository;
     private readonly SubscriptionService _subscriptionService;
@@ -20,14 +20,14 @@ public class UserService
 
     public UserService(
         MasterContext context,
-        MovieRepository movieRepository,
+        MediaContentRepository mediaContentRepository,
         UserRepository userRepository,
         SubscriptionRepository subscriptionRepository,
         SubscriptionService subscriptionService,
         WatchHistoryRepository watchHistoryRepository)
     {
         _context = context;
-        _movieRepository = movieRepository;
+        _mediaContentRepository = mediaContentRepository;
         _userRepository = userRepository;
         _subscriptionRepository = subscriptionRepository;
         _subscriptionService = subscriptionService;

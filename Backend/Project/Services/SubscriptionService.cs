@@ -12,7 +12,7 @@ public class SubscriptionService
 {
     
     private readonly SubscriptionRepository _subscriptionRepository;
-    private readonly MovieRepository _movieRepository;
+    private readonly MediaContentRepository _mediaContentRepository;
     private readonly UserRepository _userRepository;
     private readonly WatchHistoryRepository _watchHistoryRepository;
     private readonly StreamingServiceRepository _streamingServiceRepository;
@@ -20,7 +20,7 @@ public class SubscriptionService
     private readonly MasterContext _context;
     public SubscriptionService(
         MasterContext context,
-        MovieRepository movieRepository,
+        MediaContentRepository mediaContentRepository,
         UserRepository userRepository,
         SubscriptionRepository subscriptionRepository,
         WatchHistoryRepository watchHistoryRepository,
@@ -28,7 +28,7 @@ public class SubscriptionService
         SubscriptionConfirmationRepository subscriptionConfirmationRepository)
     {
         _context = context;
-        _movieRepository = movieRepository;
+        _mediaContentRepository = mediaContentRepository;
         _userRepository = userRepository;
         _subscriptionRepository = subscriptionRepository;
         _watchHistoryRepository = watchHistoryRepository;
