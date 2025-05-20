@@ -24,7 +24,7 @@ namespace Project.Migrations
                     Country = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
                     Duration = table.Column<int>(type: "INTEGER", nullable: false),
                     PosterImageName = table.Column<string>(type: "TEXT", nullable: true),
-                    YoutubeTrailerURL = table.Column<string>(type: "TEXT", nullable: true),
+                    YoutubeTrailerURL = table.Column<string>(type: "TEXT", nullable: false),
                     Discriminator = table.Column<string>(type: "TEXT", maxLength: 13, nullable: false),
                     Topics = table.Column<string>(type: "TEXT", nullable: true),
                     Genres = table.Column<string>(type: "TEXT", nullable: true)

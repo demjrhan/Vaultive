@@ -48,6 +48,8 @@
         public NoSubscriptionExistsException()
             : base("There is no subscription exists in database.") { }
     }
+    
+    
 
     /* watch history */
     public class WatchHistoryNotFoundException : Exception
@@ -70,11 +72,28 @@
         public InvalidGenreException(string genre)
             : base($"Genre '{genre}' is not a valid genre.") { }
     }
+    
+    public class AtLeastOneGenreMustExistsException : Exception
+    {
+        public AtLeastOneGenreMustExistsException()
+            : base("At least one genre must be existing in the media content.") { }
+    }
     public class StreamingServiceNotFoundException : Exception
     {
-        public StreamingServiceNotFoundException(int serviceId)
-            : base($"Streaming service with ID {serviceId} does not exist.") { }
+        public StreamingServiceNotFoundException(IEnumerable<int> serviceIds)
+            : base(GenerateMessage(serviceIds)) { }
+
+        private static string GenerateMessage(IEnumerable<int> serviceIds)
+        {
+            var ids = serviceIds as IList<int> ?? serviceIds.ToList();
+            return ids.Count == 1
+                ? $"Streaming service with ID {ids.First()} does not exist."
+                : $"Streaming services with IDs [{string.Join(", ", ids)}] do not exist.";
+        }
     }
+
+    
+    /* Option */
     public class SubtitleOptionNotFoundException : Exception
     {
         public SubtitleOptionNotFoundException(string mediaTitle)
@@ -85,6 +104,12 @@
         public AudioOptionNotFoundException(string mediaTitle)
             : base($"Audio option not found for media '{mediaTitle}'.") { }
     }
+    public class AtLeastOneOptionMustExistsException : Exception
+    {
+        public AtLeastOneOptionMustExistsException()
+            : base("There must be at least one option existing in media content. Either audio or subtitle.") { }
+    }
+   
 
     /* review */
     public class ReviewNotFoundException : Exception
@@ -101,5 +126,11 @@
     {
         public UserReviewNotFoundToMediaContentException(int userId, string mediaTitle)
             : base($"User with ID {userId} has not submitted a review for '{mediaTitle}'.") { }
+    }
+    
+    /* HTTP */
+    public class AddDataFailedException : Exception
+    {
+        public AddDataFailedException(Exception innerException) : base("Adding data to database is failed.", innerException) { }
     }
 }

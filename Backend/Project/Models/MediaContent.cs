@@ -16,15 +16,15 @@ public abstract class MediaContent
     public ICollection<WatchHistory> WatchHistories { get; set; } = new HashSet<WatchHistory>();
     public ICollection<StreamingService> StreamingServices { get; set; } = new HashSet<StreamingService>();
 
-    public SubtitleOption SubtitleOption { get; set; } = null!;
+    public SubtitleOption? SubtitleOption { get; set; }
     
-    public AudioOption AudioOption { get; set; } = null!;
+    public AudioOption? AudioOption { get; set; }
     
     
     /* properties for frontend visual */
-    
-    public string? PosterImageName { get; set; }
-    public string? YoutubeTrailerURL { get; set; }
+
+    public string? PosterImageName { get; set; } 
+    public string YoutubeTrailerURL { get; set; } = null!;
     
 
 

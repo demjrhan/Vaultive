@@ -6,6 +6,7 @@ namespace Project.DTOs.MediaContentDTOs;
 
 public class MediaContentDTO
 {
+    public int Id { get; set; }
     public string Title { get; set; } = null!;
     public string Description { get; set; } = null!;
     public DateTime ReleaseDate { get; set; }
@@ -13,7 +14,7 @@ public class MediaContentDTO
     public string Country { get; set; } = null!;
     public int Duration { get; set; }
     public string YoutubeTrailerURL { get; set; }  = null!;
-    public string PosterImageName { get; set; }  = null!;
+    public string? PosterImageName { get; set; }
     
     public ICollection<StreamingServiceResponseDTO> StreamingServices { get; set; } = new HashSet<StreamingServiceResponseDTO>();
 

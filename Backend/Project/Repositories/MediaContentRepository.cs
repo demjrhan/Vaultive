@@ -18,10 +18,14 @@ public class MediaContentRepository
         return await _context.Movies
             .Include(m => m.StreamingServices)
             .Include(m => m.Reviews)
+            .ThenInclude(r => r.User )
             .Include(m => m.WatchHistories)
             .ThenInclude(wh => wh.User )
             .ToListAsync();
 
     }
-
+    public async Task AddAsync(MediaContent mediaContent)
+    {
+        await _context.MediaContents.AddAsync(mediaContent);
+    }
 }

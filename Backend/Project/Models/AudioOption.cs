@@ -3,7 +3,7 @@
 public class AudioOption
 {
 
-    public ICollection<string>? Languages { get; set; } = new List<string>();
+    public ICollection<string>? Languages { get; set; } = new HashSet<string>();
 
     public int MediaId { get; set; }
 

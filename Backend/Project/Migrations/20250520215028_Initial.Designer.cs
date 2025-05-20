@@ -11,7 +11,7 @@ using Project.Context;
 namespace Project.Migrations
 {
     [DbContext(typeof(MasterContext))]
-    [Migration("20250520212751_Initial")]
+    [Migration("20250520215028_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -89,6 +89,7 @@ namespace Project.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("YoutubeTrailerURL")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");

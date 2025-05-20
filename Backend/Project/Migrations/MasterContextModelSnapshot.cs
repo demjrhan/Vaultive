@@ -86,6 +86,7 @@ namespace Project.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("YoutubeTrailerURL")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
