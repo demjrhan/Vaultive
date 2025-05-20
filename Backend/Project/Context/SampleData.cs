@@ -344,7 +344,7 @@ public static class SampleData
             context.SaveChanges();
         }
 
-        if (!context.MediaContentStreamingServices.Any())
+        if (!context.Movies.Any(m => m.StreamingServices.Any()))
         {
             var johnWick = context.Movies.FirstOrDefault(m => m.Title == "John Wick");
             var deadpool = context.Movies.FirstOrDefault(m => m.Title == "Deadpool");
@@ -355,70 +355,30 @@ public static class SampleData
             var spiderman = context.Movies.FirstOrDefault(m => m.Title == "Spiderman");
             var vaultive = context.Movies.FirstOrDefault(m => m.Title == "Vaultive");
 
-            var mcStreaming = new List<MediaContentStreamingService>();
 
-            if (johnWick != null && appleTV != null && disney != null)
-            {
-                mcStreaming.Add(new MediaContentStreamingService
-                    { MediaTitle = johnWick.Title, StreamingServiceId = appleTV.Id });
-                mcStreaming.Add(new MediaContentStreamingService
-                    { MediaTitle = johnWick.Title, StreamingServiceId = disney.Id });
-            }
+            johnWick?.StreamingServices.Add(appleTV);
+            johnWick?.StreamingServices.Add(disney);
 
-            if (deadpool != null && disney != null)
-            {
-                mcStreaming.Add(new MediaContentStreamingService
-                    { MediaTitle = deadpool.Title, StreamingServiceId = disney.Id });
-            }
+            deadpool?.StreamingServices.Add(disney);
 
-            if (avengers != null && disney != null && hbo != null)
-            {
-                mcStreaming.Add(new MediaContentStreamingService
-                    { MediaTitle = avengers.Title, StreamingServiceId = disney.Id });
-                mcStreaming.Add(new MediaContentStreamingService
-                    { MediaTitle = avengers.Title, StreamingServiceId = hbo.Id });
-            }
+            avengers?.StreamingServices.Add(disney);
+            avengers?.StreamingServices.Add(hbo);
 
-            if (godfather != null && hbo != null)
-            {
-                mcStreaming.Add(new MediaContentStreamingService
-                    { MediaTitle = godfather.Title, StreamingServiceId = hbo.Id });
-            }
+            godfather?.StreamingServices.Add(hbo);
 
-            if (pulpFiction != null && appleTV != null)
-            {
-                mcStreaming.Add(new MediaContentStreamingService
-                    { MediaTitle = pulpFiction.Title, StreamingServiceId = appleTV.Id });
-            }
+            pulpFiction?.StreamingServices.Add(appleTV);
 
-            if (scarface != null && hbo != null && appleTV != null)
-            {
-                mcStreaming.Add(new MediaContentStreamingService
-                    { MediaTitle = scarface.Title, StreamingServiceId = hbo.Id });
-                mcStreaming.Add(new MediaContentStreamingService
-                    { MediaTitle = scarface.Title, StreamingServiceId = appleTV.Id });
-            }
+            scarface?.StreamingServices.Add(hbo);
+            scarface?.StreamingServices.Add(appleTV);
 
-            if (spiderman != null && disney != null)
-            {
-                mcStreaming.Add(new MediaContentStreamingService
-                    { MediaTitle = spiderman.Title, StreamingServiceId = disney.Id });
-            }
+            spiderman?.StreamingServices.Add(disney);
 
-            if (vaultive != null && disney != null && hbo != null && appleTV != null)
-            {
-                mcStreaming.Add(new MediaContentStreamingService
-                    { MediaTitle = vaultive.Title, StreamingServiceId = disney.Id });
-                mcStreaming.Add(new MediaContentStreamingService
-                    { MediaTitle = vaultive.Title, StreamingServiceId = hbo.Id });
-                mcStreaming.Add(new MediaContentStreamingService
-                    { MediaTitle = vaultive.Title, StreamingServiceId = appleTV.Id });
-            }
+            vaultive?.StreamingServices.Add(disney);
+            vaultive?.StreamingServices.Add(hbo);
+            vaultive?.StreamingServices.Add(appleTV);
 
-            context.MediaContentStreamingServices.AddRange(mcStreaming);
             context.SaveChanges();
         }
-
         if (!context.WatchHistories.Any())
         {
             var watchedMovies = context.Movies.ToList();

@@ -25,9 +25,8 @@ namespace Project.Configurations
                 .WithOne(a => a.MediaContent)
                 .HasForeignKey<AudioOption>(a => a.MediaTitle);
 
-            builder.HasMany(m => m.MediaContentStreamingServices)
-                .WithOne(mcss => mcss.MediaContent)
-                .HasForeignKey(mcss => mcss.MediaTitle);
+            builder.HasMany(m => m.StreamingServices)
+                .WithMany(ss => ss.MediaContents);
 
             builder.Property(m => m.Description).HasMaxLength(50).IsRequired();
             builder.Property(m => m.ReleaseDate).IsRequired().HasColumnType("datetime");

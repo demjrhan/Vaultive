@@ -12,6 +12,8 @@ public class Review
     public MediaContent MediaContent { get; set; } = null!;
     
     public string MediaTitle { get; set; } = null!;
+    public int MediaId { get; set; }
+
     
     public WatchHistory WatchHistory { get; set; } = null!;
 

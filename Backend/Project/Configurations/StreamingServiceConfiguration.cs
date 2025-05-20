@@ -10,9 +10,8 @@ namespace Project.Configurations
         {
             builder.HasKey(ss => ss.Id);
 
-            builder.HasMany(ss => ss.MediaContentStreamingServices)
-                .WithOne(mcss => mcss.StreamingService)
-                .HasForeignKey(mcss => mcss.StreamingServiceId);
+            builder.HasMany(ss => ss.MediaContents)
+                .WithMany(m => m.StreamingServices);
 
             builder.HasMany(ss => ss.Subscriptions)
                 .WithOne(s => s.StreamingService)

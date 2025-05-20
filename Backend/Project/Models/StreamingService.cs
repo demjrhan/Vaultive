@@ -10,7 +10,7 @@ public class StreamingService
     public decimal DefaultPrice { get; set; }
 
     public ICollection<Subscription> Subscriptions { get; set; } = new HashSet<Subscription>();
-    public ICollection<MediaContentStreamingService> MediaContentStreamingServices { get; set; } = new HashSet<MediaContentStreamingService>();
+    public ICollection<MediaContent> MediaContents { get; set; } = new HashSet<MediaContent>();
     
     /* properties for frontend visual */
     

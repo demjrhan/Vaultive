@@ -29,8 +29,7 @@ public class MovieRepository
     public async Task<Movie?> GetMovieByTitleAsync(string title)
     {
         return await _context.Movies
-            .Include(m => m.MediaContentStreamingServices)
-            .ThenInclude(mcs => mcs.StreamingService)
+            .Include(m => m.StreamingServices)
             .FirstOrDefaultAsync(m => m.Title == title);
     }
 
@@ -44,8 +43,7 @@ public class MovieRepository
     public async Task<IEnumerable<Movie>> GetAllMovies()
     {
         return await _context.Movies
-            .Include(m => m.MediaContentStreamingServices)
-            .ThenInclude(mcs => mcs.StreamingService)
+            .Include(m => m.StreamingServices)
             .Include(m => m.Reviews)
             .Include(m => m.WatchHistories)
             .ThenInclude(wh => wh.User )

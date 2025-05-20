@@ -4,6 +4,8 @@ namespace Project.Models;
 public abstract class MediaContent
 {
 
+    public int Id { get; set; }
+
     public string Title { get; set; } = null!;
     public string Description { get; set; } = null!;
     public DateTime ReleaseDate { get; set; }
@@ -13,7 +15,6 @@ public abstract class MediaContent
 
     public ICollection<Review> Reviews { get; set; } = new HashSet<Review>();
     public ICollection<WatchHistory> WatchHistories { get; set; } = new HashSet<WatchHistory>();
-    public ICollection<MediaContentStreamingService> MediaContentStreamingServices { get; set; } = new HashSet<MediaContentStreamingService>();
     public ICollection<StreamingService> StreamingServices { get; set; } = new HashSet<StreamingService>();
 
     public SubtitleOption SubtitleOption { get; set; } = null!;

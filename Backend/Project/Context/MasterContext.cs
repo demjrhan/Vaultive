@@ -11,7 +11,6 @@ public class MasterContext : DbContext
     public DbSet<AudioOption> AudioOptions { get; set; }
     public DbSet<Documentary> Documentaries { get; set; }
     public DbSet<MediaContent> MediaContents { get; set; }
-    public DbSet<MediaContentStreamingService> MediaContentStreamingServices { get; set; }
     public DbSet<Movie> Movies { get; set; }
     public DbSet<Review> Reviews { get; set; }
     public DbSet<StreamingService> StreamingServices { get; set; }

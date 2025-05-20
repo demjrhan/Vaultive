@@ -74,13 +74,14 @@ public class MovieService
                 Title = m.Title,
                 YoutubeTrailerURL = m.YoutubeTrailerURL,
                 PosterImageName = m.PosterImageName,
-                StreamingServices = m.MediaContentStreamingServices
-                    .Select(mcs => new StreamingServiceResponseDTO
+                StreamingServices = m.StreamingServices
+                    .Select(ss => new StreamingServiceResponseDTO
                     {
-                        Country = mcs.StreamingService.Country,
-                        Description = mcs.StreamingService.Description,
-                        Name = mcs.StreamingService.Name,
-                        LogoImage = mcs.StreamingService.LogoImage
+                        Id = ss.Id,
+                        Country = ss.Country,
+                        Description = ss.Description,
+                        Name = ss.Name,
+                        LogoImage = ss.LogoImage
                     }).ToList(),
                 Reviews = m.Reviews.Select(r => new ReviewResponseDTO()
                 {
