@@ -8,11 +8,11 @@ namespace Project.Configurations
     {
         public void Configure(EntityTypeBuilder<SubtitleOption> builder)
         {
-            builder.HasKey(so => so.MediaTitle);
+            builder.HasKey(so => so.MediaId);
 
             builder.HasOne(so => so.MediaContent)
                 .WithOne(m => m.SubtitleOption)
-                .HasForeignKey<SubtitleOption>(so => so.MediaTitle)
+                .HasForeignKey<SubtitleOption>(so => so.MediaId)
                 .IsRequired()
                 .OnDelete(DeleteBehavior.Cascade);
 

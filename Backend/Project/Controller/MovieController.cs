@@ -29,20 +29,4 @@ public class MovieController : ControllerBase
         }
     }
 
-    [HttpGet("ByGenre/{genre}")]
-    public async Task<IActionResult> GetMoviesWithGivenGenre(string genre)
-    {
-        try
-        {
-            if (!Enum.TryParse<Genre>(genre, true, out var parsedGenre))
-                return BadRequest($"Invalid genre: {genre}");
-
-            var result = await _mediaContentService.GetMoviesWithGivenGenre(parsedGenre);
-            return Ok(result);
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(ex.Message);
-        }
-    }
 }

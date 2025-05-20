@@ -19,13 +19,13 @@ namespace Project.Migrations
 
             modelBuilder.Entity("MediaContentStreamingService", b =>
                 {
-                    b.Property<string>("MediaContentsTitle")
-                        .HasColumnType("TEXT");
+                    b.Property<int>("MediaContentsId")
+                        .HasColumnType("INTEGER");
 
                     b.Property<int>("StreamingServicesId")
                         .HasColumnType("INTEGER");
 
-                    b.HasKey("MediaContentsTitle", "StreamingServicesId");
+                    b.HasKey("MediaContentsId", "StreamingServicesId");
 
                     b.HasIndex("StreamingServicesId");
 
@@ -34,25 +34,23 @@ namespace Project.Migrations
 
             modelBuilder.Entity("Project.Models.AudioOption", b =>
                 {
-                    b.Property<string>("MediaTitle")
-                        .HasColumnType("TEXT");
+                    b.Property<int>("MediaId")
+                        .HasColumnType("INTEGER");
 
                     b.PrimitiveCollection<string>("Languages")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("MediaId")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("MediaTitle");
+                    b.HasKey("MediaId");
 
                     b.ToTable("AudioOptions");
                 });
 
             modelBuilder.Entity("Project.Models.MediaContent", b =>
                 {
-                    b.Property<string>("Title")
-                        .HasColumnType("TEXT");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Country")
                         .IsRequired()
@@ -72,9 +70,6 @@ namespace Project.Migrations
                     b.Property<int>("Duration")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("Id")
-                        .HasColumnType("INTEGER");
-
                     b.Property<string>("OriginalLanguage")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -86,14 +81,18 @@ namespace Project.Migrations
                     b.Property<DateTime>("ReleaseDate")
                         .HasColumnType("datetime");
 
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("YoutubeTrailerURL")
                         .HasColumnType("TEXT");
 
-                    b.HasKey("Title");
+                    b.HasKey("Id");
 
-                    b.HasIndex("OriginalLanguage");
-
-                    b.HasIndex("ReleaseDate");
+                    b.HasIndex("Title")
+                        .IsUnique();
 
                     b.ToTable("MediaContents");
 
@@ -116,18 +115,14 @@ namespace Project.Migrations
                     b.Property<int>("MediaId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("MediaTitle")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
                     b.Property<int>("UserId")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("MediaTitle");
+                    b.HasIndex("MediaId");
 
-                    b.HasIndex("UserId", "MediaTitle");
+                    b.HasIndex("UserId", "MediaId");
 
                     b.ToTable("Reviews");
                 });
@@ -218,17 +213,14 @@ namespace Project.Migrations
 
             modelBuilder.Entity("Project.Models.SubtitleOption", b =>
                 {
-                    b.Property<string>("MediaTitle")
-                        .HasColumnType("TEXT");
+                    b.Property<int>("MediaId")
+                        .HasColumnType("INTEGER");
 
                     b.PrimitiveCollection<string>("Languages")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("MediaId")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("MediaTitle");
+                    b.HasKey("MediaId");
 
                     b.ToTable("SubtitleOptions");
                 });
@@ -283,9 +275,8 @@ namespace Project.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("MediaTitle")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
+                    b.Property<int>("MediaId")
+                        .HasColumnType("INTEGER");
 
                     b.Property<int>("TimeLeftOf")
                         .HasColumnType("INTEGER");
@@ -298,7 +289,7 @@ namespace Project.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("MediaTitle");
+                    b.HasIndex("MediaId");
 
                     b.HasIndex("TimeLeftOf");
 
@@ -331,7 +322,7 @@ namespace Project.Migrations
                 {
                     b.HasOne("Project.Models.MediaContent", null)
                         .WithMany()
-                        .HasForeignKey("MediaContentsTitle")
+                        .HasForeignKey("MediaContentsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -346,7 +337,7 @@ namespace Project.Migrations
                 {
                     b.HasOne("Project.Models.MediaContent", "MediaContent")
                         .WithOne("AudioOption")
-                        .HasForeignKey("Project.Models.AudioOption", "MediaTitle")
+                        .HasForeignKey("Project.Models.AudioOption", "MediaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -357,7 +348,7 @@ namespace Project.Migrations
                 {
                     b.HasOne("Project.Models.MediaContent", "MediaContent")
                         .WithMany("Reviews")
-                        .HasForeignKey("MediaTitle")
+                        .HasForeignKey("MediaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -369,8 +360,8 @@ namespace Project.Migrations
 
                     b.HasOne("Project.Models.WatchHistory", "WatchHistory")
                         .WithMany()
-                        .HasForeignKey("UserId", "MediaTitle")
-                        .HasPrincipalKey("UserId", "MediaTitle")
+                        .HasForeignKey("UserId", "MediaId")
+                        .HasPrincipalKey("UserId", "MediaId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
@@ -415,7 +406,7 @@ namespace Project.Migrations
                 {
                     b.HasOne("Project.Models.MediaContent", "MediaContent")
                         .WithOne("SubtitleOption")
-                        .HasForeignKey("Project.Models.SubtitleOption", "MediaTitle")
+                        .HasForeignKey("Project.Models.SubtitleOption", "MediaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -426,7 +417,7 @@ namespace Project.Migrations
                 {
                     b.HasOne("Project.Models.MediaContent", "MediaContent")
                         .WithMany("WatchHistories")
-                        .HasForeignKey("MediaTitle")
+                        .HasForeignKey("MediaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

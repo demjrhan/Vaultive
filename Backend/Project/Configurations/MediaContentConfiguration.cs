@@ -8,23 +8,23 @@ namespace Project.Configurations
     {
         public void Configure(EntityTypeBuilder<MediaContent> builder)
         {
-            builder.HasKey(m => m.Title);
+            builder.HasKey(m => m.Id);
             
             builder.HasMany(m => m.Reviews)
                 .WithOne(r => r.MediaContent)
-                .HasForeignKey(r => r.MediaTitle);
+                .HasForeignKey(r => r.MediaId);
 
             builder.HasMany(m => m.WatchHistories)
                 .WithOne(w => w.MediaContent)
-                .HasForeignKey(w => w.MediaTitle);
+                .HasForeignKey(w => w.MediaId);
 
             builder.HasOne(m => m.SubtitleOption)
                 .WithOne(s => s.MediaContent)
-                .HasForeignKey<SubtitleOption>(s => s.MediaTitle);
+                .HasForeignKey<SubtitleOption>(s => s.MediaId);
 
             builder.HasOne(m => m.AudioOption)
                 .WithOne(a => a.MediaContent)
-                .HasForeignKey<AudioOption>(a => a.MediaTitle);
+                .HasForeignKey<AudioOption>(a => a.MediaId);
 
             builder.HasMany(m => m.StreamingServices)
                 .WithMany(ss => ss.MediaContents);

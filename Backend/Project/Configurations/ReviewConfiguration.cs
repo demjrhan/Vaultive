@@ -14,13 +14,13 @@ namespace Project.Configurations
 
             builder.HasOne(r => r.MediaContent)
                 .WithMany(m => m.Reviews)
-                .HasForeignKey(r =>  r.MediaTitle );
+                .HasForeignKey(r =>  r.MediaId);
 
             /* Delete the review if the watch history gets deleted */
             builder.HasOne(r => r.WatchHistory)
                 .WithMany() 
-                .HasForeignKey(r => new { r.UserId, r.MediaTitle })
-                .HasPrincipalKey(w => new { w.UserId, w.MediaTitle })
+                .HasForeignKey(r => new { r.UserId, r.MediaId })
+                .HasPrincipalKey(w => new { w.UserId, w.MediaId })
                 .OnDelete(DeleteBehavior.Restrict);
             
             builder.HasKey(r => r.Id);

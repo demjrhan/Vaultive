@@ -10,7 +10,7 @@ public class WatchHistory
     public int UserId { get; set; }
     public User User { get; set; } = null!;
 
-    public string MediaTitle { get; set; } = null!;
+    public int MediaId { get; set; }
     public MediaContent MediaContent { get; set; } = null!;
     
 }

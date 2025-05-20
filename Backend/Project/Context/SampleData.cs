@@ -202,7 +202,6 @@ public static class SampleData
                     Genres = new HashSet<Genre> { Genre.Action, Genre.Thriller },
                     SubtitleOption = new SubtitleOption
                     {
-                        MediaTitle = "John Wick",
                         Languages = new List<string>() {"English" }
 
                     }
@@ -221,7 +220,6 @@ public static class SampleData
                     Genres = new HashSet<Genre> { Genre.Action, Genre.Comedy, Genre.Superhero },
                     SubtitleOption = new SubtitleOption
                     {
-                        MediaTitle = "Deadpool",
                         Languages = new List<string>() {"English" }
 
                     }
@@ -240,7 +238,6 @@ public static class SampleData
                     Genres = new HashSet<Genre> { Genre.Action, Genre.Superhero },
                     SubtitleOption = new SubtitleOption
                     {
-                        MediaTitle = "Spiderman",
                         Languages = new List<string>() {"English" }
 
                     }
@@ -259,7 +256,6 @@ public static class SampleData
                     Genres = new HashSet<Genre> { Genre.Crime, Genre.Drama },
                     SubtitleOption = new SubtitleOption
                     {
-                        MediaTitle = "Pulp Fiction",
                         Languages = new List<string>() {"English" }
 
                     }
@@ -278,7 +274,6 @@ public static class SampleData
                     Genres = new HashSet<Genre> { Genre.Action, Genre.Superhero, Genre.SciFi },
                     SubtitleOption = new SubtitleOption
                     {
-                        MediaTitle = "Avengers",
                         Languages = new List<string>() {"English" }
                     }
                 },
@@ -297,7 +292,6 @@ public static class SampleData
                     Genres = new HashSet<Genre> { Genre.Crime, Genre.Drama },
                     SubtitleOption = new SubtitleOption
                     {
-                        MediaTitle = "God Father",
                         Languages = new List<string>() {"English" }
                     }
                 },
@@ -315,7 +309,6 @@ public static class SampleData
                     Genres = new HashSet<Genre> { Genre.Crime, Genre.Drama },
                     SubtitleOption = new SubtitleOption
                     {
-                        MediaTitle = "Scarface",
                         Languages = new List<string>() {"English" }
 
                     }
@@ -334,7 +327,6 @@ public static class SampleData
                     Genres = new HashSet<Genre> { Genre.Action },
                     SubtitleOption = new SubtitleOption
                     {
-                        MediaTitle = "Vaultive",
                         Languages = new List<string>() {"English" }
 
                     }
@@ -395,7 +387,7 @@ public static class SampleData
                     histories.Add(new WatchHistory
                     {
                         UserId = demir.Id,
-                        MediaTitle = movie.Title,
+                        MediaId = movie.Id,
                         WatchDate = DateTime.UtcNow.AddDays(-demirMovies.IndexOf(movie) - 1),
                         TimeLeftOf = movie.Duration - 20
                     });
@@ -413,7 +405,7 @@ public static class SampleData
                     histories.Add(new WatchHistory
                     {
                         UserId = aiko.Id,
-                        MediaTitle = movie.Title,
+                        MediaId = movie.Id,
                         WatchDate = DateTime.UtcNow.AddDays(-aikoMovies.IndexOf(movie) - 2),
                         TimeLeftOf = movie.Duration - 15
                     });
@@ -431,7 +423,7 @@ public static class SampleData
                     histories.Add(new WatchHistory
                     {
                         UserId = michal.Id,
-                        MediaTitle = movie.Title,
+                        MediaId = movie.Id,
                         WatchDate = DateTime.UtcNow.AddDays(-michalMovies.IndexOf(movie) - 3),
                         TimeLeftOf = movie.Duration - 30
                     });
@@ -453,14 +445,14 @@ public static class SampleData
                 var demirTitles = new[] { "John Wick", "Avengers", "Pulp Fiction" };
                 foreach (var title in demirTitles)
                 {
-                    var history = watchHistories.FirstOrDefault(w => w.UserId == demir.Id && w.MediaTitle == title);
                     var media = allMovies.FirstOrDefault(m => m.Title == title);
+                    var history = watchHistories.FirstOrDefault(w => w.UserId == demir.Id && w.MediaId == media.Id);
                     if (history != null && media != null)
                     {
                         reviews.Add(new Review
                         {
                             UserId = demir.Id,
-                            MediaTitle = title,
+                            MediaId = media.Id,
                             Comment = title switch
                             {
                                 "John Wick" =>
@@ -483,14 +475,14 @@ public static class SampleData
                 var aikoTitles = new[] { "Deadpool", "Spiderman" };
                 foreach (var title in aikoTitles)
                 {
-                    var history = watchHistories.FirstOrDefault(w => w.UserId == aiko.Id && w.MediaTitle == title);
                     var media = allMovies.FirstOrDefault(m => m.Title == title);
+                    var history = watchHistories.FirstOrDefault(w => w.UserId == aiko.Id && w.MediaId == media.Id);
                     if (history != null && media != null)
                     {
                         reviews.Add(new Review
                         {
                             UserId = aiko.Id,
-                            MediaTitle = title,
+                            MediaId = media.Id,
                             Comment = title switch
                             {
                                 "Deadpool" =>
@@ -511,14 +503,14 @@ public static class SampleData
                 var michalTitles = new[] { "Scarface", "God Father" };
                 foreach (var title in michalTitles)
                 {
-                    var history = watchHistories.FirstOrDefault(w => w.UserId == michal.Id && w.MediaTitle == title);
                     var media = allMovies.FirstOrDefault(m => m.Title == title);
+                    var history = watchHistories.FirstOrDefault(w => w.UserId == michal.Id && w.MediaId == media.Id);
                     if (history != null && media != null)
                     {
                         reviews.Add(new Review
                         {
                             UserId = michal.Id,
-                            MediaTitle = title,
+                            MediaId = media.Id,
                             Comment = title switch
                             {
                                 "God Father" =>

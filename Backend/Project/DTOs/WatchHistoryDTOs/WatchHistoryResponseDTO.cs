@@ -11,4 +11,6 @@ public class WatchHistoryResponseDTO
     public string WatchDateFormatted => WatchDate.ToString("dd-MM-yyyy");
     public int TimeLeftOf { get; set; }
     public string MediaTitle { get; set; } = null!;
+    public int MediaId { get; set; } 
+
 }

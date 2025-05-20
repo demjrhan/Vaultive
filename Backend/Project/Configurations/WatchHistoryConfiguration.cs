@@ -9,7 +9,7 @@ namespace Project.Configurations
         public void Configure(EntityTypeBuilder<WatchHistory> builder)
         {
 
-            builder.HasAlternateKey(wh => new { wh.UserId, wh.MediaTitle });
+            builder.HasAlternateKey(wh => new { wh.UserId, wh.MediaId });
             builder.Property(wh => wh.WatchDate).IsRequired().HasColumnType("datetime");;
             builder.Property(wh => wh.TimeLeftOf).IsRequired();
             
@@ -19,7 +19,7 @@ namespace Project.Configurations
 
             builder.HasOne(wh => wh.MediaContent)
                 .WithMany(mc => mc.WatchHistories)
-                .HasForeignKey(w => w.MediaTitle );
+                .HasForeignKey(w => w.MediaId );
             
             builder.HasIndex(wh => wh.TimeLeftOf);
 

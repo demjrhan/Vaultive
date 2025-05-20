@@ -15,8 +15,9 @@ namespace Project.Migrations
                 name: "MediaContents",
                 columns: table => new
                 {
-                    Title = table.Column<string>(type: "TEXT", nullable: false),
-                    Id = table.Column<int>(type: "INTEGER", nullable: false),
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Title = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
                     Description = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
                     ReleaseDate = table.Column<DateTime>(type: "datetime", nullable: false),
                     OriginalLanguage = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
@@ -30,7 +31,7 @@ namespace Project.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_MediaContents", x => x.Title);
+                    table.PrimaryKey("PK_MediaContents", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -72,18 +73,17 @@ namespace Project.Migrations
                 name: "AudioOptions",
                 columns: table => new
                 {
-                    MediaTitle = table.Column<string>(type: "TEXT", nullable: false),
-                    Languages = table.Column<string>(type: "TEXT", nullable: false),
-                    MediaId = table.Column<int>(type: "INTEGER", nullable: false)
+                    MediaId = table.Column<int>(type: "INTEGER", nullable: false),
+                    Languages = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AudioOptions", x => x.MediaTitle);
+                    table.PrimaryKey("PK_AudioOptions", x => x.MediaId);
                     table.ForeignKey(
-                        name: "FK_AudioOptions_MediaContents_MediaTitle",
-                        column: x => x.MediaTitle,
+                        name: "FK_AudioOptions_MediaContents_MediaId",
+                        column: x => x.MediaId,
                         principalTable: "MediaContents",
-                        principalColumn: "Title",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -91,18 +91,17 @@ namespace Project.Migrations
                 name: "SubtitleOptions",
                 columns: table => new
                 {
-                    MediaTitle = table.Column<string>(type: "TEXT", nullable: false),
-                    Languages = table.Column<string>(type: "TEXT", nullable: false),
-                    MediaId = table.Column<int>(type: "INTEGER", nullable: false)
+                    MediaId = table.Column<int>(type: "INTEGER", nullable: false),
+                    Languages = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_SubtitleOptions", x => x.MediaTitle);
+                    table.PrimaryKey("PK_SubtitleOptions", x => x.MediaId);
                     table.ForeignKey(
-                        name: "FK_SubtitleOptions_MediaContents_MediaTitle",
-                        column: x => x.MediaTitle,
+                        name: "FK_SubtitleOptions_MediaContents_MediaId",
+                        column: x => x.MediaId,
                         principalTable: "MediaContents",
-                        principalColumn: "Title",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -110,17 +109,17 @@ namespace Project.Migrations
                 name: "MediaContentStreamingService",
                 columns: table => new
                 {
-                    MediaContentsTitle = table.Column<string>(type: "TEXT", nullable: false),
+                    MediaContentsId = table.Column<int>(type: "INTEGER", nullable: false),
                     StreamingServicesId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_MediaContentStreamingService", x => new { x.MediaContentsTitle, x.StreamingServicesId });
+                    table.PrimaryKey("PK_MediaContentStreamingService", x => new { x.MediaContentsId, x.StreamingServicesId });
                     table.ForeignKey(
-                        name: "FK_MediaContentStreamingService_MediaContents_MediaContentsTitle",
-                        column: x => x.MediaContentsTitle,
+                        name: "FK_MediaContentStreamingService_MediaContents_MediaContentsId",
+                        column: x => x.MediaContentsId,
                         principalTable: "MediaContents",
-                        principalColumn: "Title",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_MediaContentStreamingService_StreamingServices_StreamingServicesId",
@@ -158,17 +157,17 @@ namespace Project.Migrations
                     WatchDate = table.Column<DateTime>(type: "datetime", nullable: false),
                     TimeLeftOf = table.Column<int>(type: "INTEGER", nullable: false),
                     UserId = table.Column<int>(type: "INTEGER", nullable: false),
-                    MediaTitle = table.Column<string>(type: "TEXT", nullable: false)
+                    MediaId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_WatchHistories", x => x.Id);
-                    table.UniqueConstraint("AK_WatchHistories_UserId_MediaTitle", x => new { x.UserId, x.MediaTitle });
+                    table.UniqueConstraint("AK_WatchHistories_UserId_MediaId", x => new { x.UserId, x.MediaId });
                     table.ForeignKey(
-                        name: "FK_WatchHistories_MediaContents_MediaTitle",
-                        column: x => x.MediaTitle,
+                        name: "FK_WatchHistories_MediaContents_MediaId",
+                        column: x => x.MediaId,
                         principalTable: "MediaContents",
-                        principalColumn: "Title",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_WatchHistories_Users_UserId",
@@ -216,17 +215,16 @@ namespace Project.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     Comment = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
                     UserId = table.Column<int>(type: "INTEGER", nullable: false),
-                    MediaTitle = table.Column<string>(type: "TEXT", nullable: false),
                     MediaId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Reviews", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Reviews_MediaContents_MediaTitle",
-                        column: x => x.MediaTitle,
+                        name: "FK_Reviews_MediaContents_MediaId",
+                        column: x => x.MediaId,
                         principalTable: "MediaContents",
-                        principalColumn: "Title",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Reviews_Users_UserId",
@@ -235,22 +233,18 @@ namespace Project.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Reviews_WatchHistories_UserId_MediaTitle",
-                        columns: x => new { x.UserId, x.MediaTitle },
+                        name: "FK_Reviews_WatchHistories_UserId_MediaId",
+                        columns: x => new { x.UserId, x.MediaId },
                         principalTable: "WatchHistories",
-                        principalColumns: new[] { "UserId", "MediaTitle" },
+                        principalColumns: new[] { "UserId", "MediaId" },
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_MediaContents_OriginalLanguage",
+                name: "IX_MediaContents_Title",
                 table: "MediaContents",
-                column: "OriginalLanguage");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_MediaContents_ReleaseDate",
-                table: "MediaContents",
-                column: "ReleaseDate");
+                column: "Title",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_MediaContentStreamingService_StreamingServicesId",
@@ -258,14 +252,14 @@ namespace Project.Migrations
                 column: "StreamingServicesId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Reviews_MediaTitle",
+                name: "IX_Reviews_MediaId",
                 table: "Reviews",
-                column: "MediaTitle");
+                column: "MediaId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Reviews_UserId_MediaTitle",
+                name: "IX_Reviews_UserId_MediaId",
                 table: "Reviews",
-                columns: new[] { "UserId", "MediaTitle" });
+                columns: new[] { "UserId", "MediaId" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_SubscriptionConfirmations_SubscriptionId",
@@ -295,9 +289,9 @@ namespace Project.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_WatchHistories_MediaTitle",
+                name: "IX_WatchHistories_MediaId",
                 table: "WatchHistories",
-                column: "MediaTitle");
+                column: "MediaId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_WatchHistories_TimeLeftOf",

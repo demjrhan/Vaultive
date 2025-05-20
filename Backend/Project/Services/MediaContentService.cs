@@ -31,33 +31,6 @@ public class MediaContentService
         _watchHistoryRepository = watchHistoryRepository;
     }
 
-    public async Task<List<MovieResponseDTO>> GetMoviesWithGivenGenre(Genre genre)
-    {
-        var movies = await _mediaContentRepository.GetMoviesWithGivenGenre(genre);
-        return movies.Select(m => new MovieResponseDTO
-        {
-            Genres = m.Genres.Select(g => g.ToString()).ToList(),
-            MediaContent = new MediaContentResponseDTO()
-            {
-                Country = m.Country,
-                Description = m.Description,
-                Duration = m.Duration,
-                OriginalLanguage = m.OriginalLanguage,
-                ReleaseDate = m.ReleaseDate,
-                Title = m.Title,
-                YoutubeTrailerURL = m.YoutubeTrailerURL,
-                PosterImageName = m.PosterImageName,
-                StreamingServices = m.StreamingServices.Select(s => new StreamingServiceResponseDTO()
-                {
-                    Country = s.Country,
-                    Description = s.Description,
-                    Name = s.Name,
-                    LogoImage = s.LogoImage
-
-                }).ToList()
-            }
-        }).ToList();
-    }
     public async Task<List<MovieResponseDTO>> GetAllMovies()
     {
         var movies = await _mediaContentRepository.GetAllMovies();
@@ -87,7 +60,6 @@ public class MediaContentService
                 {
                     Id = r.Id,
                     Comment = r.Comment,
-                    MediaTitle = r.MediaTitle,
                     Nickname = r.User.Nickname,
                     WatchedOn = r.WatchHistory?.WatchDate.ToString("yyyy-MM-dd")
                 }).ToList()
@@ -96,36 +68,4 @@ public class MediaContentService
         }).ToList();
         
     }
-    public async Task AddOrUpdateWatchHistoryAsync(WatchHistory newHistory)
-    {
-
-        await using var transaction = await _context.Database.BeginTransactionAsync();
-        try
-        {
-            var existing =
-                await _watchHistoryRepository.GetByUserAndMediaAsync(newHistory.UserId, newHistory.MediaTitle);
-
-            if (existing == null)
-            {
-                await _watchHistoryRepository.AddAsync(newHistory);
-            }
-            else if (existing.TimeLeftOf != newHistory.TimeLeftOf || existing.WatchDate != newHistory.WatchDate)
-            {
-                await _watchHistoryRepository.UpdateAsync(existing, newHistory);
-
-            }
-            
-            await _context.SaveChangesAsync();
-
-            await transaction.CommitAsync();
-        }
-        catch (Exception ex)
-        {
-            await transaction.RollbackAsync();
-            throw;
-        }
-      
-        
-    }
-
 }
