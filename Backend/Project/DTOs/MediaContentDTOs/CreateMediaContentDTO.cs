@@ -11,9 +11,8 @@ public class CreateMediaContentDTO
     public string Country { get; set; } = null!;
     public int Duration { get; set; }
 
-    public List<Genre> Genres { get; set; } = new();
-    public List<string> AudioOption { get; set; } = null!;
-    public List<string> SubtitleOption { get; set; } = null!;
+    public List<string>? AudioOption { get; set; }
+    public List<string>? SubtitleOption { get; set; }
     public List<int> StreamingServiceIds { get; set; } = new();
 
 

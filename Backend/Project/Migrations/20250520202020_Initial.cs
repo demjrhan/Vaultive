@@ -44,7 +44,8 @@ namespace Project.Migrations
                     Country = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
                     Description = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
                     DefaultPrice = table.Column<decimal>(type: "decimal(5,2)", nullable: false),
-                    LogoImage = table.Column<string>(type: "TEXT", nullable: false)
+                    LogoImage = table.Column<string>(type: "TEXT", nullable: false),
+                    WebsiteLink = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -74,7 +75,7 @@ namespace Project.Migrations
                 columns: table => new
                 {
                     MediaId = table.Column<int>(type: "INTEGER", nullable: false),
-                    Languages = table.Column<string>(type: "TEXT", nullable: false)
+                    Languages = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -92,7 +93,7 @@ namespace Project.Migrations
                 columns: table => new
                 {
                     MediaId = table.Column<int>(type: "INTEGER", nullable: false),
-                    Languages = table.Column<string>(type: "TEXT", nullable: false)
+                    Languages = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {

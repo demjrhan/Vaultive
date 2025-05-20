@@ -38,7 +38,6 @@ namespace Project.Migrations
                         .HasColumnType("INTEGER");
 
                     b.PrimitiveCollection<string>("Languages")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("MediaId");
@@ -155,6 +154,10 @@ namespace Project.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("WebsiteLink")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.HasKey("Id");
 
                     b.ToTable("StreamingServices");
@@ -217,7 +220,6 @@ namespace Project.Migrations
                         .HasColumnType("INTEGER");
 
                     b.PrimitiveCollection<string>("Languages")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("MediaId");

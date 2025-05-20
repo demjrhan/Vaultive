@@ -37,14 +37,14 @@ public class MediaContentService
         return movies.Select(m => new MovieResponseDTO
         {
             Genres = m.Genres.Select(g => g.ToString()).ToList(),
-            MediaContent = new MediaContentResponseDTO()
+            MediaContent = new MediaContentDTO()
             {
+                Title = m.Title,
                 Country = m.Country,
                 Description = m.Description,
                 Duration = m.Duration,
                 OriginalLanguage = m.OriginalLanguage,
                 ReleaseDate = m.ReleaseDate,
-                Title = m.Title,
                 YoutubeTrailerURL = m.YoutubeTrailerURL,
                 PosterImageName = m.PosterImageName,
                 StreamingServices = m.StreamingServices
@@ -54,7 +54,8 @@ public class MediaContentService
                         Country = ss.Country,
                         Description = ss.Description,
                         Name = ss.Name,
-                        LogoImage = ss.LogoImage
+                        LogoImage = ss.LogoImage,
+                        WebsiteLink = ss.WebsiteLink
                     }).ToList(),
                 Reviews = m.Reviews.Select(r => new ReviewResponseDTO()
                 {

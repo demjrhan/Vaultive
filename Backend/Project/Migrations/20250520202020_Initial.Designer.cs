@@ -11,7 +11,7 @@ using Project.Context;
 namespace Project.Migrations
 {
     [DbContext(typeof(MasterContext))]
-    [Migration("20250520192119_Initial")]
+    [Migration("20250520202020_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -41,7 +41,6 @@ namespace Project.Migrations
                         .HasColumnType("INTEGER");
 
                     b.PrimitiveCollection<string>("Languages")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("MediaId");
@@ -158,6 +157,10 @@ namespace Project.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("WebsiteLink")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.HasKey("Id");
 
                     b.ToTable("StreamingServices");
@@ -220,7 +223,6 @@ namespace Project.Migrations
                         .HasColumnType("INTEGER");
 
                     b.PrimitiveCollection<string>("Languages")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("MediaId");

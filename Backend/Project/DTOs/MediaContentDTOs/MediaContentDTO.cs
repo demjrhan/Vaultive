@@ -4,7 +4,7 @@ using Project.DTOs.StreamingServiceDTOs;
 
 namespace Project.DTOs.MediaContentDTOs;
 
-public class MediaContentResponseDTO
+public class MediaContentDTO
 {
     public string Title { get; set; } = null!;
     public string Description { get; set; } = null!;

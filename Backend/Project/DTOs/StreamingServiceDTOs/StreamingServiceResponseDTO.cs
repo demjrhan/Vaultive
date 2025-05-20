@@ -10,4 +10,5 @@ public class StreamingServiceResponseDTO
     public decimal DefaultPrice { get; set; }
     
     public string LogoImage { get; set; } = null!;
+    public string WebsiteLink { get; set; } = null!;
 }

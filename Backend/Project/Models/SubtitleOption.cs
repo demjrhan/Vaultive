@@ -3,7 +3,7 @@
 public class SubtitleOption
 {
 
-    public ICollection<string> Languages { get; set; } = new List<string>();
+    public ICollection<string>? Languages { get; set; } = new List<string>();
     
     public int MediaId { get; set; }
 

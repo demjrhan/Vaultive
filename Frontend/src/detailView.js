@@ -56,7 +56,9 @@ export function showMovieDetail(movie, from = 'home') {
     movie.mediaContent?.streamingServices
       ?.map(
         (s) =>
-          `<img src="../public/img/streamers/${s.logoImage}.png" alt="${s.name}">`,
+          `<a href="${s.websiteLink}" target="_blank">
+              <img src="../public/img/streamers/${s.logoImage}.png" alt="${s.name}">
+           </a>`,
       )
       .join('') ?? '';
 
