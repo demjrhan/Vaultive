@@ -16,13 +16,13 @@ public class MediaContentController : ControllerBase
         _mediaContentService = mediaContentService;
     }
     
-    [HttpDelete("Remove")]
+    [HttpDelete(("Remove/{mediaId:int}"))]
     public async Task<IActionResult> RemoveMediaContent(int mediaId)
     {
         try
         {
             await _mediaContentService.RemoveMediaContentWithGivenId(mediaId);
-            return Created(string.Empty, "Media Content removed successfully.");
+            return Ok("Media Content deleted successfully.");
         }
         catch (MediaContentDoesNotExistsException ex)
         {
@@ -34,6 +34,8 @@ public class MediaContentController : ControllerBase
         }
        
     }
+
+
     
 }
 

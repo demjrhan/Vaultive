@@ -435,13 +435,11 @@ namespace Project.Migrations
 
             modelBuilder.Entity("Project.Models.MediaContent", b =>
                 {
-                    b.Navigation("AudioOption")
-                        .IsRequired();
+                    b.Navigation("AudioOption");
 
                     b.Navigation("Reviews");
 
-                    b.Navigation("SubtitleOption")
-                        .IsRequired();
+                    b.Navigation("SubtitleOption");
 
                     b.Navigation("WatchHistories");
                 });

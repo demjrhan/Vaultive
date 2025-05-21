@@ -122,6 +122,7 @@ public class MediaContentService
             Genres = m.Genres.Select(g => g.ToString()).ToList(),
             MediaContent = new MediaContentFrontendDTO()
             {
+                Id = m.Id,
                 Title = m.Title,
                 Description = m.Description,
                 YoutubeTrailerURL = m.YoutubeTrailerURL,
@@ -135,6 +136,7 @@ public class MediaContentService
                     }).ToList(),
                 Reviews = m.Reviews.Select(r => new ReviewResponseFrontendDTO()
                 {
+                    Id = r.Id,
                     Comment = r.Comment,
                     Nickname = r.User.Nickname,
                 }).ToList()
@@ -186,13 +188,7 @@ public class MediaContentService
         }).ToList();
     }
     
-    /* Get the media content with the given id private method for inner purposes. */
-    private async Task<MediaContent> GetMediaContentWithGivenId(int mediaId)
-    {
-        var media = await _mediaContentRepository.GetMediaContentWithGivenId(mediaId);
-        if (media == null) throw new MediaContentDoesNotExistsException(mediaId);
-        return media;
-    }
+    
     /* Remove the media content with the given id */
     public async Task RemoveMediaContentWithGivenId(int mediaId)
     {
@@ -201,8 +197,7 @@ public class MediaContentService
         try
         {
             /* validation is done inside the GetMediaContentWithGivenId method */
-            var media = await GetMediaContentWithGivenId(mediaId);
-            await _mediaContentRepository.RemoveAsync(media);
+            await _mediaContentRepository.RemoveAsync(mediaId);
 
             await _context.SaveChangesAsync();
             await transaction.CommitAsync();
@@ -212,7 +207,7 @@ public class MediaContentService
             await transaction.RollbackAsync();
             throw new RemoveDataFailedException(ex);
         }
-      
+
     }
 
     private void ValidateGenres(HashSet<string> genres)

@@ -26,29 +26,23 @@ public class MediaContentRepository
 
     }
     
-    public async Task<Movie?> GetMediaContentWithGivenId(int mediaId)
-    {
-        return await _context.Movies
-            .Include(m => m.StreamingServices)
-            .Include(m => m.Reviews)
-            .ThenInclude(r => r.User)
-            .Include(m => m.WatchHistories)
-            .ThenInclude(wh => wh.User)
-            .Where(m => m.Id == mediaId)
-            .FirstOrDefaultAsync();
-    }
     
     public async Task AddAsync(MediaContent mediaContent)
     {
         await _context.MediaContents.AddAsync(mediaContent);
     }
 
-    public async Task RemoveAsync(MediaContent mediaContent)
+    public async Task RemoveAsync(int mediaId)
     {
-        var content = await _context.MediaContents.FindAsync(mediaContent);
-        if (content == null) throw new MediaContentDoesNotExistsException(mediaContent.Id);
+        var media = await GetMediaContentWithGivenId(mediaId);
+        if (media != null) _context.MediaContents.Remove(media);
 
-        _context.MediaContents.Remove(mediaContent);
+    }
+    /* Getting the media content, private because no access needed for outside */
+    private async Task<MediaContent?> GetMediaContentWithGivenId(int mediaId)
+    {
+        return await _context.MediaContents
+            .FirstOrDefaultAsync(m => m.Id == mediaId);
 
     }
 }

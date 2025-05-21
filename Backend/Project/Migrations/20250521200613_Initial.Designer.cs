@@ -11,7 +11,7 @@ using Project.Context;
 namespace Project.Migrations
 {
     [DbContext(typeof(MasterContext))]
-    [Migration("20250520215028_Initial")]
+    [Migration("20250521200613_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -438,13 +438,11 @@ namespace Project.Migrations
 
             modelBuilder.Entity("Project.Models.MediaContent", b =>
                 {
-                    b.Navigation("AudioOption")
-                        .IsRequired();
+                    b.Navigation("AudioOption");
 
                     b.Navigation("Reviews");
 
-                    b.Navigation("SubtitleOption")
-                        .IsRequired();
+                    b.Navigation("SubtitleOption");
 
                     b.Navigation("WatchHistories");
                 });
