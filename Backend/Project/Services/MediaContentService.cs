@@ -40,10 +40,27 @@ public class MediaContentService
     /* Adding new movie data to database. */
     public async Task AddMovieAsync(CreateMovieDTO movieDto)
     {
+        
+        if (movieDto == null) 
+            throw new ArgumentNullException(nameof(movieDto));
+        if (movieDto.MediaContent == null) 
+            throw new ArgumentException("MediaContent inside of input can not be null..", nameof(movieDto));
+        
         /* Before starting the process we are validating if the given genres are parse-able to actual Genre enumeration class. */
         ValidateGenres(movieDto.Genres);
         /* Next step is making sure if there is at least one option is existing since it is a composition-overlapping */
         ValidateOptions(movieDto.MediaContent.AudioOption, movieDto.MediaContent.SubtitleOption);
+
+        ValidateMediaContent(
+            title: movieDto.MediaContent.Title,
+            description: movieDto.MediaContent.Description,
+            originalLanguage: movieDto.MediaContent.OriginalLanguage,
+            country: movieDto.MediaContent.Country,
+            duration: movieDto.MediaContent.Duration,
+            releaseDate: movieDto.MediaContent.ReleaseDate,
+            audioLanguages: movieDto.MediaContent.AudioOption.Languages,
+            subtitleLanguages: movieDto.MediaContent.SubtitleOption.Languages
+        );
 
 
         await using var transaction = await _context.Database.BeginTransactionAsync();
@@ -240,9 +257,28 @@ public class MediaContentService
 
     public async Task UpdateMovieWithGivenIdAsync(int movieId, UpdateMovieDTO movieDto)
     {
+        if (movieDto == null) 
+            throw new ArgumentNullException(nameof(movieDto));
+        if (movieDto.MediaContent == null) 
+            throw new ArgumentException("MediaContent inside of input can not be null..", nameof(movieDto));
+        
+        
         var mediaContent = await _mediaContentRepository.GetMovieWithGivenIdAsync(movieId);
         if (mediaContent == null) throw new MediaContentDoesNotExistsException(movieId);
 
+        ValidateMediaContent(
+            title: movieDto.MediaContent.Title,
+            description: movieDto.MediaContent.Description,
+            originalLanguage: movieDto.MediaContent.OriginalLanguage,
+            country: movieDto.MediaContent.Country,
+            duration: movieDto.MediaContent.Duration,
+            releaseDate: movieDto.MediaContent.ReleaseDate,
+            audioLanguages: movieDto.MediaContent.AudioOption.Languages,
+            subtitleLanguages: movieDto.MediaContent.SubtitleOption.Languages
+        );
+        
+        
+        
         await using var transaction = await _context.Database.BeginTransactionAsync();
 
         try
@@ -341,12 +377,47 @@ public class MediaContentService
             throw new AtLeastOneOptionMustExistsException();
     }
 
-    private static List<Genre> ParseGenres(IEnumerable<string> genres)
+    private static HashSet<Genre> ParseGenres(IEnumerable<string> genres)
     {
         return genres
             .Select(g => Enum.TryParse<Genre>(g, true, out var result)
                 ? result
                 : throw new InvalidGenreException(g))
-            .ToList();
+            .ToHashSet();
     }
+    private void ValidateMediaContent(
+        string title,
+        string description,
+        string originalLanguage,
+        string country,
+        int duration,
+        DateOnly releaseDate,
+        ICollection<string>? audioLanguages = null,
+        ICollection<string>? subtitleLanguages = null)
+    {
+        if (string.IsNullOrWhiteSpace(title) || title.Length < 2 || title.Length > 100)
+            throw new ArgumentException("Title must be 2–100 characters.", nameof(title));
+
+        if (string.IsNullOrWhiteSpace(description))
+            throw new ArgumentException("Description must not be empty.", nameof(description));
+
+        if (string.IsNullOrWhiteSpace(originalLanguage))
+            throw new ArgumentException("Original language is required.", nameof(originalLanguage));
+
+        if (string.IsNullOrWhiteSpace(country))
+            throw new ArgumentException("Country is required.", nameof(country));
+
+        if (duration <= 0)
+            throw new ArgumentException("Duration must be positive.", nameof(duration));
+
+        if (releaseDate == default)
+            throw new ArgumentException("Valid release date required.", nameof(releaseDate));
+
+        if (audioLanguages != null && !audioLanguages.Any())
+            throw new ArgumentException("At least one audio language is required.", nameof(audioLanguages));
+
+        if (subtitleLanguages != null && !subtitleLanguages.Any())
+            throw new ArgumentException("At least one subtitle language is required.", nameof(subtitleLanguages));
+    }
+
 }

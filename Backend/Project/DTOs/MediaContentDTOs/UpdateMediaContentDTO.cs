@@ -1,6 +1,4 @@
-﻿using System.Globalization;
-using System.Text.Json.Serialization;
-using Project.DTOs.OptionDTOs;
+﻿using Project.DTOs.OptionDTOs;
 
 namespace Project.DTOs.MediaContentDTOs;
 
