@@ -10,8 +10,8 @@ public class SubscriptionConfirmation
     public string PaymentMethod { get; set; } = null!;
 
     public decimal Price { get; set; }
-    public DateTime StartTime { get; set; }
-    public DateTime EndTime { get; set; }
+    public DateOnly StartTime { get; set; }
+    public DateOnly EndTime { get; set; }
 
     public int UserId { get; set; }
     public User User { get; set; } = null!;

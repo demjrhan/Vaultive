@@ -4,7 +4,7 @@ public class WatchHistory
 {
     public int Id { get; set; }
 
-    public DateTime WatchDate { get; set; }
+    public DateOnly WatchDate { get; set; }
     public int TimeLeftOf { get; set; }
 
     public int UserId { get; set; }

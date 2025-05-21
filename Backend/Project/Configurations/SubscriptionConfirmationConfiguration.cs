@@ -19,11 +19,11 @@ namespace Project.Configurations
             
             builder.Property(sc => sc.StartTime)
                 .IsRequired()
-                .HasColumnType("datetime");
+                .HasColumnType("date");
 
             builder.Property(sc => sc.EndTime)
                 .IsRequired()
-                .HasColumnType("datetime");
+                .HasColumnType("date");
 
             builder.Property(sc => sc.PaymentMethod).HasMaxLength(25).IsRequired();
             builder.Property(sc => sc.Price).HasColumnType("decimal(5,2)");

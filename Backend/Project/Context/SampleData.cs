@@ -105,8 +105,8 @@ public static class SampleData
                         UserId = demir.Id,
                         SubscriptionId = subscriptions[0].Id,
                         PaymentMethod = "CreditCard",
-                        StartTime = DateTime.UtcNow.AddDays(-15),
-                        EndTime = DateTime.UtcNow.AddDays(-1),
+                        StartTime = DateOnly.FromDateTime(DateTime.UtcNow.AddDays(-15)),
+                        EndTime   = DateOnly.FromDateTime(DateTime.UtcNow.AddDays(-1)),
                         Price = SubscriptionPriceCalculator.CalculateAmount(appleTV.DefaultPrice, demir)
                     },
                     new()
@@ -114,8 +114,8 @@ public static class SampleData
                         UserId = demir.Id,
                         SubscriptionId = subscriptions[0].Id,
                         PaymentMethod = "CreditCard",
-                        StartTime = DateTime.UtcNow.AddDays(-1),
-                        EndTime = DateTime.UtcNow.AddDays(20),
+                        StartTime = DateOnly.FromDateTime(DateTime.UtcNow.AddDays(-1)),
+                        EndTime   = DateOnly.FromDateTime(DateTime.UtcNow.AddDays(20)),
                         Price = SubscriptionPriceCalculator.CalculateAmount(appleTV.DefaultPrice, demir)
                     },
                     new()
@@ -123,8 +123,8 @@ public static class SampleData
                         UserId = aiko.Id,
                         SubscriptionId = subscriptions[1].Id,
                         PaymentMethod = "PayPal",
-                        StartTime = DateTime.UtcNow.AddDays(-5),
-                        EndTime = DateTime.UtcNow.AddDays(25),
+                        StartTime = DateOnly.FromDateTime(DateTime.UtcNow.AddDays(-5)),
+                        EndTime   = DateOnly.FromDateTime(DateTime.UtcNow.AddDays(25)),
                         Price = SubscriptionPriceCalculator.CalculateAmount(disney.DefaultPrice, aiko)
                     },
                     new()
@@ -132,8 +132,8 @@ public static class SampleData
                         UserId = michal.Id,
                         SubscriptionId = subscriptions[2].Id,
                         PaymentMethod = "DebitCard",
-                        StartTime = DateTime.UtcNow.AddDays(-15),
-                        EndTime = DateTime.UtcNow.AddDays(15),
+                        StartTime = DateOnly.FromDateTime(DateTime.UtcNow.AddDays(-15)),
+                        EndTime   = DateOnly.FromDateTime(DateTime.UtcNow.AddDays(15)),
                         Price = SubscriptionPriceCalculator.CalculateAmount(hbo.DefaultPrice, michal)
                     }
                 });
@@ -155,8 +155,8 @@ public static class SampleData
                     UserId = demir.Id,
                     SubscriptionId = subId,
                     PaymentMethod = "CreditCard",
-                    StartTime = DateTime.UtcNow.AddDays(-10),
-                    EndTime = DateTime.UtcNow.AddDays(20),
+                    StartTime = DateOnly.FromDateTime(DateTime.UtcNow.AddDays(-10)),
+                    EndTime = DateOnly.FromDateTime(DateTime.UtcNow.AddDays(20)),
                     Price = SubscriptionPriceCalculator.CalculateAmount(appleTV.DefaultPrice, demir)
                 });
             }
@@ -169,8 +169,8 @@ public static class SampleData
                     UserId = aiko.Id,
                     SubscriptionId = subId,
                     PaymentMethod = "PayPal",
-                    StartTime = DateTime.UtcNow.AddDays(-5),
-                    EndTime = DateTime.UtcNow.AddDays(25),
+                    StartTime = DateOnly.FromDateTime(DateTime.UtcNow.AddDays(-5)),
+                    EndTime = DateOnly.FromDateTime(DateTime.UtcNow.AddDays(25)),
                     Price = SubscriptionPriceCalculator.CalculateAmount(disney.DefaultPrice, aiko)
                 });
             }
@@ -183,8 +183,8 @@ public static class SampleData
                     UserId = michal.Id,
                     SubscriptionId = subId,
                     PaymentMethod = "DebitCard",
-                    StartTime = DateTime.UtcNow.AddDays(-15),
-                    EndTime = DateTime.UtcNow.AddDays(15),
+                    StartTime = DateOnly.FromDateTime(DateTime.UtcNow.AddDays(-15)),
+                    EndTime = DateOnly.FromDateTime(DateTime.UtcNow.AddDays(15)),
                     Price = SubscriptionPriceCalculator.CalculateAmount(hbo.DefaultPrice, michal)
                 });
             }
@@ -202,7 +202,7 @@ public static class SampleData
                     Title = "John Wick",
                     Description =
                         "After the sudden death of his beloved wife, retired assassin John Wick receives one last gift from her—a beagle puppy named Daisy. But when a group of ruthless mobsters break into his home, steal his car, and kill Daisy, they unknowingly reawaken one of the deadliest killers the underworld has ever known. What follows is a relentless, high-octane tale of revenge as John Wick hunts down everyone involved, igniting a war against a powerful Russian crime syndicate.",
-                    ReleaseDate = new DateTime(2014, 10, 24),
+                    ReleaseDate = new DateOnly(2014, 10, 24),
                     OriginalLanguage = "English",
                     Country = "USA",
                     Duration = 101,
@@ -220,7 +220,7 @@ public static class SampleData
                     Title = "Deadpool",
                     Description =
                         "Wade Wilson, a former Special Forces operative turned mercenary, is subjected to a rogue experiment that leaves him disfigured but with accelerated healing powers. Adopting the alter ego Deadpool, Wade embarks on a mission to hunt down the man who nearly destroyed his life. Known for his irreverent humor, fourth-wall-breaking antics, and ultra-violent combat skills, Deadpool is unlike any superhero you’ve seen before—raw, unfiltered, and wildly entertaining.",
-                    ReleaseDate = new DateTime(2016, 2, 12),
+                    ReleaseDate = new DateOnly(2016, 2, 12),
                     OriginalLanguage = "English",
                     Country = "USA",
                     Duration = 108,
@@ -238,7 +238,7 @@ public static class SampleData
                     Title = "Spiderman",
                     Description =
                         "After being bitten by a genetically modified spider, awkward and intelligent teenager Peter Parker gains spider-like abilities. Struggling to balance his newfound powers, personal life, and responsibility, he takes on the mantle of Spider-Man to protect New York City from rising threats. As he battles foes and faces heartbreaking loss, Peter learns that with great power comes great responsibility.",
-                    ReleaseDate = new DateTime(2017, 2, 12),
+                    ReleaseDate = new DateOnly(2017, 2, 12),
                     OriginalLanguage = "English",
                     Country = "USA",
                     Duration = 108,
@@ -256,7 +256,7 @@ public static class SampleData
                     Title = "Pulp Fiction",
                     Description =
                         "Quentin Tarantino’s cult masterpiece weaves together several interrelated stories involving Los Angeles mobsters, fringe criminals, and a mysterious briefcase. From the philosophical hitmen Vincent and Jules, to the washed-up boxer Butch, and the volatile duo of Pumpkin and Honey Bunny, 'Pulp Fiction' is a darkly comedic, non-linear exploration of crime, redemption, and pop culture that redefined modern cinema.",
-                    ReleaseDate = new DateTime(1994, 10, 14),
+                    ReleaseDate = new DateOnly(1994, 10, 14),
                     OriginalLanguage = "English",
                     Country = "USA",
                     Duration = 154,
@@ -274,7 +274,7 @@ public static class SampleData
                     Title = "Avengers",
                     Description =
                         "When an unexpected threat emerges to endanger global security, Nick Fury, director of S.H.I.E.L.D., assembles a team of extraordinary individuals: Iron Man, Captain America, Thor, Hulk, Black Widow, and Hawkeye. Together, they must overcome their personal differences and unite to stop Loki, the god of mischief, from enslaving Earth with an alien army. 'The Avengers' is a thrilling culmination of Marvel’s cinematic universe, delivering action, wit, and superhero spectacle.",
-                    ReleaseDate = new DateTime(2012, 5, 4),
+                    ReleaseDate = new DateOnly(2012, 5, 4),
                     OriginalLanguage = "English",
                     Country = "USA",
                     Duration = 143,
@@ -292,7 +292,7 @@ public static class SampleData
                     Description =
                         "Regarded as one of the greatest films in cinematic history, 'The Godfather' chronicles the powerful Corleone crime family in post-war America. When patriarch Vito Corleone survives an assassination attempt, his reluctant son Michael is drawn into the brutal world of organized crime. As Michael rises to power, he transforms from an outsider to a ruthless mafia boss, sacrificing his morals and loved ones in the name of family loyalty and legacy.",
 
-                    ReleaseDate = new DateTime(1972, 3, 24),
+                    ReleaseDate = new DateOnly(1972, 3, 24),
                     OriginalLanguage = "English",
                     Country = "USA",
                     Duration = 175,
@@ -309,7 +309,7 @@ public static class SampleData
                     Title = "Scarface",
                     Description =
                         "Is a gangster drama directed by Brian De Palma in 1983 - inspired by the famous 1932 Howard Hawks film - was not a box office success, but today it is considered one of the most important productions in the oeuvre of the author of \"Carrie\". The story of the rapid criminal career of a small-time thug and its even faster end has gained the status of a cult film for many viewers, the best proof of which is the fact that the special edition DVD with the film sold like hot cakes in the USA. The hero of \"Scarface\" is a Cuban, Antonio Montana, who in 1981, along with thousands of other emigrants, comes to the USA.",
-                    ReleaseDate = new DateTime(1983, 12, 9),
+                    ReleaseDate = new DateOnly(1983, 12, 9),
                     OriginalLanguage = "English",
                     Country = "USA",
                     Duration = 170,
@@ -327,7 +327,7 @@ public static class SampleData
                     Title = "Vaultive",
                     Description =
                         "You were expecting plot, drama, maybe some explosions? Nope. Just smooth vocals and betrayal.",
-                    ReleaseDate = new DateTime(2025, 5, 9),
+                    ReleaseDate = new DateOnly(2025, 5, 9),
                     OriginalLanguage = "English",
                     Country = "Turkish",
                     Duration = 125,
@@ -397,7 +397,7 @@ public static class SampleData
                     {
                         UserId = demir.Id,
                         MediaId = movie.Id,
-                        WatchDate = DateTime.UtcNow.AddDays(-demirMovies.IndexOf(movie) - 1),
+                        WatchDate = DateOnly.FromDateTime(DateTime.UtcNow.AddDays(-demirMovies.IndexOf(movie) - 1)),
                         TimeLeftOf = movie.Duration - 20
                     });
                 }
@@ -415,7 +415,7 @@ public static class SampleData
                     {
                         UserId = aiko.Id,
                         MediaId = movie.Id,
-                        WatchDate = DateTime.UtcNow.AddDays(-aikoMovies.IndexOf(movie) - 2),
+                        WatchDate = DateOnly.FromDateTime(DateTime.UtcNow.AddDays(-aikoMovies.IndexOf(movie) - 2)),
                         TimeLeftOf = movie.Duration - 15
                     });
                 }
@@ -433,7 +433,7 @@ public static class SampleData
                     {
                         UserId = michal.Id,
                         MediaId = movie.Id,
-                        WatchDate = DateTime.UtcNow.AddDays(-michalMovies.IndexOf(movie) - 3),
+                        WatchDate = DateOnly.FromDateTime(DateTime.UtcNow.AddDays(-michalMovies.IndexOf(movie) - 3)),
                         TimeLeftOf = movie.Duration - 30
                     });
                 }

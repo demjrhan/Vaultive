@@ -6,7 +6,7 @@ public class CreateMediaContentDTO
 {
     public string Title { get; set; } = null!;
     public string Description { get; set; } = null!;
-    public DateTime ReleaseDate { get; set; }
+    public DateOnly ReleaseDate { get; set; }
     public string OriginalLanguage { get; set; } = null!;
     public string Country { get; set; } = null!;
     public int Duration { get; set; }

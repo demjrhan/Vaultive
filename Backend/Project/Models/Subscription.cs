@@ -13,7 +13,7 @@ public class Subscription
         get
         {
             var latest = Confirmations.MaxBy(c => c.StartTime);
-            return latest == null ? 0 : (int)(latest.EndTime - latest.StartTime).TotalDays;
+            return latest == null ? 0 : latest.EndTime.Day - latest.StartTime.Day;
         }
     }
 

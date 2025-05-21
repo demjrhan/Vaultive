@@ -155,6 +155,7 @@ public class MediaContentService
                 Country = m.Country,
                 Duration = m.Duration,
                 OriginalLanguage = m.OriginalLanguage,
+                ReleaseDate = m.ReleaseDate,
                 StreamingServices = m.StreamingServices
                     .Select(ss => new StreamingServiceResponseDTO
                     {

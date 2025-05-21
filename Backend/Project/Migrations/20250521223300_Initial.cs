@@ -19,7 +19,7 @@ namespace Project.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     Title = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
                     Description = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
-                    ReleaseDate = table.Column<DateTime>(type: "datetime", nullable: false),
+                    ReleaseDate = table.Column<DateOnly>(type: "datetime", nullable: false),
                     OriginalLanguage = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
                     Country = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
                     Duration = table.Column<int>(type: "INTEGER", nullable: false),
@@ -155,7 +155,7 @@ namespace Project.Migrations
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    WatchDate = table.Column<DateTime>(type: "datetime", nullable: false),
+                    WatchDate = table.Column<DateOnly>(type: "date", nullable: false),
                     TimeLeftOf = table.Column<int>(type: "INTEGER", nullable: false),
                     UserId = table.Column<int>(type: "INTEGER", nullable: false),
                     MediaId = table.Column<int>(type: "INTEGER", nullable: false)
@@ -186,8 +186,8 @@ namespace Project.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     PaymentMethod = table.Column<string>(type: "TEXT", maxLength: 25, nullable: false),
                     Price = table.Column<decimal>(type: "decimal(5,2)", nullable: false),
-                    StartTime = table.Column<DateTime>(type: "datetime", nullable: false),
-                    EndTime = table.Column<DateTime>(type: "datetime", nullable: false),
+                    StartTime = table.Column<DateOnly>(type: "date", nullable: false),
+                    EndTime = table.Column<DateOnly>(type: "date", nullable: false),
                     UserId = table.Column<int>(type: "INTEGER", nullable: false),
                     SubscriptionId = table.Column<int>(type: "INTEGER", nullable: false)
                 },

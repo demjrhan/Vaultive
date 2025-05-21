@@ -11,7 +11,7 @@ using Project.Context;
 namespace Project.Migrations
 {
     [DbContext(typeof(MasterContext))]
-    [Migration("20250521200613_Initial")]
+    [Migration("20250521223300_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -80,7 +80,7 @@ namespace Project.Migrations
                     b.Property<string>("PosterImageName")
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTime>("ReleaseDate")
+                    b.Property<DateOnly>("ReleaseDate")
                         .HasColumnType("datetime");
 
                     b.Property<string>("Title")
@@ -189,8 +189,8 @@ namespace Project.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<DateTime>("EndTime")
-                        .HasColumnType("datetime");
+                    b.Property<DateOnly>("EndTime")
+                        .HasColumnType("date");
 
                     b.Property<string>("PaymentMethod")
                         .IsRequired()
@@ -200,8 +200,8 @@ namespace Project.Migrations
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(5,2)");
 
-                    b.Property<DateTime>("StartTime")
-                        .HasColumnType("datetime");
+                    b.Property<DateOnly>("StartTime")
+                        .HasColumnType("date");
 
                     b.Property<int>("SubscriptionId")
                         .HasColumnType("INTEGER");
@@ -290,8 +290,8 @@ namespace Project.Migrations
                     b.Property<int>("UserId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<DateTime>("WatchDate")
-                        .HasColumnType("datetime");
+                    b.Property<DateOnly>("WatchDate")
+                        .HasColumnType("date");
 
                     b.HasKey("Id");
 
