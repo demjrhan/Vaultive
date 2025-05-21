@@ -36,23 +36,20 @@ public class MediaContentService
         _subscriptionRepository = subscriptionRepository;
         _watchHistoryRepository = watchHistoryRepository;
     }
-    
-    /* Adding new movie data to database. */
-    public async Task AddMovie(CreateMovieDTO movieDto)
-    {
 
-        
+    /* Adding new movie data to database. */
+    public async Task AddMovieAsync(CreateMovieDTO movieDto)
+    {
         /* Before starting the process we are validating if the given genres are parse-able to actual Genre enumeration class. */
         ValidateGenres(movieDto.Genres);
         /* Next step is making sure if there is at least one option is existing since it is a composition-overlapping */
         ValidateOptions(movieDto.MediaContent.AudioOption, movieDto.MediaContent.SubtitleOption);
-        
-        
+
+
         await using var transaction = await _context.Database.BeginTransactionAsync();
 
         try
         {
-
             var enums = ParseGenres(movieDto.Genres);
 
             var streamingServices = await _context.StreamingServices
@@ -77,7 +74,6 @@ public class MediaContentService
                 subtitleOption = new SubtitleOption
                 {
                     Languages = movieDto.MediaContent.SubtitleOption.Languages
-
                 };
             }
 
@@ -96,10 +92,8 @@ public class MediaContentService
                 YoutubeTrailerURL = movieDto.MediaContent.YoutubeTrailerURL,
                 Genres = enums,
                 StreamingServices = streamingServices
-
-
             });
-            
+
             await _context.SaveChangesAsync();
             await transaction.CommitAsync();
         }
@@ -109,12 +103,10 @@ public class MediaContentService
             throw new AddDataFailedException(ex);
         }
     }
-    
-    
-   
+
 
     /* Returns all the movies with their reviews and streaming services. */
-    public async Task<List<MovieResponseFrontendDTO>> GetAllMoviesFrontEnd()
+    public async Task<List<MovieResponseFrontendDTO>> GetAllMoviesFrontEndAsync()
     {
         var movies = await _mediaContentRepository.GetAllMovies();
         return movies.Select(m => new MovieResponseFrontendDTO
@@ -140,18 +132,16 @@ public class MediaContentService
                     Comment = r.Comment,
                     Nickname = r.User.Nickname,
                 }).ToList()
-
             }
         }).ToList();
-        
     }
-    
-  
-    /* Main difference than the GetAllMoviesFrontEnd is returning all details like Duration, Ids etc. */
-    public async Task<List<MovieResponseDTO>> GetAllMoviesDetailed()
+
+
+    /* Main difference than the GetAllMoviesFrontEndAsync is returning all details like Duration, Ids etc. */
+    public async Task<List<MovieResponseDTO>> GetAllMoviesDetailedAsync()
     {
         var movies = await _mediaContentRepository.GetAllMovies();
-        
+
         return movies.Select(m => new MovieResponseDTO
         {
             Genres = m.Genres.Select(g => g.ToString()).ToList(),
@@ -184,17 +174,16 @@ public class MediaContentService
                     Comment = r.Comment,
                     Nickname = r.User.Nickname,
                 }).ToList()
-
             }
         }).ToList();
     }
-    
+
     /* Get one media content including all details, with given id */
-    public async Task<MediaContentResponseDTO> GetMediaContentWithGivenId(int mediaId)
+    public async Task<MediaContentResponseDTO> GetMediaContentWithGivenIdAsync(int mediaId)
     {
-        var mediaContent = await _mediaContentRepository.GetMediaContentWithGivenId(mediaId);
+        var mediaContent = await _mediaContentRepository.GetMediaContentWithGivenIdAsync(mediaId);
         if (mediaContent == null) throw new MediaContentDoesNotExistsException(mediaId);
-        
+
         return new MediaContentResponseDTO
         {
             Id = mediaContent.Id,
@@ -224,19 +213,17 @@ public class MediaContentService
                 Comment = r.Comment,
                 Nickname = r.User.Nickname,
             }).ToList()
-
         };
     }
-    
-    
+
+
     /* Remove the media content with the given id */
-    public async Task RemoveMediaContentWithGivenId(int mediaId)
+    public async Task RemoveMediaContentWithGivenIdAsync(int mediaId)
     {
         await using var transaction = await _context.Database.BeginTransactionAsync();
 
         try
         {
-            /* validation is done inside the GetMediaContentWithGivenId method */
             await _mediaContentRepository.RemoveAsync(mediaId);
 
             await _context.SaveChangesAsync();
@@ -247,7 +234,98 @@ public class MediaContentService
             await transaction.RollbackAsync();
             throw new RemoveDataFailedException(ex);
         }
+    }
 
+
+    public async Task UpdateMovieWithGivenIdAsync(int movieId, UpdateMovieDTO movieDto)
+    {
+        var mediaContent = await _mediaContentRepository.GetMovieWithGivenIdAsync(movieId);
+        if (mediaContent == null) throw new MediaContentDoesNotExistsException(movieId);
+
+        await using var transaction = await _context.Database.BeginTransactionAsync();
+
+        try
+        {
+            mediaContent.Title = movieDto.MediaContent.Title;
+            mediaContent.Description = movieDto.MediaContent.Description;
+            mediaContent.ReleaseDate = movieDto.MediaContent.ReleaseDate;
+            mediaContent.OriginalLanguage = movieDto.MediaContent.OriginalLanguage;
+            mediaContent.Country = movieDto.MediaContent.Country;
+            mediaContent.Duration = movieDto.MediaContent.Duration;
+            mediaContent.PosterImageName = movieDto.MediaContent.PosterImageName;
+            mediaContent.YoutubeTrailerURL = movieDto.MediaContent.YoutubeTrailerURL;
+
+            if (mediaContent.AudioOption != null && movieDto.MediaContent.AudioOption != null)
+            {
+                mediaContent.AudioOption.Languages = movieDto.MediaContent.AudioOption.Languages;
+            }
+            else if (mediaContent.AudioOption == null && movieDto.MediaContent.AudioOption != null)
+            {
+                mediaContent.AudioOption = new AudioOption()
+                {
+                    Languages = movieDto.MediaContent.AudioOption.Languages
+                };
+            }
+
+            if (mediaContent.SubtitleOption != null && movieDto.MediaContent.SubtitleOption != null)
+            {
+                mediaContent.SubtitleOption.Languages = movieDto.MediaContent.SubtitleOption.Languages;
+            }
+            else if (mediaContent.SubtitleOption == null && movieDto.MediaContent.SubtitleOption != null)
+            {
+                mediaContent.SubtitleOption = new SubtitleOption()
+                {
+                    Languages = movieDto.MediaContent.SubtitleOption.Languages
+                };
+            }
+
+            var existingIds = mediaContent.StreamingServices
+                .Select(s => s.Id)
+                .ToHashSet();
+            var desiredIds = movieDto.MediaContent.StreamingServiceIds;
+
+            var toRemoveStreamingServices = mediaContent.StreamingServices
+                .Where(s => !desiredIds.Contains(s.Id))
+                .ToList();
+            foreach (var svc in toRemoveStreamingServices)
+                mediaContent.StreamingServices.Remove(svc);
+
+            var toAddIds = desiredIds.Except(existingIds).ToList();
+            if (toAddIds.Any())
+            {
+                var toAddStreamingServices = await _context.StreamingServices
+                    .Where(s => toAddIds.Contains(s.Id))
+                    .ToListAsync();
+                foreach (var svc in toAddStreamingServices)
+                    mediaContent.StreamingServices.Add(svc);
+            }
+
+
+            var desiredGenres = ParseGenres(movieDto.Genres);
+
+            var existingGenres = mediaContent.Genres.ToList();
+
+            var toRemoveGenres = existingGenres
+                .Where(g => !desiredGenres.Contains(g))
+                .ToList();
+            foreach (var g in toRemoveGenres)
+                mediaContent.Genres.Remove(g);
+
+            var toAddGenres = desiredGenres
+                .Where(g => !existingGenres.Contains(g))
+                .ToList();
+            foreach (var g in toAddGenres)
+                mediaContent.Genres.Add(g);
+
+
+            await _context.SaveChangesAsync();
+            await transaction.CommitAsync();
+        }
+        catch (Exception ex)
+        {
+            await transaction.RollbackAsync();
+            throw new UpdateDataFailedException(ex);
+        }
     }
 
     private void ValidateGenres(HashSet<string> genres)
@@ -261,6 +339,7 @@ public class MediaContentService
         if (audioOption == null && subtitleOption == null)
             throw new AtLeastOneOptionMustExistsException();
     }
+
     private static HashSet<Genre> ParseGenres(IEnumerable<string> genres)
     {
         return genres

@@ -25,7 +25,7 @@ public class MediaContentRepository
             .ToListAsync();
     }
 
-    public async Task<MediaContent?> GetMediaContentWithGivenId(int mediaId)
+    public async Task<MediaContent?> GetMediaContentWithGivenIdAsync(int mediaId)
     {
         return await _context.MediaContents
             .Include(m => m.StreamingServices)
@@ -35,7 +35,16 @@ public class MediaContentRepository
             .ThenInclude(wh => wh.User)
             .FirstOrDefaultAsync(m => m.Id == mediaId);
     }
-
+    public async Task<Movie?> GetMovieWithGivenIdAsync(int movieId)
+    {
+        return await _context.Movies
+            .Include(m => m.StreamingServices)
+            .Include(m => m.Reviews)
+            .ThenInclude(r => r.User)
+            .Include(m => m.WatchHistories)
+            .ThenInclude(wh => wh.User)
+            .FirstOrDefaultAsync(m => m.Id == movieId);
+    }
     public async Task AddAsync(MediaContent mediaContent)
     {
         await _context.MediaContents.AddAsync(mediaContent);
@@ -43,7 +52,7 @@ public class MediaContentRepository
 
     public async Task RemoveAsync(int mediaId)
     {
-        var media = await GetMediaContentWithGivenId(mediaId);
+        var media = await GetMediaContentWithGivenIdAsync(mediaId);
         if (media != null) _context.MediaContents.Remove(media);
     }
 }

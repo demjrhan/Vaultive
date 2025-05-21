@@ -21,7 +21,7 @@ public class MediaContentController : ControllerBase
     {
         try
         {
-            await _mediaContentService.RemoveMediaContentWithGivenId(mediaId);
+            await _mediaContentService.RemoveMediaContentWithGivenIdAsync(mediaId);
             return Ok("Media Content deleted successfully.");
         }
         catch (MediaContentDoesNotExistsException ex)
@@ -40,8 +40,12 @@ public class MediaContentController : ControllerBase
     {
         try
         {
-            var result = await _mediaContentService.GetMediaContentWithGivenId(mediaId);
+            var result = await _mediaContentService.GetMediaContentWithGivenIdAsync(mediaId);
             return Ok(result);
+        }
+        catch (MediaContentDoesNotExistsException ex)
+        {
+            return BadRequest(ex.Message);
         }
         catch (Exception ex)
         {

@@ -150,4 +150,8 @@
     {
         public RemoveDataFailedException(Exception innerException) : base("Removing data from database is failed.", innerException) { }
     }
+    public class UpdateDataFailedException : Exception
+    {
+        public UpdateDataFailedException(Exception innerException) : base("Updating data from database is failed.", innerException) { }
+    }
 }

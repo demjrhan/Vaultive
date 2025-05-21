@@ -19,11 +19,11 @@ public class MovieController : ControllerBase
     }
 
     [HttpGet("All")]
-    public async Task<IActionResult> GetAllMoviesFrontEnd()
+    public async Task<IActionResult> GetAllMoviesFrontEndAsync()
     {
         try
         {
-            var result = await _mediaContentService.GetAllMoviesFrontEnd();
+            var result = await _mediaContentService.GetAllMoviesFrontEndAsync();
             return Ok(result);
         }
         catch (Exception ex)
@@ -33,11 +33,11 @@ public class MovieController : ControllerBase
     }
 
     [HttpGet("AllDetailed")]
-    public async Task<IActionResult> GetAllMoviesDetailed()
+    public async Task<IActionResult> GetAllMoviesDetailedAsync()
     {
         try
         {
-            var result = await _mediaContentService.GetAllMoviesDetailed();
+            var result = await _mediaContentService.GetAllMoviesDetailedAsync();
             return Ok(result);
         }
         catch (Exception ex)
@@ -47,11 +47,11 @@ public class MovieController : ControllerBase
     }
 
     [HttpPost("Add")]
-    public async Task<IActionResult> AddMovie([FromBody] CreateMovieDTO movieDto)
+    public async Task<IActionResult> AddMovieAsync([FromBody] CreateMovieDTO movieDto)
     {
         try
         {
-            await _mediaContentService.AddMovie(movieDto);
+            await _mediaContentService.AddMovieAsync(movieDto);
             return Created(string.Empty, "Movie added successfully.");
         }
         catch (InvalidGenreException ex)
@@ -73,6 +73,28 @@ public class MovieController : ControllerBase
         catch (AddDataFailedException ex)
         {
             return StatusCode(500, $"Failed to add movie. Please try again. {ex.Message}");
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"Unexpected error: {ex.Message}");
+        }
+    }
+
+    [HttpPut("Update")]
+    public async Task<IActionResult> UpdateMovieAsync(int movieId, [FromBody] UpdateMovieDTO movieDto)
+    {
+        try
+        {
+            await _mediaContentService.UpdateMovieWithGivenIdAsync(movieId, movieDto);
+            return Ok("Content update was successful.");
+        }
+        catch (UpdateDataFailedException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+        catch (InvalidGenreException ex)
+        {
+            return BadRequest(ex.Message);
         }
         catch (Exception ex)
         {
