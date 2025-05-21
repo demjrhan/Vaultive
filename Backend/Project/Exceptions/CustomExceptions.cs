@@ -1,5 +1,13 @@
 ﻿namespace Project.Exceptions
 {
+    
+    /* Media Content */
+    public class MediaContentDoesNotExistsException : Exception
+    {
+        public MediaContentDoesNotExistsException(int mediaContentId)
+            : base($"MediaContent with id: '{mediaContentId}' does not exist.") { }
+    }
+    
     /* user */
     public class EmailAlreadyExistsException : Exception
     {
@@ -132,5 +140,9 @@
     public class AddDataFailedException : Exception
     {
         public AddDataFailedException(Exception innerException) : base("Adding data to database is failed.", innerException) { }
+    }
+    public class RemoveDataFailedException : Exception
+    {
+        public RemoveDataFailedException(Exception innerException) : base("Removing data from database is failed.", innerException) { }
     }
 }

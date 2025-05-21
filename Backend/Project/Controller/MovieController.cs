@@ -1,10 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Project.DTOs.MediaContentDTOs;
-using Project.Exceptions;
-using Project.Models.Enumerations;
-using Project.Services;
+﻿namespace Project.Controller;
 
-namespace Project.Controller;
+
+using Microsoft.AspNetCore.Mvc;
+using DTOs.MediaContentDTOs;
+using Exceptions;
+using Services;
+
 
 [Route("api/[controller]")]
 [ApiController]
@@ -71,7 +72,7 @@ public class MovieController : ControllerBase
         }
         catch (AddDataFailedException ex)
         {
-            return StatusCode(500, "Failed to add movie. Please try again.");
+            return StatusCode(500, $"Failed to add movie. Please try again. {ex.Message}");
         }
         catch (Exception ex)
         {

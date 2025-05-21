@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Project.Context;
 using Project.DTOs;
+using Project.DTOs.FrontendDTOs;
 using Project.DTOs.MediaContentDTOs;
 using Project.DTOs.OptionDTOs;
 using Project.DTOs.ReviewDTOs;
@@ -40,7 +41,10 @@ public class MediaContentService
     public async Task AddMovie(CreateMovieDTO movieDto)
     {
 
+        
+        /* Before starting the process we are validating if the given genres are parse-able to actual Genre enumeration class. */
         ValidateGenres(movieDto.Genres);
+        /* Next step is making sure if there is at least one option is existing since it is a composition-overlapping */
         ValidateOptions(movieDto.MediaContent.AudioOption, movieDto.MediaContent.SubtitleOption);
         
         
@@ -106,28 +110,30 @@ public class MediaContentService
         }
     }
     
+    
+   
 
     /* Returns all the movies with their reviews and streaming services. */
-    public async Task<List<MovieResponseDTO>> GetAllMoviesFrontEnd()
+    public async Task<List<MovieResponseFrontendDTO>> GetAllMoviesFrontEnd()
     {
         var movies = await _mediaContentRepository.GetAllMovies();
-        return movies.Select(m => new MovieResponseDTO
+        return movies.Select(m => new MovieResponseFrontendDTO
         {
             Genres = m.Genres.Select(g => g.ToString()).ToList(),
-            MediaContent = new MediaContentDTO()
+            MediaContent = new MediaContentFrontendDTO()
             {
                 Title = m.Title,
                 Description = m.Description,
                 YoutubeTrailerURL = m.YoutubeTrailerURL,
                 PosterImageName = m.PosterImageName,
                 StreamingServices = m.StreamingServices
-                    .Select(ss => new StreamingServiceResponseDTO
+                    .Select(ss => new StreamingServiceResponseFrontendDTO()
                     {
                         Name = ss.Name,
                         LogoImage = ss.LogoImage,
                         WebsiteLink = ss.WebsiteLink
                     }).ToList(),
-                Reviews = m.Reviews.Select(r => new ReviewResponseDTO()
+                Reviews = m.Reviews.Select(r => new ReviewResponseFrontendDTO()
                 {
                     Comment = r.Comment,
                     Nickname = r.User.Nickname,
@@ -137,7 +143,8 @@ public class MediaContentService
         }).ToList();
         
     }
-
+    
+  
     /* Main difference than the GetAllMoviesFrontEnd is returning all details like Duration, Ids etc. */
     public async Task<List<MovieResponseDTO>> GetAllMoviesDetailed()
     {
@@ -179,7 +186,34 @@ public class MediaContentService
         }).ToList();
     }
     
-    
+    /* Get the media content with the given id private method for inner purposes. */
+    private async Task<MediaContent> GetMediaContentWithGivenId(int mediaId)
+    {
+        var media = await _mediaContentRepository.GetMediaContentWithGivenId(mediaId);
+        if (media == null) throw new MediaContentDoesNotExistsException(mediaId);
+        return media;
+    }
+    /* Remove the media content with the given id */
+    public async Task RemoveMediaContentWithGivenId(int mediaId)
+    {
+        await using var transaction = await _context.Database.BeginTransactionAsync();
+
+        try
+        {
+            /* validation is done inside the GetMediaContentWithGivenId method */
+            var media = await GetMediaContentWithGivenId(mediaId);
+            await _mediaContentRepository.RemoveAsync(media);
+
+            await _context.SaveChangesAsync();
+            await transaction.CommitAsync();
+        }
+        catch (Exception ex)
+        {
+            await transaction.RollbackAsync();
+            throw new RemoveDataFailedException(ex);
+        }
+      
+    }
 
     private void ValidateGenres(HashSet<string> genres)
     {
