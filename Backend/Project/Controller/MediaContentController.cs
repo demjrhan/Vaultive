@@ -16,7 +16,7 @@ public class MediaContentController : ControllerBase
         _mediaContentService = mediaContentService;
     }
     
-    [HttpDelete(("Remove/{mediaId:int}"))]
+    [HttpDelete("Remove/{mediaId:int}")]
     public async Task<IActionResult> RemoveMediaContent(int mediaId)
     {
         try
@@ -35,6 +35,19 @@ public class MediaContentController : ControllerBase
        
     }
 
+    [HttpGet("Get/{mediaId:int}")]
+    public async Task<IActionResult> GetMediaContentWithGivenId(int mediaId)
+    {
+        try
+        {
+            var result = await _mediaContentService.GetMediaContentWithGivenId(mediaId);
+            return Ok(result);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
 
     
 }

@@ -19,14 +19,23 @@ public class MediaContentRepository
         return await _context.Movies
             .Include(m => m.StreamingServices)
             .Include(m => m.Reviews)
-            .ThenInclude(r => r.User )
+            .ThenInclude(r => r.User)
             .Include(m => m.WatchHistories)
-            .ThenInclude(wh => wh.User )
+            .ThenInclude(wh => wh.User)
             .ToListAsync();
-
     }
-    
-    
+
+    public async Task<MediaContent?> GetMediaContentWithGivenId(int mediaId)
+    {
+        return await _context.MediaContents
+            .Include(m => m.StreamingServices)
+            .Include(m => m.Reviews)
+            .ThenInclude(r => r.User)
+            .Include(m => m.WatchHistories)
+            .ThenInclude(wh => wh.User)
+            .FirstOrDefaultAsync(m => m.Id == mediaId);
+    }
+
     public async Task AddAsync(MediaContent mediaContent)
     {
         await _context.MediaContents.AddAsync(mediaContent);
@@ -36,13 +45,5 @@ public class MediaContentRepository
     {
         var media = await GetMediaContentWithGivenId(mediaId);
         if (media != null) _context.MediaContents.Remove(media);
-
-    }
-    /* Getting the media content, private because no access needed for outside */
-    private async Task<MediaContent?> GetMediaContentWithGivenId(int mediaId)
-    {
-        return await _context.MediaContents
-            .FirstOrDefaultAsync(m => m.Id == mediaId);
-
     }
 }

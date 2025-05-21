@@ -120,7 +120,7 @@ public class MediaContentService
         return movies.Select(m => new MovieResponseFrontendDTO
         {
             Genres = m.Genres.Select(g => g.ToString()).ToList(),
-            MediaContent = new MediaContentFrontendDTO()
+            MediaContent = new MediaContentFrontendResponseDTO()
             {
                 Id = m.Id,
                 Title = m.Title,
@@ -151,10 +151,11 @@ public class MediaContentService
     public async Task<List<MovieResponseDTO>> GetAllMoviesDetailed()
     {
         var movies = await _mediaContentRepository.GetAllMovies();
+        
         return movies.Select(m => new MovieResponseDTO
         {
             Genres = m.Genres.Select(g => g.ToString()).ToList(),
-            MediaContent = new MediaContentDTO()
+            MediaContentResponse = new MediaContentResponseDTO()
             {
                 Id = m.Id,
                 Title = m.Title,
@@ -186,6 +187,45 @@ public class MediaContentService
 
             }
         }).ToList();
+    }
+    
+    /* Get one media content including all details, with given id */
+    public async Task<MediaContentResponseDTO> GetMediaContentWithGivenId(int mediaId)
+    {
+        var mediaContent = await _mediaContentRepository.GetMediaContentWithGivenId(mediaId);
+        if (mediaContent == null) throw new MediaContentDoesNotExistsException(mediaId);
+        
+        return new MediaContentResponseDTO
+        {
+            Id = mediaContent.Id,
+            Title = mediaContent.Title,
+            Description = mediaContent.Description,
+            YoutubeTrailerURL = mediaContent.YoutubeTrailerURL,
+            PosterImageName = mediaContent.PosterImageName,
+            Country = mediaContent.Country,
+            Duration = mediaContent.Duration,
+            OriginalLanguage = mediaContent.OriginalLanguage,
+            StreamingServices = mediaContent.StreamingServices
+                .Select(ss => new StreamingServiceResponseDTO
+                {
+                    Id = ss.Id,
+                    Country = ss.Country,
+                    DefaultPrice = ss.DefaultPrice,
+                    Description = ss.Description,
+                    Name = ss.Name,
+                    LogoImage = ss.LogoImage,
+                    WebsiteLink = ss.WebsiteLink
+                }).ToList(),
+            Reviews = mediaContent.Reviews.Select(r => new ReviewResponseDTO()
+            {
+                Id = r.Id,
+                MediaTitle = r.MediaContent.Title,
+                WatchedOn = r.WatchHistory.WatchDate.ToShortDateString(),
+                Comment = r.Comment,
+                Nickname = r.User.Nickname,
+            }).ToList()
+
+        };
     }
     
     

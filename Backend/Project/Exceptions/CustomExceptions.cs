@@ -7,7 +7,12 @@
         public MediaContentDoesNotExistsException(int mediaContentId)
             : base($"MediaContent with id: '{mediaContentId}' does not exist.") { }
     }
-    
+
+    public class NoMediaContentExistsException : Exception
+    {
+        public NoMediaContentExistsException()
+            : base($"There is no media content in database.") { }
+    }
     /* user */
     public class EmailAlreadyExistsException : Exception
     {

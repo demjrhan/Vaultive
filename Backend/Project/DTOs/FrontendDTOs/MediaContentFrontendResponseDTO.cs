@@ -1,6 +1,6 @@
 ﻿namespace Project.DTOs.FrontendDTOs;
 
-public class MediaContentFrontendDTO
+public class MediaContentFrontendResponseDTO
 {
     public int Id { get; set; }
     public string Title { get; set; } = null!;
