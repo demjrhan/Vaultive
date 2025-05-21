@@ -17,7 +17,7 @@ public class Subscription
         }
     }
 
-    public ICollection<SubscriptionConfirmation> Confirmations { get; set; } = new HashSet<SubscriptionConfirmation>();
+    public ICollection<SubscriptionConfirmation> Confirmations { get; set; } = new List<SubscriptionConfirmation>();
     
     public int StreamingServiceId { get; set; }
     public StreamingService StreamingService { get; set; } = null!;

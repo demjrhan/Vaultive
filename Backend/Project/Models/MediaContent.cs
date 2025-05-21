@@ -12,9 +12,9 @@ public abstract class MediaContent
     public string Country { get; set; } = null!;
     public int Duration { get; set; }
 
-    public ICollection<Review> Reviews { get; set; } = new HashSet<Review>();
-    public ICollection<WatchHistory> WatchHistories { get; set; } = new HashSet<WatchHistory>();
-    public ICollection<StreamingService> StreamingServices { get; set; } = new HashSet<StreamingService>();
+    public ICollection<Review> Reviews { get; set; } = new List<Review>();
+    public ICollection<WatchHistory> WatchHistories { get; set; } = new List<WatchHistory>();
+    public ICollection<StreamingService> StreamingServices { get; set; } = new List<StreamingService>();
 
     public SubtitleOption? SubtitleOption { get; set; }
     

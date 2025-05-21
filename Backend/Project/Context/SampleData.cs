@@ -208,7 +208,7 @@ public static class SampleData
                     Duration = 101,
                     YoutubeTrailerURL = "C0BMx-qxsP4",
                     PosterImageName = "john-wick-poster",
-                    Genres = new HashSet<Genre> { Genre.Action, Genre.Thriller },
+                    Genres = new List<Genre> { Genre.Action, Genre.Thriller },
                     SubtitleOption = new SubtitleOption
                     {
                         Languages = new List<string>() {"English" }
@@ -226,7 +226,7 @@ public static class SampleData
                     Duration = 108,
                     YoutubeTrailerURL = "VHAK-gU9gi0",
                     PosterImageName = "deadpool-poster",
-                    Genres = new HashSet<Genre> { Genre.Action, Genre.Comedy, Genre.Superhero },
+                    Genres = new List<Genre> { Genre.Action, Genre.Comedy, Genre.Superhero },
                     SubtitleOption = new SubtitleOption
                     {
                         Languages = new List<string>() {"English" }
@@ -244,7 +244,7 @@ public static class SampleData
                     Duration = 108,
                     YoutubeTrailerURL = "t06RUxPbp_c",
                     PosterImageName = "spider-man-poster",
-                    Genres = new HashSet<Genre> { Genre.Action, Genre.Superhero },
+                    Genres = new List<Genre> { Genre.Action, Genre.Superhero },
                     SubtitleOption = new SubtitleOption
                     {
                         Languages = new List<string>() {"English" }
@@ -262,7 +262,7 @@ public static class SampleData
                     Duration = 154,
                     YoutubeTrailerURL = "s7EdQ4FqbhY",
                     PosterImageName = "pulpfiction-poster",
-                    Genres = new HashSet<Genre> { Genre.Crime, Genre.Drama },
+                    Genres = new List<Genre> { Genre.Crime, Genre.Drama },
                     SubtitleOption = new SubtitleOption
                     {
                         Languages = new List<string>() {"English" }
@@ -280,7 +280,7 @@ public static class SampleData
                     Duration = 143,
                     YoutubeTrailerURL = "6ZfuNTqbHE8",
                     PosterImageName = "avengers-poster",
-                    Genres = new HashSet<Genre> { Genre.Action, Genre.Superhero, Genre.SciFi },
+                    Genres = new List<Genre> { Genre.Action, Genre.Superhero, Genre.SciFi },
                     SubtitleOption = new SubtitleOption
                     {
                         Languages = new List<string>() {"English" }
@@ -298,7 +298,7 @@ public static class SampleData
                     Duration = 175,
                     YoutubeTrailerURL = "UaVTIH8mujA",
                     PosterImageName = "godfather-poster",
-                    Genres = new HashSet<Genre> { Genre.Crime, Genre.Drama },
+                    Genres = new List<Genre> { Genre.Crime, Genre.Drama },
                     SubtitleOption = new SubtitleOption
                     {
                         Languages = new List<string>() {"English" }
@@ -315,7 +315,7 @@ public static class SampleData
                     Duration = 170,
                     YoutubeTrailerURL = "cv276Wg3e7I",
                     PosterImageName = "scarface-poster",
-                    Genres = new HashSet<Genre> { Genre.Crime, Genre.Drama },
+                    Genres = new List<Genre> { Genre.Crime, Genre.Drama },
                     SubtitleOption = new SubtitleOption
                     {
                         Languages = new List<string>() {"English" }
@@ -333,7 +333,7 @@ public static class SampleData
                     Duration = 125,
                     YoutubeTrailerURL = "dQw4w9WgXcQ",
                     PosterImageName = null,
-                    Genres = new HashSet<Genre> { Genre.Action },
+                    Genres = new List<Genre> { Genre.Action },
                     SubtitleOption = new SubtitleOption
                     {
                         Languages = new List<string>() {"English" }

@@ -8,8 +8,8 @@ public class MediaContentFrontendResponseDTO
     public string YoutubeTrailerURL { get; set; }  = null!;
     public string? PosterImageName { get; set; }
     
-    public ICollection<StreamingServiceResponseFrontendDTO> StreamingServices { get; set; } = new HashSet<StreamingServiceResponseFrontendDTO>();
+    public ICollection<StreamingServiceResponseFrontendDTO> StreamingServices { get; set; } = new List<StreamingServiceResponseFrontendDTO>();
 
-    public ICollection<ReviewResponseFrontendDTO> Reviews { get; set; } = new HashSet<ReviewResponseFrontendDTO>();
+    public ICollection<ReviewResponseFrontendDTO> Reviews { get; set; } = new List<ReviewResponseFrontendDTO>();
 
 }

@@ -13,7 +13,7 @@ public class CreateMediaContentDTO
     public OptionDTO? AudioOption { get; set; }
     public OptionDTO? SubtitleOption { get; set; }
     
-    public HashSet<int> StreamingServiceIds { get; set; } = new();
+    public List<int> StreamingServiceIds { get; set; } = new();
 
     public string? PosterImageName { get; set; } = null;
     

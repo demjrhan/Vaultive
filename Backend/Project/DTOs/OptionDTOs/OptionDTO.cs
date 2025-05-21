@@ -2,6 +2,6 @@
 
 public class OptionDTO
 {
-    public ICollection<string>? Languages { get; set; } = new HashSet<string>();
+    public ICollection<string>? Languages { get; set; } = new List<string>();
 
 }

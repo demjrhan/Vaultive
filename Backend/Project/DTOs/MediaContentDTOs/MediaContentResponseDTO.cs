@@ -16,8 +16,8 @@ public class MediaContentResponseDTO
     public string YoutubeTrailerURL { get; set; }  = null!;
     public string? PosterImageName { get; set; }
     
-    public ICollection<StreamingServiceResponseDTO> StreamingServices { get; set; } = new HashSet<StreamingServiceResponseDTO>();
+    public ICollection<StreamingServiceResponseDTO> StreamingServices { get; set; } = new List<StreamingServiceResponseDTO>();
 
-    public ICollection<ReviewResponseDTO> Reviews { get; set; } = new HashSet<ReviewResponseDTO>();
+    public ICollection<ReviewResponseDTO> Reviews { get; set; } = new List<ReviewResponseDTO>();
 
 }

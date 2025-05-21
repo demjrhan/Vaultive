@@ -43,6 +43,8 @@ public class MediaContentRepository
             .ThenInclude(r => r.User)
             .Include(m => m.WatchHistories)
             .ThenInclude(wh => wh.User)
+            .Include(m => m.AudioOption)
+            .Include(m => m.SubtitleOption)
             .FirstOrDefaultAsync(m => m.Id == movieId);
     }
     public async Task AddAsync(MediaContent mediaContent)

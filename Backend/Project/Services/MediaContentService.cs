@@ -328,7 +328,7 @@ public class MediaContentService
         }
     }
 
-    private void ValidateGenres(HashSet<string> genres)
+    private void ValidateGenres(List<string> genres)
     {
         if (genres == null || !genres.Any())
             throw new AtLeastOneGenreMustExistsException();
@@ -340,12 +340,12 @@ public class MediaContentService
             throw new AtLeastOneOptionMustExistsException();
     }
 
-    private static HashSet<Genre> ParseGenres(IEnumerable<string> genres)
+    private static List<Genre> ParseGenres(IEnumerable<string> genres)
     {
         return genres
             .Select(g => Enum.TryParse<Genre>(g, true, out var result)
                 ? result
                 : throw new InvalidGenreException(g))
-            .ToHashSet();
+            .ToList();
     }
 }

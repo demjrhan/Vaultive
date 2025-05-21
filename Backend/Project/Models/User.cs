@@ -13,7 +13,7 @@ public class User
     public string Country { get; set; } = null!;
     public Status Status { get; set; }
 
-    public ICollection<Review> Reviews { get; set; } = new HashSet<Review>();
-    public ICollection<WatchHistory> WatchHistories { get; set; } = new HashSet<WatchHistory>();
-    public ICollection<SubscriptionConfirmation> Confirmations { get; set; } = new HashSet<SubscriptionConfirmation>();
+    public ICollection<Review> Reviews { get; set; } = new List<Review>();
+    public ICollection<WatchHistory> WatchHistories { get; set; } = new List<WatchHistory>();
+    public ICollection<SubscriptionConfirmation> Confirmations { get; set; } = new List<SubscriptionConfirmation>();
 }
