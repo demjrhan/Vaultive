@@ -108,7 +108,6 @@ export function showMovieDetail(movie, from = 'home') {
 
   submitReview.addEventListener('mouseover', () => {
     textarea.style.filter = 'blur(2px)';
-    textarea.readOnly = true;
   });
 
 
@@ -116,19 +115,12 @@ export function showMovieDetail(movie, from = 'home') {
     textarea.style.filter = 'blur(0px)';
     const existingOverlay = document.getElementById('blur-overlay');
     if (existingOverlay) existingOverlay.remove();
-    textarea.readOnly = false;
   })
 
 
   submitReview.addEventListener('click', async () => {
-    try {
       const comment = textarea.value?.trim();
       const mediaTitle = movie?.mediaContent?.title?.trim();
-
-      if (!comment || !mediaTitle) {
-        console.warn('Cannot send empty or undefined review data');
-        return;
-      }
 
       const response = await fetch(`${API_BASE_URL}/Review/Add`, {
         method: 'POST',
@@ -143,24 +135,25 @@ export function showMovieDetail(movie, from = 'home') {
       });
 
       if (!response.ok) {
+        const previousText = textarea.value;
+        textarea.readOnly = true;
+
         setTimeout(() => {
           textarea.value = 'Unfortunately, we were unable to submit your review. Please try again later.';
           textarea.style.color = 'red';
 
           setTimeout(() => {
-            textarea.value = reviewText;
+            textarea.value = previousText;
             textarea.style.color = 'white';
+            textarea.readOnly = false;
           }, 5000);
         }, 1);
-      } else {
+      }
+      else {
         appendReviewToUI({ comment });
 
         textarea.value = '';
       }
-
-    } catch (error) {
-      console.error('Error submitting review:', error);
-    }
   });
 
 
