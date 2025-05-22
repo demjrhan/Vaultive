@@ -27,15 +27,26 @@ public class UserRepository
     }
     public async Task<IEnumerable<User>> GetAllUsersAsync()
     {
-        return await _context
-            .Users
+        return await _context.Users
+
+            // Reviews → MediaContent, WatchHistory
             .Include(u => u.Reviews)
             .ThenInclude(r => r.MediaContent)
-            .ThenInclude(m => m.WatchHistories)
+            .Include(u => u.Reviews)
+            .ThenInclude(r => r.WatchHistory)
+
+            // WatchHistories → MediaContent
+            .Include(u => u.WatchHistories)
+            .ThenInclude(wh => wh.MediaContent)
+
+            // Confirmations → Subscription → StreamingService
             .Include(u => u.Confirmations)
             .ThenInclude(c => c.Subscription)
+            .ThenInclude(s => s.StreamingService)
+
             .ToListAsync();
     }
+
     public async Task<User?> GetUserWithGivenId(int userId)
     {
         return await _context

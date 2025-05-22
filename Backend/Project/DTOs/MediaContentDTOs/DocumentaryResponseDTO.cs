@@ -2,6 +2,6 @@
 
 public class DocumentaryResponseDTO
 {
-    public MediaContentResponseDTO MediaContentResponse { get; set; }
+    public MediaContentDetailedResponseDTO MediaContentDetailedResponse { get; set; }
     public List<string> Topics { get; set; }
 }

@@ -17,7 +17,7 @@ public class MediaContentController : ControllerBase
     }
     
     [HttpDelete("Remove/{mediaId:int}")]
-    public async Task<IActionResult> RemoveMediaContent(int mediaId)
+    public async Task<IActionResult> RemoveMediaContentAsync(int mediaId)
     {
         try
         {
@@ -32,7 +32,7 @@ public class MediaContentController : ControllerBase
     }
 
     [HttpGet("Get/{mediaId:int}")]
-    public async Task<IActionResult> GetMediaContentWithGivenId(int mediaId)
+    public async Task<IActionResult> GetMediaContentWithGivenIdAsync(int mediaId)
     {
         try
         {

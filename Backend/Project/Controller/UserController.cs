@@ -54,4 +54,32 @@ public class UserController : ControllerBase
         }
     }
 
+    [HttpDelete("Remove/{userId:int}")]
+    public async Task<IActionResult> RemoveUserAsync(int userId)
+    {
+        try
+        {
+            await _userService.RemoveUserWithGivenIdAsync(userId);
+            return Ok("User deleted successfully.");
+        }
+        catch (RemoveDataFailedException ex)
+        {
+            return StatusCode(500, $"Failed to remove user. Please try again. {ex.Message}");
+        }
+       
+    }
+    
+    [HttpGet("AllDetailed")]
+    public async Task<IActionResult> GetAllUsersDetailedAsync()
+    {
+        try
+        {
+            var result = await _userService.GetAllUsersDetailedAsync();
+            return Ok(result);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
 }

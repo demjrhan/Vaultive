@@ -6,5 +6,5 @@ public class ReviewResponseDTO
     public string MediaTitle { get; set; } = null!;
     public string? Comment { get; set; }
     public string? Nickname { get; set; }
-    public string? WatchedOn { get; set; }
+    public DateOnly WatchedOn { get; set; }
 }

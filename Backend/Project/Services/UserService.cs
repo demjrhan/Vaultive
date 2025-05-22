@@ -1,6 +1,8 @@
 ﻿using System.Net.Mail;
 using Microsoft.EntityFrameworkCore;
 using Project.Context;
+using Project.DTOs.ReviewDTOs;
+using Project.DTOs.SubscriptionDTOs;
 using Project.DTOs.UserDTOs;
 using Project.DTOs.WatchHistoryDTOs;
 using Project.Exceptions;
@@ -40,11 +42,11 @@ public class UserService
         _streamingServiceRepository = streamingServiceRepository;
         _subscriptionConfirmationRepository = subscriptionConfirmationRepository;
     }
-   
+
     public async Task RemoveUserWithGivenIdAsync(int userId)
     {
         await using var transaction = await _context.Database.BeginTransactionAsync();
-        
+
         try
         {
             await _userRepository.RemoveAsync(userId);
@@ -58,18 +60,19 @@ public class UserService
             throw new RemoveDataFailedException(ex);
         }
     }
-        /* Adding new movie data to database. */
+
+    /* Adding new movie data to database. */
     public async Task AddUserAsync(CreateUserDTO userDto)
     {
         if (userDto == null)
             throw new ArgumentNullException(nameof(userDto));
-        
+
         if (await _context.Users.AnyAsync(u => u.Email == userDto.Email))
             throw new EmailAlreadyExistsException(userDto.Email);
 
         if (await _context.Users.AnyAsync(u => u.Nickname == userDto.Nickname))
             throw new NicknameAlreadyExistsException(userDto.Nickname);
-        
+
         /* Before starting the process we are validating if the given genres are parse-able to actual Genre enumeration class. */
         ValidateUser(
             firstname: userDto.Firstname,
@@ -87,12 +90,12 @@ public class UserService
 
             await _userRepository.AddAsync(new User()
             {
-                Firstname       = userDto.Firstname,
-                Lastname        = userDto.Lastname,
-                Nickname        = userDto.Nickname,
-                Email           = userDto.Email,
-                Country         = userDto.Country,
-                Status          = status
+                Firstname = userDto.Firstname,
+                Lastname = userDto.Lastname,
+                Nickname = userDto.Nickname,
+                Email = userDto.Email,
+                Country = userDto.Country,
+                Status = status
             });
 
             await _context.SaveChangesAsync();
@@ -104,12 +107,53 @@ public class UserService
             throw new AddDataFailedException(ex);
         }
     }
+
+    public async Task<List<UserDetailedResponseDTO>> GetAllUsersDetailedAsync()
+    {
+        var users = await _userRepository.GetAllUsersAsync();
+
+        return users.Select(u => new UserDetailedResponseDTO()
+        {
+            Country = u.Country,
+            Firstname = u.Firstname,
+            Lastname = u.Lastname,
+            Nickname = u.Nickname,
+            Status = u.Status.ToString(),
+            Reviews = u.Reviews.Select(r => new ReviewResponseDTO()
+            {
+                Id = r.Id,
+                Comment = r.Comment,
+                MediaTitle = r.MediaContent.Title,
+                Nickname = r.User.Nickname,
+                WatchedOn = r.WatchHistory.WatchDate
+            }).ToList(),
+            Confirmations = u.Confirmations.Select(c => new SubscriptionConfirmationResponseDTO()
+            {
+                Id = c.Id,
+                DurationInDays = c.Subscription.DurationInDays,
+                PaymentMethod = c.PaymentMethod,
+                Price = c.Price,
+                StreamingServiceName = c.Subscription.StreamingService.Name,
+                SubscriptionId = c.SubscriptionId,
+                UserCountry = c.User.Country,
+                UserId = c.UserId,
+                UserStatus = c.User.Status.ToString()
+            }).ToList(),
+            WatchHistories = u.WatchHistories.Select(wh => new WatchHistoryResponseDTO()
+            {
+                MediaId = wh.MediaId,
+                MediaTitle = wh.MediaContent.Title,
+                TimeLeftOf = wh.TimeLeftOf,
+                WatchDate = wh.WatchDate
+            }).ToList()
+        }).ToList();
+    }
+
     private static Status ParseStatus(string status)
     {
         return Enum.TryParse<Status>(status, true, out var result)
-                ? result
-                : throw new InvalidUserStatusException(status);
-
+            ? result
+            : throw new InvalidUserStatusException(status);
     }
 
     private void ValidateUser(
@@ -120,7 +164,6 @@ public class UserService
         string country,
         string status)
     {
-        
         // First name: optional, but if provided must be 2–50 chars
         if (!string.IsNullOrWhiteSpace(firstname) &&
             (firstname.Length < 2 || firstname.Length > 50))
@@ -147,6 +190,7 @@ public class UserService
         {
             throw new ArgumentException("Email is required.", nameof(email));
         }
+
         if (!IsValidEmail(email))
         {
             throw new ArgumentException("Email is not in a valid format.", nameof(email));
@@ -183,5 +227,4 @@ public class UserService
             return false;
         }
     }
-
 }

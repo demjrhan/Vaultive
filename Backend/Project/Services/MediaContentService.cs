@@ -307,7 +307,7 @@ public class MediaContentService
         return movies.Select(m => new MovieResponseDTO
         {
             Genres = m.Genres.Select(g => g.ToString()).ToList(),
-            MediaContentResponse = new MediaContentResponseDTO()
+            MediaContentDetailedResponse = new MediaContentDetailedResponseDTO()
             {
                 Id = m.Id,
                 Title = m.Title,
@@ -333,7 +333,7 @@ public class MediaContentService
                 {
                     Id = r.Id,
                     MediaTitle = r.MediaContent.Title,
-                    WatchedOn = r.WatchHistory.WatchDate.ToShortDateString(),
+                    WatchedOn = r.WatchHistory.WatchDate,
                     Comment = r.Comment,
                     Nickname = r.User.Nickname,
                 }).ToList()
@@ -342,12 +342,12 @@ public class MediaContentService
     }
 
     /* Get one media content including all details, with given id */
-    public async Task<MediaContentResponseDTO> GetMediaContentWithGivenIdAsync(int mediaId)
+    public async Task<MediaContentDetailedResponseDTO> GetMediaContentWithGivenIdAsync(int mediaId)
     {
         var mediaContent = await _mediaContentRepository.GetMediaContentWithGivenIdAsync(mediaId);
         if (mediaContent == null) throw new MediaContentDoesNotExistsException(mediaId);
 
-        return new MediaContentResponseDTO
+        return new MediaContentDetailedResponseDTO
         {
             Id = mediaContent.Id,
             Title = mediaContent.Title,
@@ -372,7 +372,7 @@ public class MediaContentService
             {
                 Id = r.Id,
                 MediaTitle = r.MediaContent.Title,
-                WatchedOn = r.WatchHistory.WatchDate.ToShortDateString(),
+                WatchedOn = r.WatchHistory.WatchDate,
                 Comment = r.Comment,
                 Nickname = r.User.Nickname,
             }).ToList()
