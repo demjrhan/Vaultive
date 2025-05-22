@@ -61,7 +61,7 @@ public class UserService
         }
     }
 
-    /* Adding new movie data to database. */
+    /* Adding new user data to database. */
     public async Task AddUserAsync(CreateUserDTO userDto)
     {
         if (userDto == null)
@@ -73,7 +73,6 @@ public class UserService
         if (await _context.Users.AnyAsync(u => u.Nickname == userDto.Nickname))
             throw new NicknameAlreadyExistsException(userDto.Nickname);
 
-        /* Before starting the process we are validating if the given genres are parse-able to actual Genre enumeration class. */
         ValidateUser(
             firstname: userDto.Firstname,
             lastname: userDto.Lastname,
@@ -108,6 +107,54 @@ public class UserService
         }
     }
 
+    /* Update the user with the given id */
+    public async Task UpdateUserWithGivenIdAsync(int userId, UpdateUserDTO userDto)
+    {
+        if (userDto == null)
+            throw new ArgumentNullException(nameof(userDto));
+       
+        if (await _context.Users.AnyAsync(u => u.Email == userDto.Email && u.Id != userId))
+            throw new EmailAlreadyExistsException(userDto.Email);
+
+        if (await _context.Users.AnyAsync(u => u.Nickname == userDto.Nickname && u.Id != userId))
+            throw new NicknameAlreadyExistsException(userDto.Nickname);
+
+
+        var user = await _userRepository.GetUserWithGivenId(userId);
+        if (user == null) throw new UserNotFoundException(userId);
+
+        ValidateUser(
+            firstname: userDto.Firstname,
+            lastname: userDto.Lastname,
+            nickname: userDto.Nickname,
+            email: userDto.Email,
+            country: userDto.Country,
+            status: userDto.Status);
+
+
+        await using var transaction = await _context.Database.BeginTransactionAsync();
+
+        try
+        {
+            var status = ParseStatus(userDto.Status);
+
+            user.Firstname = userDto.Firstname;
+            user.Lastname  = userDto.Lastname;
+            user.Nickname  = userDto.Nickname;
+            user.Email     = userDto.Email;
+            user.Country   = userDto.Country;
+            user.Status    = status;
+
+
+            await _context.SaveChangesAsync();
+            await transaction.CommitAsync();
+        }
+        catch (Exception ex)
+        {
+            await transaction.RollbackAsync();
+            throw new UpdateDataFailedException(ex);
+        }
+    }
     public async Task<List<UserDetailedResponseDTO>> GetAllUsersDetailedAsync()
     {
         var users = await _userRepository.GetAllUsersAsync();

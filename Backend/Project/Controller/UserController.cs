@@ -46,7 +46,7 @@ public class UserController : ControllerBase
         }
         catch (AddDataFailedException ex)
         {
-            return StatusCode(500, $"Failed to add movie. Please try again. {ex.Message}");
+            return StatusCode(500, $"Failed to add user. Please try again. {ex.Message}");
         }
         catch (Exception ex)
         {
@@ -80,6 +80,43 @@ public class UserController : ControllerBase
         catch (Exception ex)
         {
             return BadRequest(ex.Message);
+        }
+    }
+    [HttpPut("Update")]
+    public async Task<IActionResult> UpdateUserAsync(int userId, [FromBody] UpdateUserDTO userDto)
+    {
+        try
+        {
+            await _userService.UpdateUserWithGivenIdAsync(userId, userDto);
+            return Ok("User update was successful.");
+        }
+        catch (InvalidUserStatusException ex)
+        {
+            return BadRequest($"Invalid status: {ex.Message}");
+        }
+        catch (NicknameAlreadyExistsException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+        catch (EmailAlreadyExistsException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+        catch (ArgumentNullException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+        catch (ArgumentException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+        catch (UpdateDataFailedException ex)
+        {
+            return StatusCode(500, $"Failed to update user. Please try again. {ex.Message}");
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"Unexpected error: {ex.Message}");
         }
     }
 }
