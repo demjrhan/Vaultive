@@ -13,6 +13,11 @@
         public NoMediaContentExistsException()
             : base($"There is no media content in database.") { }
     }
+    public class MediaContentTitleMustBeUniqueException : Exception
+    {
+        public MediaContentTitleMustBeUniqueException(string title)
+            : base($"{title} already exists.") { }
+    }
     /* user */
     public class EmailAlreadyExistsException : Exception
     {
@@ -22,8 +27,9 @@
     public class NicknameAlreadyExistsException : Exception
     {
         public NicknameAlreadyExistsException(string nickname)
-            : base($"Nickname '{nickname}' is already taken.") { }
+            : base($"Nickname '{nickname}' already exists.") { }
     }
+    
     public class UserNotFoundException : Exception
     {
         public UserNotFoundException(int userId)
@@ -137,8 +143,8 @@
     }
     public class UserReviewNotFoundToMediaContentException : Exception
     {
-        public UserReviewNotFoundToMediaContentException(int userId, string mediaTitle)
-            : base($"User with ID {userId} has not submitted a review for '{mediaTitle}'.") { }
+        public UserReviewNotFoundToMediaContentException(int userId, int mediaId)
+            : base($"User with ID {userId} has not submitted a review for media id '{mediaId}'.") { }
     }
     
     /* HTTP */

@@ -14,7 +14,7 @@ public class MediaContentRepository
         _context = masterContext;
     }
 
-    public async Task<IEnumerable<Movie>> GetAllMovies()
+    public async Task<IEnumerable<Movie>> GetAllMoviesFrontEndAsync()
     {
         return await _context.Movies
             .Include(m => m.StreamingServices)
@@ -22,6 +22,8 @@ public class MediaContentRepository
             .ThenInclude(r => r.User)
             .Include(m => m.WatchHistories)
             .ThenInclude(wh => wh.User)
+            .Include(m => m.AudioOption)
+            .Include(m => m.SubtitleOption)
             .ToListAsync();
     }
 
@@ -33,8 +35,12 @@ public class MediaContentRepository
             .ThenInclude(r => r.User)
             .Include(m => m.WatchHistories)
             .ThenInclude(wh => wh.User)
+            .Include(m => m.AudioOption)
+            .Include(m => m.SubtitleOption)
             .FirstOrDefaultAsync(m => m.Id == mediaId);
     }
+
+    /* Used for updating the media content */
     public async Task<Movie?> GetMovieWithGivenIdAsync(int movieId)
     {
         return await _context.Movies
@@ -47,6 +53,7 @@ public class MediaContentRepository
             .Include(m => m.SubtitleOption)
             .FirstOrDefaultAsync(m => m.Id == movieId);
     }
+
     public async Task AddAsync(MediaContent mediaContent)
     {
         await _context.MediaContents.AddAsync(mediaContent);
@@ -55,6 +62,7 @@ public class MediaContentRepository
     public async Task RemoveAsync(int mediaId)
     {
         var media = await GetMediaContentWithGivenIdAsync(mediaId);
-        if (media != null) _context.MediaContents.Remove(media);
+        if (media == null) throw new MediaContentDoesNotExistsException(mediaId);
+        _context.MediaContents.Remove(media);
     }
 }

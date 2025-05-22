@@ -24,10 +24,6 @@ public class MediaContentController : ControllerBase
             await _mediaContentService.RemoveMediaContentWithGivenIdAsync(mediaId);
             return Ok("Media Content deleted successfully.");
         }
-        catch (MediaContentDoesNotExistsException ex)
-        {
-            return BadRequest(ex.Message);
-        }
         catch (RemoveDataFailedException ex)
         {
             return StatusCode(500, $"Failed to remove media content. Please try again. {ex.Message}");

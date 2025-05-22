@@ -1,8 +1,5 @@
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
 using Project.Context;
-using Project.DTOs;
 using Project.DTOs.FrontendDTOs;
 using Project.DTOs.MediaContentDTOs;
 using Project.DTOs.OptionDTOs;
@@ -17,34 +14,49 @@ namespace Project.Services;
 
 public class MediaContentService
 {
-    private readonly MediaContentRepository _mediaContentRepository;
+    private readonly ReviewRepository _reviewRepository;
     private readonly UserRepository _userRepository;
+    private readonly StreamingServiceRepository _streamingServiceRepository;
+    private readonly SubscriptionConfirmationRepository _subscriptionConfirmationRepository;
     private readonly SubscriptionRepository _subscriptionRepository;
+    private readonly MediaContentRepository _mediaContentRepository;
     private readonly WatchHistoryRepository _watchHistoryRepository;
     private readonly MasterContext _context;
 
     public MediaContentService(
         MasterContext context,
-        MediaContentRepository mediaContentRepository,
+        ReviewRepository reviewRepository,
         UserRepository userRepository,
+        MediaContentRepository mediaContentRepository,
+        WatchHistoryRepository watchHistoryRepository,
         SubscriptionRepository subscriptionRepository,
-        WatchHistoryRepository watchHistoryRepository)
+        StreamingServiceRepository streamingServiceRepository,
+        SubscriptionConfirmationRepository subscriptionConfirmationRepository)
     {
         _context = context;
-        _mediaContentRepository = mediaContentRepository;
+        _reviewRepository = reviewRepository;
         _userRepository = userRepository;
-        _subscriptionRepository = subscriptionRepository;
+        _mediaContentRepository = mediaContentRepository;
         _watchHistoryRepository = watchHistoryRepository;
+        _subscriptionRepository = subscriptionRepository;
+        _streamingServiceRepository = streamingServiceRepository;
+        _subscriptionConfirmationRepository = subscriptionConfirmationRepository;
     }
 
     /* Adding new movie data to database. */
     public async Task AddMovieAsync(CreateMovieDTO movieDto)
     {
-        
-        if (movieDto == null) 
+        if (movieDto == null)
             throw new ArgumentNullException(nameof(movieDto));
-        if (movieDto.MediaContent == null) 
+        
+        if (movieDto.MediaContent == null)
             throw new ArgumentException("MediaContent inside of input can not be null..", nameof(movieDto));
+        
+        /* Movie Title must be unique. */
+        if (await _context.MediaContents.AnyAsync(m => m.Title == movieDto.MediaContent.Title))
+            throw new MediaContentTitleMustBeUniqueException(movieDto.MediaContent.Title);
+
+        
         
         /* Before starting the process we are validating if the given genres are parse-able to actual Genre enumeration class. */
         ValidateGenres(movieDto.Genres);
@@ -121,121 +133,7 @@ public class MediaContentService
         }
     }
 
-
-    /* Returns all the movies with their reviews and streaming services. */
-    public async Task<List<MovieResponseFrontendDTO>> GetAllMoviesFrontEndAsync()
-    {
-        var movies = await _mediaContentRepository.GetAllMovies();
-        return movies.Select(m => new MovieResponseFrontendDTO
-        {
-            Genres = m.Genres.Select(g => g.ToString()).ToList(),
-            MediaContent = new MediaContentFrontendResponseDTO()
-            {
-                Id = m.Id,
-                Title = m.Title,
-                Description = m.Description,
-                YoutubeTrailerURL = m.YoutubeTrailerURL,
-                PosterImageName = m.PosterImageName,
-                StreamingServices = m.StreamingServices
-                    .Select(ss => new StreamingServiceResponseFrontendDTO()
-                    {
-                        Name = ss.Name,
-                        LogoImage = ss.LogoImage,
-                        WebsiteLink = ss.WebsiteLink
-                    }).ToList(),
-                Reviews = m.Reviews.Select(r => new ReviewResponseFrontendDTO()
-                {
-                    Id = r.Id,
-                    Comment = r.Comment,
-                    Nickname = r.User.Nickname,
-                }).ToList()
-            }
-        }).ToList();
-    }
-
-
-    /* Main difference than the GetAllMoviesFrontEndAsync is returning all details like Duration, Ids etc. */
-    public async Task<List<MovieResponseDTO>> GetAllMoviesDetailedAsync()
-    {
-        var movies = await _mediaContentRepository.GetAllMovies();
-
-        return movies.Select(m => new MovieResponseDTO
-        {
-            Genres = m.Genres.Select(g => g.ToString()).ToList(),
-            MediaContentResponse = new MediaContentResponseDTO()
-            {
-                Id = m.Id,
-                Title = m.Title,
-                Description = m.Description,
-                YoutubeTrailerURL = m.YoutubeTrailerURL,
-                PosterImageName = m.PosterImageName,
-                Country = m.Country,
-                Duration = m.Duration,
-                OriginalLanguage = m.OriginalLanguage,
-                ReleaseDate = m.ReleaseDate,
-                StreamingServices = m.StreamingServices
-                    .Select(ss => new StreamingServiceResponseDTO
-                    {
-                        Id = ss.Id,
-                        Country = ss.Country,
-                        DefaultPrice = ss.DefaultPrice,
-                        Description = ss.Description,
-                        Name = ss.Name,
-                        LogoImage = ss.LogoImage,
-                        WebsiteLink = ss.WebsiteLink
-                    }).ToList(),
-                Reviews = m.Reviews.Select(r => new ReviewResponseDTO()
-                {
-                    Id = r.Id,
-                    MediaTitle = r.MediaContent.Title,
-                    WatchedOn = r.WatchHistory.WatchDate.ToShortDateString(),
-                    Comment = r.Comment,
-                    Nickname = r.User.Nickname,
-                }).ToList()
-            }
-        }).ToList();
-    }
-
-    /* Get one media content including all details, with given id */
-    public async Task<MediaContentResponseDTO> GetMediaContentWithGivenIdAsync(int mediaId)
-    {
-        var mediaContent = await _mediaContentRepository.GetMediaContentWithGivenIdAsync(mediaId);
-        if (mediaContent == null) throw new MediaContentDoesNotExistsException(mediaId);
-
-        return new MediaContentResponseDTO
-        {
-            Id = mediaContent.Id,
-            Title = mediaContent.Title,
-            Description = mediaContent.Description,
-            YoutubeTrailerURL = mediaContent.YoutubeTrailerURL,
-            PosterImageName = mediaContent.PosterImageName,
-            Country = mediaContent.Country,
-            Duration = mediaContent.Duration,
-            OriginalLanguage = mediaContent.OriginalLanguage,
-            StreamingServices = mediaContent.StreamingServices
-                .Select(ss => new StreamingServiceResponseDTO
-                {
-                    Id = ss.Id,
-                    Country = ss.Country,
-                    DefaultPrice = ss.DefaultPrice,
-                    Description = ss.Description,
-                    Name = ss.Name,
-                    LogoImage = ss.LogoImage,
-                    WebsiteLink = ss.WebsiteLink
-                }).ToList(),
-            Reviews = mediaContent.Reviews.Select(r => new ReviewResponseDTO()
-            {
-                Id = r.Id,
-                MediaTitle = r.MediaContent.Title,
-                WatchedOn = r.WatchHistory.WatchDate.ToShortDateString(),
-                Comment = r.Comment,
-                Nickname = r.User.Nickname,
-            }).ToList()
-        };
-    }
-
-
-    /* Remove the media content with the given id */
+      /* Remove the media content with the given id */
     public async Task RemoveMediaContentWithGivenIdAsync(int mediaId)
     {
         await using var transaction = await _context.Database.BeginTransactionAsync();
@@ -254,15 +152,19 @@ public class MediaContentService
         }
     }
 
-
+    /* Update the media content with the given id */
     public async Task UpdateMovieWithGivenIdAsync(int movieId, UpdateMovieDTO movieDto)
     {
-        if (movieDto == null) 
+        if (movieDto == null)
             throw new ArgumentNullException(nameof(movieDto));
-        if (movieDto.MediaContent == null) 
+        if (movieDto.MediaContent == null)
             throw new ArgumentException("MediaContent inside of input can not be null..", nameof(movieDto));
         
-        
+        /* Movie Title must be unique but if the movie trying to update itself, no error is thrown. */
+        if (await _context.MediaContents.AnyAsync(m => m.Title == movieDto.MediaContent.Title && m.Id != movieId))
+            throw new MediaContentTitleMustBeUniqueException(movieDto.MediaContent.Title);
+
+
         var mediaContent = await _mediaContentRepository.GetMovieWithGivenIdAsync(movieId);
         if (mediaContent == null) throw new MediaContentDoesNotExistsException(movieId);
 
@@ -276,9 +178,8 @@ public class MediaContentService
             audioLanguages: movieDto.MediaContent.AudioOption.Languages,
             subtitleLanguages: movieDto.MediaContent.SubtitleOption.Languages
         );
-        
-        
-        
+
+
         await using var transaction = await _context.Database.BeginTransactionAsync();
 
         try
@@ -364,6 +265,122 @@ public class MediaContentService
             throw new UpdateDataFailedException(ex);
         }
     }
+    
+
+    /* Returns all the movies with their reviews and streaming services. */
+    public async Task<List<MovieResponseFrontendDTO>> GetAllMoviesFrontEndAsync()
+    {
+        var movies = await _mediaContentRepository.GetAllMoviesFrontEndAsync();
+        return movies.Select(m => new MovieResponseFrontendDTO
+        {
+            Genres = m.Genres.Select(g => g.ToString()).ToList(),
+            MediaContent = new MediaContentFrontendResponseDTO()
+            {
+                Id = m.Id,
+                Title = m.Title,
+                Description = m.Description,
+                YoutubeTrailerURL = m.YoutubeTrailerURL,
+                PosterImageName = m.PosterImageName,
+                StreamingServices = m.StreamingServices
+                    .Select(ss => new StreamingServiceResponseFrontendDTO()
+                    {
+                        Name = ss.Name,
+                        LogoImage = ss.LogoImage,
+                        WebsiteLink = ss.WebsiteLink
+                    }).ToList(),
+                Reviews = m.Reviews.Select(r => new ReviewResponseFrontendDTO()
+                {
+                    Id = r.Id,
+                    Comment = r.Comment,
+                    Nickname = r.User.Nickname,
+                }).ToList()
+            }
+        }).ToList();
+    }
+
+
+    /* Main difference than the GetAllMoviesFrontEndAsync is returning all details like Duration, Ids etc. */
+    public async Task<List<MovieResponseDTO>> GetAllMoviesDetailedAsync()
+    {
+        var movies = await _mediaContentRepository.GetAllMoviesFrontEndAsync();
+
+        return movies.Select(m => new MovieResponseDTO
+        {
+            Genres = m.Genres.Select(g => g.ToString()).ToList(),
+            MediaContentResponse = new MediaContentResponseDTO()
+            {
+                Id = m.Id,
+                Title = m.Title,
+                Description = m.Description,
+                YoutubeTrailerURL = m.YoutubeTrailerURL,
+                PosterImageName = m.PosterImageName,
+                Country = m.Country,
+                Duration = m.Duration,
+                OriginalLanguage = m.OriginalLanguage,
+                ReleaseDate = m.ReleaseDate,
+                StreamingServices = m.StreamingServices
+                    .Select(ss => new StreamingServiceResponseDTO
+                    {
+                        Id = ss.Id,
+                        Country = ss.Country,
+                        DefaultPrice = ss.DefaultPrice,
+                        Description = ss.Description,
+                        Name = ss.Name,
+                        LogoImage = ss.LogoImage,
+                        WebsiteLink = ss.WebsiteLink
+                    }).ToList(),
+                Reviews = m.Reviews.Select(r => new ReviewResponseDTO()
+                {
+                    Id = r.Id,
+                    MediaTitle = r.MediaContent.Title,
+                    WatchedOn = r.WatchHistory.WatchDate.ToShortDateString(),
+                    Comment = r.Comment,
+                    Nickname = r.User.Nickname,
+                }).ToList()
+            }
+        }).ToList();
+    }
+
+    /* Get one media content including all details, with given id */
+    public async Task<MediaContentResponseDTO> GetMediaContentWithGivenIdAsync(int mediaId)
+    {
+        var mediaContent = await _mediaContentRepository.GetMediaContentWithGivenIdAsync(mediaId);
+        if (mediaContent == null) throw new MediaContentDoesNotExistsException(mediaId);
+
+        return new MediaContentResponseDTO
+        {
+            Id = mediaContent.Id,
+            Title = mediaContent.Title,
+            Description = mediaContent.Description,
+            YoutubeTrailerURL = mediaContent.YoutubeTrailerURL,
+            PosterImageName = mediaContent.PosterImageName,
+            Country = mediaContent.Country,
+            Duration = mediaContent.Duration,
+            OriginalLanguage = mediaContent.OriginalLanguage,
+            StreamingServices = mediaContent.StreamingServices
+                .Select(ss => new StreamingServiceResponseDTO
+                {
+                    Id = ss.Id,
+                    Country = ss.Country,
+                    DefaultPrice = ss.DefaultPrice,
+                    Description = ss.Description,
+                    Name = ss.Name,
+                    LogoImage = ss.LogoImage,
+                    WebsiteLink = ss.WebsiteLink
+                }).ToList(),
+            Reviews = mediaContent.Reviews.Select(r => new ReviewResponseDTO()
+            {
+                Id = r.Id,
+                MediaTitle = r.MediaContent.Title,
+                WatchedOn = r.WatchHistory.WatchDate.ToShortDateString(),
+                Comment = r.Comment,
+                Nickname = r.User.Nickname,
+            }).ToList()
+        };
+    }
+
+
+  
 
     private void ValidateGenres(List<string> genres)
     {
@@ -385,6 +402,7 @@ public class MediaContentService
                 : throw new InvalidGenreException(g))
             .ToHashSet();
     }
+
     private void ValidateMediaContent(
         string title,
         string description,
@@ -419,5 +437,4 @@ public class MediaContentService
         if (subtitleLanguages != null && !subtitleLanguages.Any())
             throw new ArgumentException("At least one subtitle language is required.", nameof(subtitleLanguages));
     }
-
 }

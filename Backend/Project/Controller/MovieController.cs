@@ -54,11 +54,23 @@ public class MovieController : ControllerBase
             await _mediaContentService.AddMovieAsync(movieDto);
             return Created(string.Empty, "Movie added successfully.");
         }
+        catch (ArgumentNullException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+        catch (ArgumentException ex)
+        {
+            return BadRequest(ex.Message);
+        }
         catch (InvalidGenreException ex)
         {
             return BadRequest($"Invalid genre: {ex.Message}");
         }
         catch (StreamingServiceNotFoundException ex)
+        {
+            return NotFound(ex.Message);
+        }
+        catch (MediaContentTitleMustBeUniqueException ex)
         {
             return NotFound(ex.Message);
         }
@@ -87,6 +99,18 @@ public class MovieController : ControllerBase
         {
             await _mediaContentService.UpdateMovieWithGivenIdAsync(movieId, movieDto);
             return Ok("Content update was successful.");
+        }
+        catch (ArgumentNullException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+        catch (ArgumentException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+        catch (MediaContentDoesNotExistsException ex)
+        {
+            return BadRequest(ex.Message);
         }
         catch (UpdateDataFailedException ex)
         {

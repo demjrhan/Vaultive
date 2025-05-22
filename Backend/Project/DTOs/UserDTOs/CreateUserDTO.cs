@@ -1,6 +1,4 @@
-﻿using Project.Models.Enumerations;
-
-namespace Project.DTOs.UserDTOs;
+﻿namespace Project.DTOs.UserDTOs;
 
 public class CreateUserDTO
 {
@@ -9,5 +7,5 @@ public class CreateUserDTO
     public string Nickname { get; set; } = null!;
     public string Email { get; set; } = null!;
     public string Country { get; set; } = null!;
-    public Status Status { get; set; }
+    public string Status { get; set; } = null!;
 }
