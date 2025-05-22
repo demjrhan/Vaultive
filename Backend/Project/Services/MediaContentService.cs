@@ -126,16 +126,17 @@ public class MediaContentService
             await _context.SaveChangesAsync();
             await transaction.CommitAsync();
         }
-        catch (Exception ex)
+        catch 
         {
             await transaction.RollbackAsync();
-            throw new AddDataFailedException(ex);
+            throw;
         }
     }
 
       /* Remove the media content with the given id */
     public async Task RemoveMediaContentWithGivenIdAsync(int mediaId)
     {
+        if (mediaId <= 0) throw new ArgumentException("Media id can not be equal or smaller than 0.");
         await using var transaction = await _context.Database.BeginTransactionAsync();
 
         try
@@ -145,10 +146,10 @@ public class MediaContentService
             await _context.SaveChangesAsync();
             await transaction.CommitAsync();
         }
-        catch (Exception ex)
+        catch 
         {
             await transaction.RollbackAsync();
-            throw new RemoveDataFailedException(ex);
+            throw;
         }
     }
 
@@ -165,8 +166,8 @@ public class MediaContentService
             throw new MediaContentTitleMustBeUniqueException(movieDto.MediaContent.Title);
 
 
-        var mediaContent = await _mediaContentRepository.GetMovieWithGivenIdAsync(movieId);
-        if (mediaContent == null) throw new MediaContentDoesNotExistsException(movieId);
+        var movie = await _mediaContentRepository.GetMovieWithGivenIdAsync(movieId);
+        if (movie == null) throw new MediaContentDoesNotExistsException(movieId);
 
         ValidateMediaContent(
             title: movieDto.MediaContent.Title,
@@ -184,49 +185,49 @@ public class MediaContentService
 
         try
         {
-            mediaContent.Title = movieDto.MediaContent.Title;
-            mediaContent.Description = movieDto.MediaContent.Description;
-            mediaContent.ReleaseDate = movieDto.MediaContent.ReleaseDate;
-            mediaContent.OriginalLanguage = movieDto.MediaContent.OriginalLanguage;
-            mediaContent.Country = movieDto.MediaContent.Country;
-            mediaContent.Duration = movieDto.MediaContent.Duration;
-            mediaContent.PosterImageName = movieDto.MediaContent.PosterImageName;
-            mediaContent.YoutubeTrailerURL = movieDto.MediaContent.YoutubeTrailerURL;
+            movie.Title = movieDto.MediaContent.Title;
+            movie.Description = movieDto.MediaContent.Description;
+            movie.ReleaseDate = movieDto.MediaContent.ReleaseDate;
+            movie.OriginalLanguage = movieDto.MediaContent.OriginalLanguage;
+            movie.Country = movieDto.MediaContent.Country;
+            movie.Duration = movieDto.MediaContent.Duration;
+            movie.PosterImageName = movieDto.MediaContent.PosterImageName;
+            movie.YoutubeTrailerURL = movieDto.MediaContent.YoutubeTrailerURL;
 
-            if (mediaContent.AudioOption != null && movieDto.MediaContent.AudioOption != null)
+            if (movie.AudioOption != null && movieDto.MediaContent.AudioOption != null)
             {
-                mediaContent.AudioOption.Languages = movieDto.MediaContent.AudioOption.Languages;
+                movie.AudioOption.Languages = movieDto.MediaContent.AudioOption.Languages;
             }
-            else if (mediaContent.AudioOption == null && movieDto.MediaContent.AudioOption != null)
+            else if (movie.AudioOption == null && movieDto.MediaContent.AudioOption != null)
             {
-                mediaContent.AudioOption = new AudioOption()
+                movie.AudioOption = new AudioOption()
                 {
                     Languages = movieDto.MediaContent.AudioOption.Languages
                 };
             }
 
-            if (mediaContent.SubtitleOption != null && movieDto.MediaContent.SubtitleOption != null)
+            if (movie.SubtitleOption != null && movieDto.MediaContent.SubtitleOption != null)
             {
-                mediaContent.SubtitleOption.Languages = movieDto.MediaContent.SubtitleOption.Languages;
+                movie.SubtitleOption.Languages = movieDto.MediaContent.SubtitleOption.Languages;
             }
-            else if (mediaContent.SubtitleOption == null && movieDto.MediaContent.SubtitleOption != null)
+            else if (movie.SubtitleOption == null && movieDto.MediaContent.SubtitleOption != null)
             {
-                mediaContent.SubtitleOption = new SubtitleOption()
+                movie.SubtitleOption = new SubtitleOption()
                 {
                     Languages = movieDto.MediaContent.SubtitleOption.Languages
                 };
             }
 
-            var existingIds = mediaContent.StreamingServices
+            var existingIds = movie.StreamingServices
                 .Select(s => s.Id)
                 .ToHashSet();
             var desiredIds = movieDto.MediaContent.StreamingServiceIds;
 
-            var toRemoveStreamingServices = mediaContent.StreamingServices
+            var toRemoveStreamingServices = movie.StreamingServices
                 .Where(s => !desiredIds.Contains(s.Id))
                 .ToList();
             foreach (var svc in toRemoveStreamingServices)
-                mediaContent.StreamingServices.Remove(svc);
+                movie.StreamingServices.Remove(svc);
 
             var toAddIds = desiredIds.Except(existingIds).ToList();
             if (toAddIds.Any())
@@ -235,34 +236,34 @@ public class MediaContentService
                     .Where(s => toAddIds.Contains(s.Id))
                     .ToListAsync();
                 foreach (var svc in toAddStreamingServices)
-                    mediaContent.StreamingServices.Add(svc);
+                    movie.StreamingServices.Add(svc);
             }
 
 
             var desiredGenres = ParseGenres(movieDto.Genres);
 
-            var existingGenres = mediaContent.Genres.ToList();
+            var existingGenres = movie.Genres.ToList();
 
             var toRemoveGenres = existingGenres
                 .Where(g => !desiredGenres.Contains(g))
                 .ToList();
             foreach (var g in toRemoveGenres)
-                mediaContent.Genres.Remove(g);
+                movie.Genres.Remove(g);
 
             var toAddGenres = desiredGenres
                 .Where(g => !existingGenres.Contains(g))
                 .ToList();
             foreach (var g in toAddGenres)
-                mediaContent.Genres.Add(g);
+                movie.Genres.Add(g);
 
 
             await _context.SaveChangesAsync();
             await transaction.CommitAsync();
         }
-        catch (Exception ex)
+        catch 
         {
             await transaction.RollbackAsync();
-            throw new UpdateDataFailedException(ex);
+            throw;
         }
     }
     
@@ -344,6 +345,8 @@ public class MediaContentService
     /* Get one media content including all details, with given id */
     public async Task<MediaContentDetailedResponseDTO> GetMediaContentWithGivenIdAsync(int mediaId)
     {
+        if (mediaId <= 0) throw new ArgumentException("Media id can not be equal or smaller than 0.");
+
         var mediaContent = await _mediaContentRepository.GetMediaContentWithGivenIdAsync(mediaId);
         if (mediaContent == null) throw new MediaContentDoesNotExistsException(mediaId);
 

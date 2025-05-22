@@ -68,6 +68,12 @@
             : base("There is no subscription exists in database.") { }
     }
     
+    public class UserHasNoActiveSubscriptionException : Exception
+    {
+        public UserHasNoActiveSubscriptionException(string nickname, string? message = "")
+            : base($"User {nickname} does not have any active subscription. {message}") { }
+    }
+    
     
 
     /* watch history */
@@ -76,10 +82,10 @@
         public WatchHistoryNotFoundException(int userId)
             : base($"Watch history not found with given userId {userId}.") { }
     }
-    public class WatchHistoryAlreadyExistsException : Exception
+    public class MediaContentAlreadyWatchedException : Exception
     {
-        public WatchHistoryAlreadyExistsException(int userId, string mediaTitle)
-            : base($"Watch history already exists for user {userId} and media '{mediaTitle}'.") { }
+        public MediaContentAlreadyWatchedException(string nickname, string mediaTitle)
+            : base($"{nickname} already watched and finished media '{mediaTitle}'.") { }
     }
     public class MovieNotFoundException : Exception
     {
@@ -148,16 +154,9 @@
     }
     
     /* HTTP */
-    public class AddDataFailedException : Exception
-    {
-        public AddDataFailedException(Exception innerException) : base("Adding data to database is failed.", innerException) { }
-    }
+   
     public class RemoveDataFailedException : Exception
     {
         public RemoveDataFailedException(Exception innerException) : base("Removing data from database is failed.", innerException) { }
-    }
-    public class UpdateDataFailedException : Exception
-    {
-        public UpdateDataFailedException(Exception innerException) : base("Updating data from database is failed.", innerException) { }
     }
 }

@@ -1,21 +1,20 @@
 ﻿namespace Project.Controller;
+
 using Microsoft.AspNetCore.Mvc;
 using Exceptions;
 using Services;
-
 
 [Route("api/[controller]")]
 [ApiController]
 public class MediaContentController : ControllerBase
 {
-
     private readonly MediaContentService _mediaContentService;
 
     public MediaContentController(MediaContentService mediaContentService)
     {
         _mediaContentService = mediaContentService;
     }
-    
+
     [HttpDelete("Remove/{mediaId:int}")]
     public async Task<IActionResult> RemoveMediaContentAsync(int mediaId)
     {
@@ -24,12 +23,21 @@ public class MediaContentController : ControllerBase
             await _mediaContentService.RemoveMediaContentWithGivenIdAsync(mediaId);
             return Ok("Media Content deleted successfully.");
         }
-        catch (RemoveDataFailedException ex)
+        catch (MediaContentDoesNotExistsException ex)
         {
-            return StatusCode(500, $"Failed to remove media content. Please try again. {ex.Message}");
+            return BadRequest(ex.Message);
         }
-       
+        catch (ArgumentException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"Unexpected error: {ex.Message}");
+        }
     }
+
+   
 
     [HttpGet("Get/{mediaId:int}")]
     public async Task<IActionResult> GetMediaContentWithGivenIdAsync(int mediaId)
@@ -45,14 +53,7 @@ public class MediaContentController : ControllerBase
         }
         catch (Exception ex)
         {
-            return BadRequest(ex.Message);
+            return StatusCode(500, $"Unexpected error: {ex.Message}");
         }
     }
-
-    
 }
-
-
-
-    
-

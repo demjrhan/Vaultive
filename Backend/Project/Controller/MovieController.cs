@@ -82,10 +82,6 @@ public class MovieController : ControllerBase
         {
             return BadRequest(ex.Message);
         }
-        catch (AddDataFailedException ex)
-        {
-            return StatusCode(500, $"Failed to add movie. Please try again. {ex.Message}");
-        }
         catch (Exception ex)
         {
             return StatusCode(500, $"Unexpected error: {ex.Message}");
@@ -109,10 +105,6 @@ public class MovieController : ControllerBase
             return BadRequest(ex.Message);
         }
         catch (MediaContentDoesNotExistsException ex)
-        {
-            return BadRequest(ex.Message);
-        }
-        catch (UpdateDataFailedException ex)
         {
             return BadRequest(ex.Message);
         }

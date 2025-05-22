@@ -44,10 +44,6 @@ public class UserController : ControllerBase
         {
             return BadRequest(ex.Message);
         }
-        catch (AddDataFailedException ex)
-        {
-            return StatusCode(500, $"Failed to add user. Please try again. {ex.Message}");
-        }
         catch (Exception ex)
         {
             return StatusCode(500, $"Unexpected error: {ex.Message}");
@@ -79,9 +75,49 @@ public class UserController : ControllerBase
         }
         catch (Exception ex)
         {
-            return BadRequest(ex.Message);
+            return StatusCode(500, $"Unexpected error: {ex.Message}");
         }
     }
+
+    [HttpPut("Watch")]
+    public async Task<IActionResult> WatchMediaContentAsync(int userId, int mediaId)
+    {
+        try
+        {
+            await _userService.WatchMediaContentAsync(userId, mediaId);
+            return Ok($"User successfully watched media content {mediaId}.");
+        }
+        catch (ArgumentException ex)
+        {
+            return BadRequest(ex.Message);
+
+        }
+        catch (MediaContentDoesNotExistsException ex)
+        {
+            return BadRequest(ex.Message);
+
+        }
+        catch (UserNotFoundException ex)
+        {
+            return BadRequest(ex.Message);
+
+        }
+        catch (MediaContentAlreadyWatchedException ex)
+        {
+            return BadRequest(ex.Message);
+
+        }
+        catch (UserHasNoActiveSubscriptionException ex)
+        {
+            return BadRequest(ex.Message);
+
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"Unexpected error: {ex.Message}");
+        }
+    }
+    
     [HttpPut("Update")]
     public async Task<IActionResult> UpdateUserAsync(int userId, [FromBody] UpdateUserDTO userDto)
     {
@@ -109,10 +145,6 @@ public class UserController : ControllerBase
         catch (ArgumentException ex)
         {
             return BadRequest(ex.Message);
-        }
-        catch (UpdateDataFailedException ex)
-        {
-            return StatusCode(500, $"Failed to update user. Please try again. {ex.Message}");
         }
         catch (Exception ex)
         {

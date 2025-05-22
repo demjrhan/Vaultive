@@ -19,9 +19,11 @@ public class UserService
     private readonly StreamingServiceRepository _streamingServiceRepository;
     private readonly SubscriptionConfirmationRepository _subscriptionConfirmationRepository;
     private readonly SubscriptionRepository _subscriptionRepository;
+    private readonly SubscriptionService _subscriptionService;
     private readonly MediaContentRepository _mediaContentRepository;
     private readonly WatchHistoryRepository _watchHistoryRepository;
     private readonly MasterContext _context;
+    private static readonly Random _random = new Random();
 
     public UserService(
         MasterContext context,
@@ -30,6 +32,7 @@ public class UserService
         MediaContentRepository mediaContentRepository,
         WatchHistoryRepository watchHistoryRepository,
         SubscriptionRepository subscriptionRepository,
+        SubscriptionService subscriptionService,
         StreamingServiceRepository streamingServiceRepository,
         SubscriptionConfirmationRepository subscriptionConfirmationRepository)
     {
@@ -39,12 +42,15 @@ public class UserService
         _mediaContentRepository = mediaContentRepository;
         _watchHistoryRepository = watchHistoryRepository;
         _subscriptionRepository = subscriptionRepository;
+        _subscriptionService = subscriptionService;
         _streamingServiceRepository = streamingServiceRepository;
         _subscriptionConfirmationRepository = subscriptionConfirmationRepository;
     }
-
+    
+    /* Remove user with given id */
     public async Task RemoveUserWithGivenIdAsync(int userId)
     {
+        if (userId <= 0) throw new ArgumentException("User id can not be equal or smaller than 0.");
         await using var transaction = await _context.Database.BeginTransactionAsync();
 
         try
@@ -54,10 +60,10 @@ public class UserService
             await _context.SaveChangesAsync();
             await transaction.CommitAsync();
         }
-        catch (Exception ex)
+        catch 
         {
             await transaction.RollbackAsync();
-            throw new RemoveDataFailedException(ex);
+            throw;
         }
     }
 
@@ -100,19 +106,21 @@ public class UserService
             await _context.SaveChangesAsync();
             await transaction.CommitAsync();
         }
-        catch (Exception ex)
+        catch 
         {
             await transaction.RollbackAsync();
-            throw new AddDataFailedException(ex);
+            throw;
         }
     }
 
     /* Update the user with the given id */
     public async Task UpdateUserWithGivenIdAsync(int userId, UpdateUserDTO userDto)
     {
+        if (userId <= 0) throw new ArgumentException("User id can not be equal or smaller than 0.");
+
         if (userDto == null)
             throw new ArgumentNullException(nameof(userDto));
-       
+
         if (await _context.Users.AnyAsync(u => u.Email == userDto.Email && u.Id != userId))
             throw new EmailAlreadyExistsException(userDto.Email);
 
@@ -139,22 +147,25 @@ public class UserService
             var status = ParseStatus(userDto.Status);
 
             user.Firstname = userDto.Firstname;
-            user.Lastname  = userDto.Lastname;
-            user.Nickname  = userDto.Nickname;
-            user.Email     = userDto.Email;
-            user.Country   = userDto.Country;
-            user.Status    = status;
+            user.Lastname = userDto.Lastname;
+            user.Nickname = userDto.Nickname;
+            user.Email = userDto.Email;
+            user.Country = userDto.Country;
+            user.Status = status;
 
 
             await _context.SaveChangesAsync();
             await transaction.CommitAsync();
         }
-        catch (Exception ex)
+        catch 
         {
             await transaction.RollbackAsync();
-            throw new UpdateDataFailedException(ex);
+            throw;
         }
     }
+
+    /* Get all users with detail, like watch history etc. */
+
     public async Task<List<UserDetailedResponseDTO>> GetAllUsersDetailedAsync()
     {
         var users = await _userRepository.GetAllUsersAsync();
@@ -194,6 +205,63 @@ public class UserService
                 WatchDate = wh.WatchDate
             }).ToList()
         }).ToList();
+    }
+
+    /* Make user watch a media content */
+    public async Task WatchMediaContentAsync(int userId, int mediaId)
+    {
+        if (userId <= 0) throw new ArgumentException("User id can not be equal or smaller than 0.");
+        if (mediaId <= 0) throw new ArgumentException("Media id can not be equal or smaller than 0.");
+        
+        await using var transaction = await _context.Database.BeginTransactionAsync();
+
+        try
+        {
+            var mediaContent = await _mediaContentRepository.GetMediaContentWithGivenIdAsync(mediaId);
+            if (mediaContent == null) throw new MediaContentDoesNotExistsException(mediaId);
+
+            var user = await _userRepository.GetUserWithGivenId(userId);
+            if (user == null) throw new UserNotFoundException(userId);
+
+            if (user.WatchHistories.Any(wh => wh.MediaId == mediaId && wh.TimeLeftOf == 0))
+                throw new MediaContentAlreadyWatchedException(user.Nickname, mediaContent.Title);
+
+            var activeSubscriptions = await _subscriptionService.GetActiveSubscriptionsOfUserIdAsync(userId);
+            if (!activeSubscriptions.Any())
+                throw new UserHasNoActiveSubscriptionException(user.Nickname,
+                    $"Can not watch media content unless have subscription for the streaming services it supports.");
+
+            var existing = await _context.WatchHistories
+                .SingleOrDefaultAsync(wh => wh.UserId == userId && wh.MediaId == mediaId);
+
+            if (existing != null)
+            {
+                if (existing.TimeLeftOf == 0)
+                    throw new MediaContentAlreadyWatchedException(user.Nickname, mediaContent.Title);
+
+                existing.TimeLeftOf = _random.Next(0, existing.TimeLeftOf);
+                existing.WatchDate = DateOnly.FromDateTime(DateTime.Now);
+            }
+            else
+            {
+                user.WatchHistories.Add(new WatchHistory
+                {
+                    MediaContent = mediaContent,
+                    TimeLeftOf = _random.Next(0, mediaContent.Duration),
+                    WatchDate = DateOnly.FromDateTime(DateTime.Now)
+                });
+            }
+            
+            
+
+            await _context.SaveChangesAsync();
+            await transaction.CommitAsync();
+        }
+        catch 
+        {
+            await transaction.RollbackAsync();
+            throw;
+        }
     }
 
     private static Status ParseStatus(string status)
