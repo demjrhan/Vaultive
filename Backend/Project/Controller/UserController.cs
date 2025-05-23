@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Project.DTOs.ReviewDTOs;
 using Project.DTOs.UserDTOs;
 using Project.Exceptions;
 using Project.Services;
@@ -22,7 +23,7 @@ public class UserController : ControllerBase
         try
         {
             await _userService.AddUserAsync(userDto);
-            return Created(string.Empty, "User added successfully.");
+            return Created(string.Empty, $"User {userDto.Firstname} added successfully.");
         }
         catch (InvalidUserStatusException ex)
         {
@@ -56,15 +57,14 @@ public class UserController : ControllerBase
         try
         {
             await _userService.RemoveUserWithGivenIdAsync(userId);
-            return Ok("User deleted successfully.");
+            return Ok($"User {userId} deleted successfully.");
         }
         catch (RemoveDataFailedException ex)
         {
-            return StatusCode(500, $"Failed to remove user. Please try again. {ex.Message}");
+            return StatusCode(500, $"Failed to remove user {userId}. Please try again. {ex.Message}");
         }
-       
     }
-    
+
     [HttpGet("AllDetailed")]
     public async Task<IActionResult> GetAllUsersDetailedAsync()
     {
@@ -85,46 +85,41 @@ public class UserController : ControllerBase
         try
         {
             await _userService.WatchMediaContentAsync(userId, mediaId);
-            return Ok($"User successfully watched media content {mediaId}.");
+            return Ok($"User {userId} successfully watched media content {mediaId}.");
         }
         catch (ArgumentException ex)
         {
             return BadRequest(ex.Message);
-
         }
         catch (MediaContentDoesNotExistsException ex)
         {
             return BadRequest(ex.Message);
-
         }
         catch (UserNotFoundException ex)
         {
             return BadRequest(ex.Message);
-
         }
         catch (MediaContentAlreadyWatchedException ex)
         {
             return BadRequest(ex.Message);
-
         }
         catch (UserHasNoActiveSubscriptionException ex)
         {
             return BadRequest(ex.Message);
-
         }
         catch (Exception ex)
         {
             return StatusCode(500, $"Unexpected error: {ex.Message}");
         }
     }
-    
+
     [HttpPut("Update")]
-    public async Task<IActionResult> UpdateUserAsync(int userId, [FromBody] UpdateUserDTO userDto)
+    public async Task<IActionResult> UpdateUserAsync([FromBody] UpdateUserDTO userDto)
     {
         try
         {
-            await _userService.UpdateUserWithGivenIdAsync(userId, userDto);
-            return Ok("User update was successful.");
+            await _userService.UpdateUserWithGivenIdAsync(userDto);
+            return Ok($"User {userDto.Id} update was successful.");
         }
         catch (InvalidUserStatusException ex)
         {
@@ -135,6 +130,46 @@ public class UserController : ControllerBase
             return BadRequest(ex.Message);
         }
         catch (EmailAlreadyExistsException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+        catch (ArgumentNullException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+        catch (ArgumentException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"Unexpected error: {ex.Message}");
+        }
+    }
+
+
+    [HttpPost("Review")]
+    public async Task<IActionResult> AddReviewAsync([FromBody] AddReviewDTO addReviewDto)
+    {
+        try
+        {
+            await _userService.AddReviewToMediaContentAsync(addReviewDto);
+            return Ok($"User {addReviewDto.UserId} added review successfully.");
+        }
+
+        catch (DuplicateReviewException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+        catch (WatchHistoryNotFoundException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+        catch (MediaContentDoesNotExistsException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+        catch (UserNotFoundException ex)
         {
             return BadRequest(ex.Message);
         }

@@ -122,7 +122,7 @@ export function showMovieDetail(movie, from = 'home') {
       const comment = textarea.value?.trim();
       const mediaTitle = movie?.mediaContent?.title?.trim();
 
-      const response = await fetch(`${API_BASE_URL}/Review/Add`, {
+      const response = await fetch(`${API_BASE_URL}/User/Review`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

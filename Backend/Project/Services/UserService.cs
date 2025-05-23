@@ -46,7 +46,7 @@ public class UserService
         _streamingServiceRepository = streamingServiceRepository;
         _subscriptionConfirmationRepository = subscriptionConfirmationRepository;
     }
-    
+
     /* Remove user with given id */
     public async Task RemoveUserWithGivenIdAsync(int userId)
     {
@@ -60,7 +60,7 @@ public class UserService
             await _context.SaveChangesAsync();
             await transaction.CommitAsync();
         }
-        catch 
+        catch
         {
             await transaction.RollbackAsync();
             throw;
@@ -106,7 +106,7 @@ public class UserService
             await _context.SaveChangesAsync();
             await transaction.CommitAsync();
         }
-        catch 
+        catch
         {
             await transaction.RollbackAsync();
             throw;
@@ -114,36 +114,35 @@ public class UserService
     }
 
     /* Update the user with the given id */
-    public async Task UpdateUserWithGivenIdAsync(int userId, UpdateUserDTO userDto)
+    public async Task UpdateUserWithGivenIdAsync(UpdateUserDTO userDto)
     {
-        if (userId <= 0) throw new ArgumentException("User id can not be equal or smaller than 0.");
-
-        if (userDto == null)
-            throw new ArgumentNullException(nameof(userDto));
-
-        if (await _context.Users.AnyAsync(u => u.Email == userDto.Email && u.Id != userId))
-            throw new EmailAlreadyExistsException(userDto.Email);
-
-        if (await _context.Users.AnyAsync(u => u.Nickname == userDto.Nickname && u.Id != userId))
-            throw new NicknameAlreadyExistsException(userDto.Nickname);
-
-
-        var user = await _userRepository.GetUserWithGivenId(userId);
-        if (user == null) throw new UserNotFoundException(userId);
-
-        ValidateUser(
-            firstname: userDto.Firstname,
-            lastname: userDto.Lastname,
-            nickname: userDto.Nickname,
-            email: userDto.Email,
-            country: userDto.Country,
-            status: userDto.Status);
-
-
         await using var transaction = await _context.Database.BeginTransactionAsync();
 
         try
         {
+            if (userDto.Id <= 0) throw new ArgumentException("User id can not be equal or smaller than 0.");
+
+            if (userDto == null)
+                throw new ArgumentNullException(nameof(userDto));
+
+            if (await _context.Users.AnyAsync(u => u.Email == userDto.Email && u.Id != userDto.Id))
+                throw new EmailAlreadyExistsException(userDto.Email);
+
+            if (await _context.Users.AnyAsync(u => u.Nickname == userDto.Nickname && u.Id != userDto.Id))
+                throw new NicknameAlreadyExistsException(userDto.Nickname);
+
+
+            var user = await _userRepository.GetUserWithGivenId(userDto.Id) ??
+                       throw new UserNotFoundException(userDto.Id);
+
+            ValidateUser(
+                firstname: userDto.Firstname,
+                lastname: userDto.Lastname,
+                nickname: userDto.Nickname,
+                email: userDto.Email,
+                country: userDto.Country,
+                status: userDto.Status);
+
             var status = ParseStatus(userDto.Status);
 
             user.Firstname = userDto.Firstname;
@@ -157,7 +156,7 @@ public class UserService
             await _context.SaveChangesAsync();
             await transaction.CommitAsync();
         }
-        catch 
+        catch
         {
             await transaction.RollbackAsync();
             throw;
@@ -172,6 +171,7 @@ public class UserService
 
         return users.Select(u => new UserDetailedResponseDTO()
         {
+            Id = u.Id,
             Country = u.Country,
             Firstname = u.Firstname,
             Lastname = u.Lastname,
@@ -210,18 +210,17 @@ public class UserService
     /* Make user watch a media content */
     public async Task WatchMediaContentAsync(int userId, int mediaId)
     {
-        if (userId <= 0) throw new ArgumentException("User id can not be equal or smaller than 0.");
-        if (mediaId <= 0) throw new ArgumentException("Media id can not be equal or smaller than 0.");
-        
         await using var transaction = await _context.Database.BeginTransactionAsync();
 
         try
         {
-            var mediaContent = await _mediaContentRepository.GetMediaContentWithGivenIdAsync(mediaId);
-            if (mediaContent == null) throw new MediaContentDoesNotExistsException(mediaId);
+            if (userId <= 0) throw new ArgumentException("User id can not be equal or smaller than 0.");
+            if (mediaId <= 0) throw new ArgumentException("Media id can not be equal or smaller than 0.");
 
-            var user = await _userRepository.GetUserWithGivenId(userId);
-            if (user == null) throw new UserNotFoundException(userId);
+            var mediaContent = await _mediaContentRepository.GetMediaContentWithGivenIdAsync(mediaId) ??
+                               throw new MediaContentDoesNotExistsException(mediaId);
+
+            var user = await _userRepository.GetUserWithGivenId(userId) ?? throw new UserNotFoundException(userId);
 
             if (user.WatchHistories.Any(wh => wh.MediaId == mediaId && wh.TimeLeftOf == 0))
                 throw new MediaContentAlreadyWatchedException(user.Nickname, mediaContent.Title);
@@ -251,13 +250,59 @@ public class UserService
                     WatchDate = DateOnly.FromDateTime(DateTime.Now)
                 });
             }
-            
-            
+
 
             await _context.SaveChangesAsync();
             await transaction.CommitAsync();
         }
-        catch 
+        catch
+        {
+            await transaction.RollbackAsync();
+            throw;
+        }
+    }
+
+    /* Make user add review to media content */
+    public async Task AddReviewToMediaContentAsync(AddReviewDTO addReviewDto)
+    {
+        await using var transaction = await _context.Database.BeginTransactionAsync();
+
+        try
+        {
+            if (addReviewDto.UserId <= 0) throw new ArgumentException("User id can not be equal or smaller than 0.");
+            if (addReviewDto.MediaId <= 0) throw new ArgumentException("Media id can not be equal or smaller than 0.");
+
+            var mediaContent = await _mediaContentRepository.GetMediaContentWithGivenIdAsync(addReviewDto.MediaId) ??
+                               throw new MediaContentDoesNotExistsException(addReviewDto.MediaId);
+
+            var user = await _userRepository.GetUserWithGivenId(addReviewDto.UserId) ??
+                       throw new UserNotFoundException(addReviewDto.UserId);
+
+
+            var watchHistory =
+                await _watchHistoryRepository.GetWatchHistoryOfUserToGivenMediaIdAsync(user.Id, mediaContent.Id) ??
+                throw new WatchHistoryNotFoundException(user.Id);
+
+            var existingReview =
+                await _reviewRepository.GetReviewOfUserToMediaContentAsync(user.Id, mediaContent.Id);
+
+            if (existingReview != null)
+                throw new DuplicateReviewException(user.Nickname, mediaContent.Title);
+
+            var review = new Review
+            {
+                Comment = addReviewDto.Comment,
+                UserId = user.Id,
+                User = user,
+                MediaContent = mediaContent,
+                WatchHistory = watchHistory
+            };
+
+            await _reviewRepository.AddReviewAsync(review);
+            await _context.SaveChangesAsync();
+            await transaction.CommitAsync();
+        }
+        catch
         {
             await transaction.RollbackAsync();
             throw;

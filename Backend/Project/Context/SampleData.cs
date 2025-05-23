@@ -449,35 +449,6 @@ public static class SampleData
             var watchHistories = context.WatchHistories.Include(w => w.MediaContent).ToList();
             var allMovies = context.Movies.ToList();
 
-            if (demir != null)
-            {
-                var demirTitles = new[] { "John Wick", "Avengers", "Pulp Fiction" };
-                foreach (var title in demirTitles)
-                {
-                    var media = allMovies.FirstOrDefault(m => m.Title == title);
-                    var history = watchHistories.FirstOrDefault(w => w.UserId == demir.Id && w.MediaId == media.Id);
-                    if (history != null && media != null)
-                    {
-                        reviews.Add(new Review
-                        {
-                            UserId = demir.Id,
-                            MediaId = media.Id,
-                            Comment = title switch
-                            {
-                                "John Wick" =>
-                                    "John Wick delivers non-stop action with beautifully choreographed fight scenes. Keanu Reeves is at his absolute best. The emotional beginning really grounds the character’s motivation.",
-                                "Avengers" =>
-                                    "Avengers was a great culmination of multiple Marvel stories. The characters each had their moment to shine, and the final battle was epic.",
-                                "Pulp Fiction" =>
-                                    "Pulp Fiction’s nonlinear storytelling and quirky dialogues made it fascinating. Some scenes felt slow, but overall, it’s a film worth dissecting.",
-                                _ => ""
-                            },
-                            MediaContent = media,
-                            WatchHistory = history
-                        });
-                    }
-                }
-            }
 
             if (aiko != null)
             {
