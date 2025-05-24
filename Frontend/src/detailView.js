@@ -108,19 +108,22 @@ export function showMovieDetail(movie, from = 'home') {
 
   submitReview.addEventListener('mouseover', () => {
     textarea.style.filter = 'blur(2px)';
+    textarea.readOnly = true;
   });
 
 
+
   submitReview.addEventListener('mouseout', () => {
-    textarea.style.filter = 'blur(0px)';
+    textarea.style.filter = 'blur(0)';
     const existingOverlay = document.getElementById('blur-overlay');
     if (existingOverlay) existingOverlay.remove();
+    textarea.readOnly = false;
   })
 
 
   submitReview.addEventListener('click', async () => {
       const comment = textarea.value?.trim();
-      const mediaTitle = movie?.mediaContent?.title?.trim();
+      const mediaId = movie?.mediaContent?.id;
 
       const response = await fetch(`${API_BASE_URL}/User/Review`, {
         method: 'POST',
@@ -129,7 +132,7 @@ export function showMovieDetail(movie, from = 'home') {
         },
         body: JSON.stringify({
           userId: 1,
-          mediaTitle: mediaTitle,
+          mediaId: mediaId,
           comment: comment,
         })
       });
@@ -139,7 +142,15 @@ export function showMovieDetail(movie, from = 'home') {
         textarea.readOnly = true;
 
         setTimeout(() => {
-          textarea.value = 'Unfortunately, we were unable to submit your review. Please try again later.';
+          response.text()
+            .then(errorMessage => {
+              textarea.value = errorMessage;
+              textarea.readOnly = false;
+            })
+            .catch(err => {
+              textarea.value = 'Unfortunately, we were unable to submit your review. Please try again later.';
+              textarea.readOnly = false;
+            });
           textarea.style.color = 'red';
 
           setTimeout(() => {
@@ -152,7 +163,16 @@ export function showMovieDetail(movie, from = 'home') {
       else {
         appendReviewToUI({ comment });
 
-        textarea.value = '';
+        setTimeout(() => {
+          textarea.style.color = 'green';
+          textarea.value = 'Successfully submitted your review. Thank you!';
+
+          setTimeout(() => {
+            textarea.value = '';
+            textarea.style.color = 'white';
+            textarea.readOnly = false;
+          }, 5000);
+        }, 1);
       }
   });
 

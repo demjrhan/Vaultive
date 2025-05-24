@@ -6,9 +6,9 @@ export async function renderRecommendations() {
   const movieCardsContainer = document.querySelector('.movie-cards');
   movieCardsContainer.innerHTML = '';
 
-  const API_BASE_URL = 'http://localhost:5034/api/Movie';
+  const API_BASE_URL = 'http://localhost:5034/api';
   try {
-    const response = await fetch(`${API_BASE_URL}/All`);
+    const response = await fetch(`${API_BASE_URL}/Movie/All`);
     if (!response.ok) throw new Error('Failed to fetch recommendations');
     const movies = await response.json();
     console.log(movies);
