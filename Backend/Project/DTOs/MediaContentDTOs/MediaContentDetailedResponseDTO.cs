@@ -21,8 +21,8 @@ public class MediaContentDetailedResponseDTO
     
     public OptionDTO? AudioOption { get; set; }
     
-    public ICollection<StreamingServiceDTO> StreamingServices { get; set; } = new List<StreamingServiceDTO>();
+    public ICollection<StreamingServiceDTO> StreamingServices { get; set; }
 
-    public ICollection<ReviewDTO> Reviews { get; set; } = new List<ReviewDTO>();
+    public ICollection<ReviewDTO> Reviews { get; set; }
 
 }

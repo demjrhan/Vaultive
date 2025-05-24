@@ -2,7 +2,7 @@
 
 public class CreateMovieDTO
 {
-    public CreateMediaContentDTO MediaContent { get; set; } = new();
-    public List<string> Genres { get; set; }  = new();
+    public CreateMediaContentDTO MediaContent { get; set; }
+    public ICollection<string> Genres { get; set; } 
 
 }

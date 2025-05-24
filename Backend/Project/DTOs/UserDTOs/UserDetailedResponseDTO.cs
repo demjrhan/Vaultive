@@ -13,7 +13,7 @@ public class UserDetailedResponseDTO
     public string Country { get; set; }
     public string Status { get; set; }
     
-    public ICollection<ReviewDTO> Reviews { get; set; } = new List<ReviewDTO>();
-    public ICollection<WatchHistoryResponseDTO> WatchHistories { get; set; } = new List<WatchHistoryResponseDTO>();
-    public ICollection<SubscriptionConfirmationDTO> Confirmations { get; set; } = new List<SubscriptionConfirmationDTO>();
+    public IEnumerable<ReviewDTO> Reviews { get; set; }
+    public ICollection<WatchHistoryResponseDTO> WatchHistories { get; set; }
+    public ICollection<SubscriptionConfirmationDTO> Confirmations { get; set; }
 }

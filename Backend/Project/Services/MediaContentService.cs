@@ -462,7 +462,7 @@ public class MediaContentService
     }
 
 
-    private void ValidateGenres(List<string> genres)
+    private void ValidateGenres(ICollection<string> genres)
     {
         if (genres == null || !genres.Any())
             throw new AtLeastOneGenreMustExistsException();
