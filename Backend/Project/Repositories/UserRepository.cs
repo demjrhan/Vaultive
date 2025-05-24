@@ -46,13 +46,18 @@ public class UserRepository
 
     public async Task<User?> GetUserWithGivenId(int userId)
     {
-        return await _context
-            .Users
+        return await _context.Users
             .Include(u => u.Reviews)
             .ThenInclude(r => r.MediaContent)
-            .ThenInclude(m => m.WatchHistories)
+            .Include(u => u.Reviews)
+            .ThenInclude(r => r.WatchHistory)
+
+            .Include(u => u.WatchHistories)
+            .ThenInclude(wh => wh.MediaContent)
+
             .Include(u => u.Confirmations)
             .ThenInclude(c => c.Subscription)
+            .ThenInclude(s => s.StreamingService)
             .FirstOrDefaultAsync(u => u.Id == userId);
     }
 }

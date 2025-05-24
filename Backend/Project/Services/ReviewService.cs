@@ -57,10 +57,10 @@ public class ReviewService
     }
 
     /* Returns all the reviews with their media titles. */
-    public async Task<List<ReviewResponseDTO>> GetAllReviewsWithMediaTitlesAsync()
+    public async Task<List<ReviewDTO>> GetAllReviewsWithMediaTitlesAsync()
     {
         var reviews = await _reviewRepository.GetAllReviewsWithMediaTitlesAsync();
-        return reviews.Select(r => new ReviewResponseDTO()
+        return reviews.Select(r => new ReviewDTO()
         {
             Id = r.Id,
             MediaTitle = r.MediaContent.Title,
@@ -71,11 +71,11 @@ public class ReviewService
     }
 
     /* Return review by id */
-    public async Task<ReviewResponseDTO> GetReviewByIdAsync(int reviewId)
+    public async Task<ReviewDTO> GetReviewByIdAsync(int reviewId)
     {
         var review = await _reviewRepository.GetReviewByIdAsync(reviewId);
         if (review == null) throw new ReviewNotFoundException(reviewId);
-        return new ReviewResponseDTO()
+        return new ReviewDTO()
         {
             Id = review.Id,
             Comment = review.Comment,

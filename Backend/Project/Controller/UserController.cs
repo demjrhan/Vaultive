@@ -63,10 +63,6 @@ public class UserController : ControllerBase
         {
             return BadRequest(ex.Message);
         }
-        catch (UserNotFoundException ex)
-        {
-            return BadRequest(ex.Message);
-        }
         catch (Exception ex)
         {
             return StatusCode(500, $"Unexpected error: {ex.Message}");
@@ -79,6 +75,28 @@ public class UserController : ControllerBase
         try
         {
             var result = await _userService.GetAllUsersDetailedAsync();
+            return Ok(result);
+        }
+        catch (ArgumentException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+        catch (UserNotFoundException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"Unexpected error: {ex.Message}");
+        }
+    }
+
+    [HttpGet("Get/{userId:int}")]
+    public async Task<IActionResult> GetUserWithGivenIdAsync(int userId)
+    {
+        try
+        {
+            var result = await _userService.GetUserWithGivenIdAsync(userId);
             return Ok(result);
         }
         catch (Exception ex)

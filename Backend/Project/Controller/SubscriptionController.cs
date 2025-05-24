@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Project.Exceptions;
 using Project.Services;
 
 namespace Project.Controller;
@@ -13,7 +14,7 @@ public class SubscriptionController : ControllerBase
     {
         _subscriptionService = subscriptionService;
     }
-    [HttpGet("GetActiveSubscriptionsOfUser/{userId:int}")]
+    [HttpGet("ActiveSubscriptionsOfUser/{userId:int}")]
     public async Task<IActionResult> GetActiveSubscriptionsOfUserIdAsync(int userId)
     {
         try
@@ -24,6 +25,24 @@ public class SubscriptionController : ControllerBase
         catch (ArgumentException ex)
         {
             return BadRequest(ex.Message);
+        }
+        catch (UserNotFoundException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"Unexpected error: {ex.Message}");
+        }
+    }
+
+    [HttpGet("SubscriptionsWithConfirmations")]
+    public async Task<IActionResult> GetAllSubscriptionsWithConfirmations()
+    {
+        try
+        {
+            var result = await _subscriptionService.GetAllSubscriptionsWithConfirmations();
+            return Ok(result);
         }
         catch (Exception ex)
         {

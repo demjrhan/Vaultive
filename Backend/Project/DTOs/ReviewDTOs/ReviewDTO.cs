@@ -1,6 +1,6 @@
 namespace Project.DTOs.ReviewDTOs;
 
-public class ReviewResponseDTO
+public class ReviewDTO
 {
     public int Id { get; set; }
     public string MediaTitle { get; set; } = null!;

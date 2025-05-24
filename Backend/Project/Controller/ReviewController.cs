@@ -30,7 +30,7 @@ namespace Project.Controller
             }
         }
 
-        [HttpGet("{reviewId:int}")]
+        [HttpGet("Get/{reviewId:int}")]
         public async Task<IActionResult> GetReviewByIdAsync(int reviewId)
         {
             try
@@ -74,7 +74,7 @@ namespace Project.Controller
             }
         }
 
-        [HttpDelete("{reviewId:int}")]
+        [HttpDelete("Delete/{reviewId:int}")]
         public async Task<IActionResult> RemoveReviewAsync(int reviewId)
         {
             try

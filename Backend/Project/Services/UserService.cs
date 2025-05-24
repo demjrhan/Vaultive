@@ -164,7 +164,6 @@ public class UserService
     }
 
     /* Get all users with detail, like watch history etc. */
-
     public async Task<List<UserDetailedResponseDTO>> GetAllUsersDetailedAsync()
     {
         var users = await _userRepository.GetAllUsersAsync();
@@ -177,7 +176,7 @@ public class UserService
             Lastname = u.Lastname,
             Nickname = u.Nickname,
             Status = u.Status.ToString(),
-            Reviews = u.Reviews.Select(r => new ReviewResponseDTO()
+            Reviews = u.Reviews.Select(r => new ReviewDTO()
             {
                 Id = r.Id,
                 Comment = r.Comment,
@@ -185,14 +184,13 @@ public class UserService
                 Nickname = r.User.Nickname,
                 WatchedOn = r.WatchHistory.WatchDate
             }).ToList(),
-            Confirmations = u.Confirmations.Select(c => new SubscriptionConfirmationResponseDTO()
+            Confirmations = u.Confirmations.Select(c => new SubscriptionConfirmationDTO()
             {
                 Id = c.Id,
-                DurationInDays = c.Subscription.DurationInDays,
+                DurationInDays = _subscriptionService.CalculateRemainingDaysOfConfirmation(c.EndTime),
                 PaymentMethod = c.PaymentMethod,
                 Price = c.Price,
                 StreamingServiceName = c.Subscription.StreamingService.Name,
-                SubscriptionId = c.SubscriptionId,
                 UserCountry = c.User.Country,
                 UserId = c.UserId,
                 UserStatus = c.User.Status.ToString()
@@ -205,6 +203,51 @@ public class UserService
                 WatchDate = wh.WatchDate
             }).ToList()
         }).ToList();
+    }
+    
+    /* Get user with detail, like watch history etc. */
+    public async Task<UserDetailedResponseDTO> GetUserWithGivenIdAsync(int userId)
+    {
+        
+        if (userId <= 0) throw new ArgumentException("User id can not be equal or smaller than 0.");
+        var user = await _userRepository.GetUserWithGivenId(userId) ??
+                   throw new UserNotFoundException(userId);
+
+        return new UserDetailedResponseDTO()
+        {
+            Id = user.Id,
+            Country = user.Country,
+            Firstname = user.Firstname,
+            Lastname = user.Lastname,
+            Nickname = user.Nickname,
+            Status = user.Status.ToString(),
+            Reviews = user.Reviews.Select(r => new ReviewDTO()
+            {
+                Id = r.Id,
+                Comment = r.Comment,
+                MediaTitle = r.MediaContent.Title,
+                Nickname = r.User.Nickname,
+                WatchedOn = r.WatchHistory.WatchDate
+            }).ToList(),
+            Confirmations = user.Confirmations.Select(c => new SubscriptionConfirmationDTO()
+            {
+                Id = c.Id,
+                DurationInDays = _subscriptionService.CalculateRemainingDaysOfConfirmation(c.EndTime),
+                PaymentMethod = c.PaymentMethod,
+                Price = c.Price,
+                StreamingServiceName = c.Subscription.StreamingService.Name,
+                UserCountry = c.User.Country,
+                UserId = c.UserId,
+                UserStatus = c.User.Status.ToString()
+            }).ToList(),
+            WatchHistories = user.WatchHistories.Select(wh => new WatchHistoryResponseDTO()
+            {
+                MediaId = wh.MediaId,
+                MediaTitle = wh.MediaContent.Title,
+                TimeLeftOf = wh.TimeLeftOf,
+                WatchDate = wh.WatchDate
+            }).ToList()
+        };
     }
 
     /* Make user watch a media content */

@@ -1,6 +1,6 @@
 ﻿namespace Project.DTOs.StreamingServiceDTOs;
 
-public class StreamingServiceResponseDTO
+public class StreamingServiceDTO
 {
     public int Id { get; set; }
     public string Name { get; set; } = null!;

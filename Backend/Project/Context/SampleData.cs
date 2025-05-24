@@ -105,8 +105,8 @@ public static class SampleData
                         UserId = demir.Id,
                         SubscriptionId = subscriptions[0].Id,
                         PaymentMethod = "CreditCard",
-                        StartTime = DateOnly.FromDateTime(DateTime.UtcNow.AddDays(-15)),
-                        EndTime   = DateOnly.FromDateTime(DateTime.UtcNow.AddDays(-1)),
+                        StartTime = DateOnly.FromDateTime(DateTime.UtcNow.AddDays(-155)),
+                        EndTime   = DateOnly.FromDateTime(DateTime.UtcNow.AddDays(-130)),
                         Price = SubscriptionPriceCalculator.CalculateAmount(appleTV.DefaultPrice, demir)
                     },
                     new()

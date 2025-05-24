@@ -329,7 +329,7 @@ public class MediaContentService
                 OriginalLanguage = m.OriginalLanguage,
                 ReleaseDate = m.ReleaseDate,
                 StreamingServices = m.StreamingServices
-                    .Select(ss => new StreamingServiceResponseDTO
+                    .Select(ss => new StreamingServiceDTO
                     {
                         Id = ss.Id,
                         Country = ss.Country,
@@ -339,7 +339,7 @@ public class MediaContentService
                         LogoImage = ss.LogoImage,
                         WebsiteLink = ss.WebsiteLink
                     }).ToList(),
-                Reviews = m.Reviews.Select(r => new ReviewResponseDTO()
+                Reviews = m.Reviews.Select(r => new ReviewDTO()
                 {
                     Id = r.Id,
                     MediaTitle = r.MediaContent.Title,
@@ -379,7 +379,7 @@ public class MediaContentService
             Duration = mediaContent.Duration,
             OriginalLanguage = mediaContent.OriginalLanguage,
             StreamingServices = mediaContent.StreamingServices
-                .Select(ss => new StreamingServiceResponseDTO
+                .Select(ss => new StreamingServiceDTO
                 {
                     Id = ss.Id,
                     Country = ss.Country,
@@ -389,7 +389,7 @@ public class MediaContentService
                     LogoImage = ss.LogoImage,
                     WebsiteLink = ss.WebsiteLink
                 }).ToList(),
-            Reviews = mediaContent.Reviews.Select(r => new ReviewResponseDTO()
+            Reviews = mediaContent.Reviews.Select(r => new ReviewDTO()
             {
                 Id = r.Id,
                 MediaTitle = r.MediaContent.Title,
@@ -430,7 +430,7 @@ public class MediaContentService
                 OriginalLanguage = movie.OriginalLanguage,
                 ReleaseDate = movie.ReleaseDate,
                 StreamingServices = movie.StreamingServices
-                    .Select(ss => new StreamingServiceResponseDTO
+                    .Select(ss => new StreamingServiceDTO
                     {
                         Id = ss.Id,
                         Country = ss.Country,
@@ -440,7 +440,7 @@ public class MediaContentService
                         LogoImage = ss.LogoImage,
                         WebsiteLink = ss.WebsiteLink
                     }).ToList(),
-                Reviews = movie.Reviews.Select(r => new ReviewResponseDTO()
+                Reviews = movie.Reviews.Select(r => new ReviewDTO()
                 {
                     Id = r.Id,
                     MediaTitle = r.MediaContent.Title,

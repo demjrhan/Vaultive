@@ -12,11 +12,17 @@ public class Subscription
     {
         get
         {
+            var today = DateOnly.FromDateTime(DateTime.UtcNow);
             var latest = Confirmations.MaxBy(c => c.StartTime);
             if (latest == null)
                 return 0;
-
-            return latest.EndTime.DayNumber - latest.StartTime.DayNumber;
+            
+            return  latest.EndTime < today
+                ? 0
+                : latest.EndTime.DayNumber
+                  - today.DayNumber
+                  + 1;
+            
         }
     }
 
