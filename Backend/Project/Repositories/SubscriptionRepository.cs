@@ -31,6 +31,10 @@ public class SubscriptionRepository
             .Where(sc => sc.UserId == userId)
             .ToListAsync();
     }
+    public async Task AddSubscriptionAsync(Subscription subscription)
+    {
+        await _context.Subscriptions.AddAsync(subscription);
+    }
 
 
 }

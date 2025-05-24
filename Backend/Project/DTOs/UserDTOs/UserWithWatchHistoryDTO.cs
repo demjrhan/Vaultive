@@ -5,8 +5,8 @@ namespace Project.DTOs.UserDTOs;
 public class UserWithWatchHistoryDTO
 {
 
-    public UserResponseDTO User { get; set; }
+    public UserDTO User { get; set; }
 
-    public IEnumerable<WatchHistoryResponseDTO> WatchHistory { get; set; } 
+    public IEnumerable<WatchHistoryDTO> WatchHistory { get; set; } 
 
 }

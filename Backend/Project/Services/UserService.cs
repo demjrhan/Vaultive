@@ -6,6 +6,7 @@ using Project.DTOs.SubscriptionDTOs;
 using Project.DTOs.UserDTOs;
 using Project.DTOs.WatchHistoryDTOs;
 using Project.Exceptions;
+using Project.Helper;
 using Project.Models;
 using Project.Models.Enumerations;
 using Project.Repositories;
@@ -164,56 +165,53 @@ public class UserService
     }
 
     /* Get all users with detail, like watch history etc. */
-    public async Task<List<UserDetailedResponseDTO>> GetAllUsersDetailedAsync()
+    public async Task<List<UserDetailedDTO>> GetAllUsersDetailedAsync()
     {
         var users = await _userRepository.GetAllUsersAsync();
-
-        return users.Select(u => new UserDetailedResponseDTO()
+        var result = new List<UserDetailedDTO>();
+        foreach (var user in users)
         {
-            Id = u.Id,
-            Country = u.Country,
-            Firstname = u.Firstname,
-            Lastname = u.Lastname,
-            Nickname = u.Nickname,
-            Status = u.Status.ToString(),
-            Reviews = u.Reviews.Select(r => new ReviewDTO()
+            var activeSubscriptions = await _subscriptionService.GetActiveSubscriptionsOfUserIdAsync(user.Id);
+            var userDetailed = new UserDetailedDTO()
             {
-                Id = r.Id,
-                Comment = r.Comment,
-                MediaTitle = r.MediaContent.Title,
-                Nickname = r.User.Nickname,
-                WatchedOn = r.WatchHistory.WatchDate
-            }).ToList(),
-            Confirmations = u.Confirmations.Select(c => new SubscriptionConfirmationDTO()
-            {
-                Id = c.Id,
-                DurationInDays = _subscriptionService.CalculateRemainingDaysOfConfirmation(c.EndTime),
-                PaymentMethod = c.PaymentMethod,
-                Price = c.Price,
-                StreamingServiceName = c.Subscription.StreamingService.Name,
-                UserCountry = c.User.Country,
-                UserId = c.UserId,
-                UserStatus = c.User.Status.ToString()
-            }).ToList(),
-            WatchHistories = u.WatchHistories.Select(wh => new WatchHistoryResponseDTO()
-            {
-                MediaId = wh.MediaId,
-                MediaTitle = wh.MediaContent.Title,
-                TimeLeftOf = wh.TimeLeftOf,
-                WatchDate = wh.WatchDate
-            }).ToList()
-        }).ToList();
+                Id = user.Id,
+                Country = user.Country,
+                Firstname = user.Firstname,
+                Lastname = user.Lastname,
+                Nickname = user.Nickname,
+                Status = user.Status.ToString(),
+                Reviews = user.Reviews.Select(r => new ReviewDTO()
+                {
+                    Id = r.Id,
+                    Comment = r.Comment,
+                    MediaTitle = r.MediaContent.Title,
+                    Nickname = r.User.Nickname,
+                    WatchedOn = r.WatchHistory.WatchDate
+                }).ToList(),
+                ActiveSubscriptions = await _subscriptionService.GetActiveSubscriptionsOfUserIdAsync(user.Id),
+                WatchHistories = user.WatchHistories.Select(wh => new WatchHistoryDTO()
+                {
+                    MediaId = wh.MediaId,
+                    MediaTitle = wh.MediaContent.Title,
+                    TimeLeftOf = wh.TimeLeftOf,
+                    WatchDate = wh.WatchDate
+                }).ToList()
+            };
+
+            result.Add(userDetailed);
+        }
+
+        return result;
     }
-    
+
     /* Get user with detail, like watch history etc. */
-    public async Task<UserDetailedResponseDTO> GetUserWithGivenIdAsync(int userId)
+    public async Task<UserDetailedDTO> GetUserWithGivenIdAsync(int userId)
     {
-        
         if (userId <= 0) throw new ArgumentException("User id can not be equal or smaller than 0.");
         var user = await _userRepository.GetUserWithGivenId(userId) ??
                    throw new UserNotFoundException(userId);
 
-        return new UserDetailedResponseDTO()
+        return new UserDetailedDTO()
         {
             Id = user.Id,
             Country = user.Country,
@@ -229,18 +227,8 @@ public class UserService
                 Nickname = r.User.Nickname,
                 WatchedOn = r.WatchHistory.WatchDate
             }).ToList(),
-            Confirmations = user.Confirmations.Select(c => new SubscriptionConfirmationDTO()
-            {
-                Id = c.Id,
-                DurationInDays = _subscriptionService.CalculateRemainingDaysOfConfirmation(c.EndTime),
-                PaymentMethod = c.PaymentMethod,
-                Price = c.Price,
-                StreamingServiceName = c.Subscription.StreamingService.Name,
-                UserCountry = c.User.Country,
-                UserId = c.UserId,
-                UserStatus = c.User.Status.ToString()
-            }).ToList(),
-            WatchHistories = user.WatchHistories.Select(wh => new WatchHistoryResponseDTO()
+            ActiveSubscriptions = await _subscriptionService.GetActiveSubscriptionsOfUserIdAsync(user.Id),
+            WatchHistories = user.WatchHistories.Select(wh => new WatchHistoryDTO()
             {
                 MediaId = wh.MediaId,
                 MediaTitle = wh.MediaContent.Title,
@@ -265,8 +253,12 @@ public class UserService
 
             var user = await _userRepository.GetUserWithGivenId(userId) ?? throw new UserNotFoundException(userId);
 
+
             if (user.WatchHistories.Any(wh => wh.MediaId == mediaId && wh.TimeLeftOf == 0))
                 throw new MediaContentAlreadyWatchedException(user.Nickname, mediaContent.Title);
+
+            var canWatch = await CanUserWatchContent(user, mediaContent);
+            if (!canWatch) throw new UserCanNotWatchMediaContentException(userId);
 
             var activeSubscriptions = await _subscriptionService.GetActiveSubscriptionsOfUserIdAsync(userId);
             if (!activeSubscriptions.Any())
@@ -351,6 +343,78 @@ public class UserService
             throw;
         }
     }
+
+    /* Make user subscribe to streaming service*/
+    public async Task SubscribeAsync(AddSubscriptionDTO dto)
+    {
+        await using var transaction = await _context.Database.BeginTransactionAsync();
+
+        try
+        {
+            var streamingService = await _streamingServiceRepository.GetStreamingServiceById(dto.StreamingServiceId);
+            if (streamingService == null)
+                throw new StreamingServiceNotFoundException(new[] { dto.StreamingServiceId });
+
+            var user = await _userRepository.GetUserWithGivenId(dto.UserId);
+            if (user == null)
+                throw new UserNotFoundException(dto.UserId);
+
+            var activeSubscriptions = await _subscriptionService.GetActiveSubscriptionsOfUserIdAsync(user.Id);
+            if (activeSubscriptions.Any(ss => ss.StreamingServiceName == streamingService.Name))
+                throw new SubscriptionAlreadyExistsException(user.Id, streamingService.Id);
+
+            var subscription = new Subscription
+            {
+                StreamingServiceId = dto.StreamingServiceId,
+                StreamingService = streamingService
+            };
+            await _subscriptionRepository.AddSubscriptionAsync(subscription);
+
+            var today = DateOnly.FromDateTime(DateTime.Now);
+            var confirmation = new SubscriptionConfirmation
+            {
+                StartTime = today,
+                EndTime = today.AddMonths(dto.DurationInMonth),
+                PaymentMethod = dto.PaymentMethod,
+                Price = SubscriptionPriceCalculator.CalculateAmount(streamingService.DefaultPrice, user),
+                Subscription = subscription,
+                SubscriptionId = subscription.Id,
+                User = user,
+                UserId = user.Id
+            };
+            await _subscriptionConfirmationRepository.AddSubscriptionConfirmationAsync(confirmation);
+
+            await _context.SaveChangesAsync();
+
+            await transaction.CommitAsync();
+        }
+        catch
+        {
+            await transaction.RollbackAsync();
+            throw;
+        }
+    }
+
+
+    /* Validations */
+
+    public async Task<bool> CanUserWatchContent(User user, MediaContent mediaContent)
+    {
+        var activeSubscriptions = await _subscriptionService
+            .GetActiveSubscriptionsOfUserIdAsync(user.Id);
+
+        var activeNames = activeSubscriptions
+            .Select(asc => asc.StreamingServiceName);
+
+        var contentNames = mediaContent
+            .StreamingServices
+            .Select(ss => ss.Name);
+
+        return activeNames
+            .Intersect(contentNames)
+            .Any();
+    }
+
 
     private static Status ParseStatus(string status)
     {

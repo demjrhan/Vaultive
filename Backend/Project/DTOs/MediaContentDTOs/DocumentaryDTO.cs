@@ -2,6 +2,6 @@
 
 public class DocumentaryDTO
 {
-    public MediaContentDetailedResponseDTO MediaContentDetailedResponse { get; set; }
+    public MediaContentDetailedDTO MediaContentDetailed { get; set; }
     public ICollection<string> Topics { get; set; }
 }

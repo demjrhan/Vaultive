@@ -1,112 +1,169 @@
 ﻿namespace Project.Exceptions
 {
-    
     /* Media Content */
     public class MediaContentDoesNotExistsException : Exception
     {
         public MediaContentDoesNotExistsException(int mediaContentId)
-            : base($"MediaContent with id: '{mediaContentId}' does not exist.") { }
+            : base($"MediaContent with id: '{mediaContentId}' does not exist.")
+        {
+        }
     }
 
     public class NoMediaContentExistsException : Exception
     {
         public NoMediaContentExistsException()
-            : base($"There is no media content in database.") { }
+            : base($"There is no media content in database.")
+        {
+        }
     }
+
     public class MediaContentTitleMustBeUniqueException : Exception
     {
         public MediaContentTitleMustBeUniqueException(string title)
-            : base($"{title} already exists.") { }
+            : base($"{title} already exists.")
+        {
+        }
     }
+
     /* user */
     public class EmailAlreadyExistsException : Exception
     {
         public EmailAlreadyExistsException(string email)
-            : base($"Email '{email}' is already in use.") { }
+            : base($"Email '{email}' is already in use.")
+        {
+        }
     }
+
     public class NicknameAlreadyExistsException : Exception
     {
         public NicknameAlreadyExistsException(string nickname)
-            : base($"Nickname '{nickname}' already exists.") { }
+            : base($"Nickname '{nickname}' already exists.")
+        {
+        }
     }
-    
+
     public class UserNotFoundException : Exception
     {
         public UserNotFoundException(int userId)
-            : base($"User with id {userId} does not exists.") { }
+            : base($"User with id {userId} does not exists.")
+        {
+        }
     }
+
     public class InvalidUserStatusException : Exception
     {
         public InvalidUserStatusException(string status)
-            : base($"Invalid user status: '{status}'.") { }
+            : base($"Invalid user status: '{status}'.")
+        {
+        }
     }
+
     public class NoChangesDetectedException : Exception
     {
         public NoChangesDetectedException()
-            : base("The provided data is identical to the current user information. No changes were made.") { }
+            : base("The provided data is identical to the current user information. No changes were made.")
+        {
+        }
+    }
+
+    public class UserCanNotWatchMediaContentException : Exception
+    {
+        public UserCanNotWatchMediaContentException(int userId)
+            : base(
+                $"{userId} can not watch the media content, does not satisfy the required subscriptions for streaming services.")
+        {
+        }
     }
 
     /* subscription */
     public class SubscriptionConfirmationNotFoundException : Exception
     {
         public SubscriptionConfirmationNotFoundException(int subscriptionId)
-            : base($"Subscription confirmation not found with given subscribe id {subscriptionId}.") { }
+            : base($"Subscription confirmation not found with given subscribe id {subscriptionId}.")
+        {
+        }
     }
+
     public class SubscriptionsNotFoundException : Exception
     {
         public SubscriptionsNotFoundException(int subscriptionId)
-            : base($"Subscription not found with given Id {subscriptionId}.") { }
+            : base($"Subscription not found with given Id {subscriptionId}.")
+        {
+        }
     }
+
     public class SubscriptionAlreadyExistsException : Exception
     {
         public SubscriptionAlreadyExistsException(int userId, int serviceId)
-            : base($"User {userId} already has an active subscription for service ID {serviceId}.") { }
+            : base($"User {userId} already has an active subscription for service ID {serviceId}.")
+        {
+        }
     }
+
     public class NoSubscriptionExistsException : Exception
     {
         public NoSubscriptionExistsException()
-            : base("There is no subscription exists in database.") { }
+            : base("There is no subscription exists in database.")
+        {
+        }
     }
-    
+
     public class UserHasNoActiveSubscriptionException : Exception
     {
         public UserHasNoActiveSubscriptionException(string nickname, string? message = "")
-            : base($"User {nickname} does not have any active subscription. {message}") { }
+            : base($"User {nickname} does not have any active subscription. {message}")
+        {
+        }
     }
-    
-    
+
 
     /* watch history */
     public class WatchHistoryNotFoundException : Exception
     {
         public WatchHistoryNotFoundException(int userId)
-            : base($"Watch history not found with given userId {userId}.") { }
+            : base($"Watch history not found with given userId {userId}.")
+        {
+        }
     }
+
     public class MediaContentAlreadyWatchedException : Exception
     {
         public MediaContentAlreadyWatchedException(string nickname, string mediaTitle)
-            : base($"{nickname} already watched and finished media '{mediaTitle}'.") { }
+            : base($"{nickname} already watched and finished media '{mediaTitle}'.")
+        {
+        }
     }
+
     public class MovieNotFoundException : Exception
     {
         public MovieNotFoundException(int movieId)
-            : base($"Movie with id '{movieId}' does not exist.") { }
+            : base($"Movie with id '{movieId}' does not exist.")
+        {
+        }
     }
+
     public class InvalidGenreException : Exception
     {
         public InvalidGenreException(string genre)
-            : base($"Genre '{genre}' is not a valid genre.") { }
+            : base($"Genre '{genre}' is not a valid genre.")
+        {
+        }
     }
-    
+
     public class AtLeastOneGenreMustExistsException : Exception
     {
         public AtLeastOneGenreMustExistsException()
-            : base("At least one genre must be existing in the media content.") { }
+            : base("At least one genre must be existing in the media content.")
+        {
+        }
     }
+
     public class StreamingServiceNotFoundException : Exception
     {
         public StreamingServiceNotFoundException(IEnumerable<int> serviceIds)
-            : base(GenerateMessage(serviceIds)) { }
+            : base(GenerateMessage(serviceIds))
+        {
+        }
 
         private static string GenerateMessage(IEnumerable<int> serviceIds)
         {
@@ -117,40 +174,55 @@
         }
     }
 
-    
+
     /* Option */
     public class SubtitleOptionNotFoundException : Exception
     {
         public SubtitleOptionNotFoundException(string mediaTitle)
-            : base($"Subtitle option not found for media '{mediaTitle}'.") { }
+            : base($"Subtitle option not found for media '{mediaTitle}'.")
+        {
+        }
     }
+
     public class AudioOptionNotFoundException : Exception
     {
         public AudioOptionNotFoundException(string mediaTitle)
-            : base($"Audio option not found for media '{mediaTitle}'.") { }
+            : base($"Audio option not found for media '{mediaTitle}'.")
+        {
+        }
     }
+
     public class AtLeastOneOptionMustExistsException : Exception
     {
         public AtLeastOneOptionMustExistsException()
-            : base("There must be at least one option existing in media content. Either audio or subtitle.") { }
+            : base("There must be at least one option existing in media content. Either audio or subtitle.")
+        {
+        }
     }
-   
+
 
     /* review */
     public class ReviewNotFoundException : Exception
     {
         public ReviewNotFoundException(int reviewId)
-            : base($"Review with ID {reviewId} was not found.") { }
+            : base($"Review with ID {reviewId} was not found.")
+        {
+        }
     }
+
     public class DuplicateReviewException : Exception
     {
         public DuplicateReviewException(string nickname, string mediaTitle)
-            : base($"{nickname} has already reviewed '{mediaTitle}'.") { }
+            : base($"{nickname} has already reviewed '{mediaTitle}'.")
+        {
+        }
     }
+
     public class UserReviewNotFoundToMediaContentException : Exception
     {
         public UserReviewNotFoundToMediaContentException(int userId, int mediaId)
-            : base($"User with ID {userId} has not submitted a review for media id '{mediaId}'.") { }
+            : base($"User with ID {userId} has not submitted a review for media id '{mediaId}'.")
+        {
+        }
     }
-    
 }

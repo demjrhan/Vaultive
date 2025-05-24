@@ -311,13 +311,13 @@ public class MediaContentService
 
 
     /* Main difference than the GetAllMoviesFrontEndAsync is returning all details like Duration, Ids etc. */
-    public async Task<List<MovieResponseDTO>> GetAllMoviesDetailedAsync()
+    public async Task<List<MovieDTO>> GetAllMoviesDetailedAsync()
     {
         var movies = await _mediaContentRepository.GetAllMoviesAsync();
 
-        return movies.Select(m => new MovieResponseDTO
+        return movies.Select(m => new MovieDTO
         {
-            MediaContentDetailedResponse = new MediaContentDetailedResponseDTO()
+            MediaContentDetailed = new MediaContentDetailedDTO()
             {
                 Id = m.Id,
                 Title = m.Title,
@@ -361,14 +361,14 @@ public class MediaContentService
     }
 
     /* Get one media content by id including all details, with given id */
-    public async Task<MediaContentDetailedResponseDTO> GetMediaContentWithGivenIdAsync(int mediaId)
+    public async Task<MediaContentDetailedDTO> GetMediaContentWithGivenIdAsync(int mediaId)
     {
         if (mediaId <= 0) throw new ArgumentException("Media id can not be equal or smaller than 0.");
 
         var mediaContent = await _mediaContentRepository.GetMediaContentWithGivenIdAsync(mediaId);
         if (mediaContent == null) throw new MediaContentDoesNotExistsException(mediaId);
 
-        return new MediaContentDetailedResponseDTO
+        return new MediaContentDetailedDTO
         {
             Id = mediaContent.Id,
             Title = mediaContent.Title,
@@ -409,16 +409,16 @@ public class MediaContentService
     }
 
     /* Get one movie by id including all details, with given id */
-    public async Task<MovieResponseDTO> GetMovieWithGivenIdAsync(int movieId)
+    public async Task<MovieDTO> GetMovieWithGivenIdAsync(int movieId)
     {
         if (movieId <= 0) throw new ArgumentException("Movie id can not be equal or smaller than 0.");
 
         var movie = await _mediaContentRepository.GetMovieWithGivenIdAsync(movieId);
         if (movie == null) throw new MovieNotFoundException(movieId);
 
-        return new MovieResponseDTO
+        return new MovieDTO
         {
-            MediaContentDetailedResponse = new MediaContentDetailedResponseDTO()
+            MediaContentDetailed = new MediaContentDetailedDTO()
             {
                 Id = movie.Id,
                 Title = movie.Title,

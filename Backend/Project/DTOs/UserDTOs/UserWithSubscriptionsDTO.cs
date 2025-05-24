@@ -4,6 +4,6 @@ namespace Project.DTOs.UserDTOs;
 
 public class UserWithSubscriptionsDTO
 {
-    public UserResponseDTO User { get; set; }
+    public UserDTO User { get; set; }
     public IEnumerable<SubscriptionDTO> Subscriptions { get; set; } 
 }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Project.DTOs.ReviewDTOs;
+using Project.DTOs.SubscriptionDTOs;
 using Project.DTOs.UserDTOs;
 using Project.Exceptions;
 using Project.Services;
@@ -172,8 +173,7 @@ public class UserController : ControllerBase
             return StatusCode(500, $"Unexpected error: {ex.Message}");
         }
     }
-
-
+    
     [HttpPost("Review")]
     public async Task<IActionResult> AddReviewAsync([FromBody] AddReviewDTO addReviewDto)
     {
@@ -212,4 +212,37 @@ public class UserController : ControllerBase
             return StatusCode(500, $"Unexpected error: {ex.Message}");
         }
     }
+    
+    [HttpPost("Subscribe")]
+    public async Task<IActionResult> SubscribeAsync([FromBody] AddSubscriptionDTO addSubscriptionDto)
+    {
+        try
+        {
+            await _userService.SubscribeAsync(addSubscriptionDto);
+            return Ok($"User with id {addSubscriptionDto.UserId} subscribed to streaming service with id {addSubscriptionDto.StreamingServiceId} successfully.");
+        }
+
+        catch (StreamingServiceNotFoundException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+        catch (UserNotFoundException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+        catch (SubscriptionAlreadyExistsException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+        catch (ArgumentException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"Unexpected error: {ex.Message}");
+        }
+    }
+
+    
 }

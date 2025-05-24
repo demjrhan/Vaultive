@@ -1,7 +1,7 @@
 ﻿
 namespace Project.DTOs.WatchHistoryDTOs;
 
-public class WatchHistoryResponseDTO
+public class WatchHistoryDTO
 {
 
     public DateOnly WatchDate { get; set; }

@@ -15,6 +15,10 @@ public class StreamingServiceRepository
 
     public async Task<StreamingService?> GetStreamingServiceById(int streamingServiceId)
     {
-       return await _context.StreamingServices.FirstOrDefaultAsync(s => s.Id == streamingServiceId);
+        return await _context.StreamingServices.Include(ss => ss.Subscriptions)
+            .ThenInclude(s => s.Confirmations)
+            .ThenInclude(s => s.User)
+            .Include(ss => ss.MediaContents)
+            .FirstOrDefaultAsync(ss => ss.Id == streamingServiceId);
     }
 }
