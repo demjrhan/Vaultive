@@ -89,8 +89,8 @@
     }
     public class MovieNotFoundException : Exception
     {
-        public MovieNotFoundException(string title)
-            : base($"Movie with title '{title}' does not exist.") { }
+        public MovieNotFoundException(int movieId)
+            : base($"Movie with id '{movieId}' does not exist.") { }
     }
     public class InvalidGenreException : Exception
     {

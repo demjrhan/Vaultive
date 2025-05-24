@@ -45,6 +45,23 @@ public class MovieController : ControllerBase
             return BadRequest(ex.Message);
         }
     }
+    [HttpGet("Get/{movieId:int}")]
+    public async Task<IActionResult> GetMovieWithGivenIdAsync(int movieId)
+    {
+        try
+        {
+            var result = await _mediaContentService.GetMovieWithGivenIdAsync(movieId);
+            return Ok(result);
+        }
+        catch (MovieNotFoundException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"Unexpected error: {ex.Message}");
+        }
+    }
 
     [HttpPost("Add")]
     public async Task<IActionResult> AddMovieAsync([FromBody] CreateMovieDTO movieDto)

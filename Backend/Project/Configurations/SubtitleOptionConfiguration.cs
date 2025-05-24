@@ -16,6 +16,11 @@ namespace Project.Configurations
                 .IsRequired()
                 .OnDelete(DeleteBehavior.Cascade);
 
+            builder.Property(so => so.Languages)
+                .HasConversion(
+                    v => string.Join(",", v ?? new List<string>()),
+                    v => v.Split(',', StringSplitOptions.RemoveEmptyEntries).ToList()
+                );
         }
     }
 }

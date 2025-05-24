@@ -318,8 +318,12 @@ public static class SampleData
                     Genres = new List<Genre> { Genre.Crime, Genre.Drama },
                     SubtitleOption = new SubtitleOption
                     {
-                        Languages = new List<string>() {"English" }
+                        Languages = new List<string>() {"English","Spanish" }
 
+                    },
+                    AudioOption = new AudioOption()
+                    {
+                        Languages = new List<string>() {"Japanese"}
                     }
                 },
                 new Movie

@@ -14,7 +14,7 @@ public class MediaContentRepository
         _context = masterContext;
     }
 
-    public async Task<IEnumerable<Movie>> GetAllMoviesFrontEndAsync()
+    public async Task<IEnumerable<Movie>> GetAllMoviesAsync()
     {
         return await _context.Movies
             .Include(m => m.StreamingServices)

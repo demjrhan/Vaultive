@@ -29,17 +29,14 @@ public class UserRepository
     {
         return await _context.Users
 
-            // Reviews → MediaContent, WatchHistory
             .Include(u => u.Reviews)
             .ThenInclude(r => r.MediaContent)
             .Include(u => u.Reviews)
             .ThenInclude(r => r.WatchHistory)
 
-            // WatchHistories → MediaContent
             .Include(u => u.WatchHistories)
             .ThenInclude(wh => wh.MediaContent)
 
-            // Confirmations → Subscription → StreamingService
             .Include(u => u.Confirmations)
             .ThenInclude(c => c.Subscription)
             .ThenInclude(s => s.StreamingService)

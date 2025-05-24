@@ -48,16 +48,15 @@ public class MediaContentService
     {
         if (movieDto == null)
             throw new ArgumentNullException(nameof(movieDto));
-        
+
         if (movieDto.MediaContent == null)
             throw new ArgumentException("MediaContent inside of input can not be null..", nameof(movieDto));
-        
+
         /* Movie Title must be unique. */
         if (await _context.MediaContents.AnyAsync(m => m.Title == movieDto.MediaContent.Title))
             throw new MediaContentTitleMustBeUniqueException(movieDto.MediaContent.Title);
 
-        
-        
+
         /* Before starting the process we are validating if the given genres are parse-able to actual Genre enumeration class. */
         ValidateGenres(movieDto.Genres);
         /* Next step is making sure if there is at least one option is existing since it is a composition-overlapping */
@@ -126,14 +125,14 @@ public class MediaContentService
             await _context.SaveChangesAsync();
             await transaction.CommitAsync();
         }
-        catch 
+        catch
         {
             await transaction.RollbackAsync();
             throw;
         }
     }
 
-      /* Remove the media content with the given id */
+    /* Remove the media content with the given id */
     public async Task RemoveMediaContentWithGivenIdAsync(int mediaId)
     {
         if (mediaId <= 0) throw new ArgumentException("Media id can not be equal or smaller than 0.");
@@ -146,7 +145,7 @@ public class MediaContentService
             await _context.SaveChangesAsync();
             await transaction.CommitAsync();
         }
-        catch 
+        catch
         {
             await transaction.RollbackAsync();
             throw;
@@ -156,15 +155,18 @@ public class MediaContentService
     /* Update the media content with the given id */
     public async Task UpdateMovieWithGivenIdAsync(int movieId, UpdateMovieDTO movieDto)
     {
+        if (movieId <= 0) throw new ArgumentException("Movie id can not be equal or smaller than 0.");
+
         if (movieDto == null)
             throw new ArgumentNullException(nameof(movieDto));
         if (movieDto.MediaContent == null)
             throw new ArgumentException("MediaContent inside of input can not be null..", nameof(movieDto));
-        
+
         /* Movie Title must be unique but if the movie trying to update itself, no error is thrown. */
         if (await _context.MediaContents.AnyAsync(m => m.Title == movieDto.MediaContent.Title && m.Id != movieId))
             throw new MediaContentTitleMustBeUniqueException(movieDto.MediaContent.Title);
-
+        /* Next step is making sure if there is at least one option is existing since it is a composition-overlapping */
+            ValidateOptions(movieDto.MediaContent.AudioOption, movieDto.MediaContent.SubtitleOption);
 
         var movie = await _mediaContentRepository.GetMovieWithGivenIdAsync(movieId);
         if (movie == null) throw new MediaContentDoesNotExistsException(movieId);
@@ -176,8 +178,8 @@ public class MediaContentService
             country: movieDto.MediaContent.Country,
             duration: movieDto.MediaContent.Duration,
             releaseDate: movieDto.MediaContent.ReleaseDate,
-            audioLanguages: movieDto.MediaContent.AudioOption.Languages,
-            subtitleLanguages: movieDto.MediaContent.SubtitleOption.Languages
+            audioLanguages: movieDto.MediaContent.AudioOption?.Languages,
+            subtitleLanguages: movieDto.MediaContent.SubtitleOption?.Languages
         );
 
 
@@ -202,8 +204,12 @@ public class MediaContentService
             {
                 movie.AudioOption = new AudioOption()
                 {
+                    MediaContent = movie,
                     Languages = movieDto.MediaContent.AudioOption.Languages
                 };
+            } else if (movie.AudioOption != null && movieDto.MediaContent.AudioOption == null)
+            {
+                movie.AudioOption = null;
             }
 
             if (movie.SubtitleOption != null && movieDto.MediaContent.SubtitleOption != null)
@@ -214,8 +220,12 @@ public class MediaContentService
             {
                 movie.SubtitleOption = new SubtitleOption()
                 {
+                    MediaContent = movie,
                     Languages = movieDto.MediaContent.SubtitleOption.Languages
                 };
+            }else if (movie.SubtitleOption != null && movieDto.MediaContent.SubtitleOption == null)
+            {
+                movie.SubtitleOption = null;
             }
 
             var existingIds = movie.StreamingServices
@@ -260,21 +270,20 @@ public class MediaContentService
             await _context.SaveChangesAsync();
             await transaction.CommitAsync();
         }
-        catch 
+        catch
         {
             await transaction.RollbackAsync();
             throw;
         }
     }
-    
+
 
     /* Returns all the movies with their reviews and streaming services. */
     public async Task<List<MovieResponseFrontendDTO>> GetAllMoviesFrontEndAsync()
     {
-        var movies = await _mediaContentRepository.GetAllMoviesFrontEndAsync();
+        var movies = await _mediaContentRepository.GetAllMoviesAsync();
         return movies.Select(m => new MovieResponseFrontendDTO
         {
-            Genres = m.Genres.Select(g => g.ToString()).ToList(),
             MediaContent = new MediaContentFrontendResponseDTO()
             {
                 Id = m.Id,
@@ -295,7 +304,8 @@ public class MediaContentService
                     Comment = r.Comment,
                     Nickname = r.User.Nickname,
                 }).ToList()
-            }
+            },
+            Genres = m.Genres.Select(g => g.ToString()).ToList()
         }).ToList();
     }
 
@@ -303,11 +313,10 @@ public class MediaContentService
     /* Main difference than the GetAllMoviesFrontEndAsync is returning all details like Duration, Ids etc. */
     public async Task<List<MovieResponseDTO>> GetAllMoviesDetailedAsync()
     {
-        var movies = await _mediaContentRepository.GetAllMoviesFrontEndAsync();
+        var movies = await _mediaContentRepository.GetAllMoviesAsync();
 
         return movies.Select(m => new MovieResponseDTO
         {
-            Genres = m.Genres.Select(g => g.ToString()).ToList(),
             MediaContentDetailedResponse = new MediaContentDetailedResponseDTO()
             {
                 Id = m.Id,
@@ -337,12 +346,21 @@ public class MediaContentService
                     WatchedOn = r.WatchHistory.WatchDate,
                     Comment = r.Comment,
                     Nickname = r.User.Nickname,
-                }).ToList()
-            }
+                }).ToList(),
+                AudioOption = new OptionDTO()
+                {
+                    Languages = m.AudioOption?.Languages
+                },
+                SubtitleOption = new OptionDTO()
+                {
+                    Languages = m.SubtitleOption?.Languages
+                }
+            },
+            Genres = m.Genres.Select(g => g.ToString()).ToList()
         }).ToList();
     }
 
-    /* Get one media content including all details, with given id */
+    /* Get one media content by id including all details, with given id */
     public async Task<MediaContentDetailedResponseDTO> GetMediaContentWithGivenIdAsync(int mediaId)
     {
         if (mediaId <= 0) throw new ArgumentException("Media id can not be equal or smaller than 0.");
@@ -378,12 +396,71 @@ public class MediaContentService
                 WatchedOn = r.WatchHistory.WatchDate,
                 Comment = r.Comment,
                 Nickname = r.User.Nickname,
-            }).ToList()
+            }).ToList(),
+            AudioOption = new OptionDTO()
+            {
+                Languages = mediaContent.AudioOption?.Languages
+            },
+            SubtitleOption = new OptionDTO()
+            {
+                Languages = mediaContent.SubtitleOption?.Languages
+            }
         };
     }
 
+    /* Get one movie by id including all details, with given id */
+    public async Task<MovieResponseDTO> GetMovieWithGivenIdAsync(int movieId)
+    {
+        if (movieId <= 0) throw new ArgumentException("Movie id can not be equal or smaller than 0.");
 
-  
+        var movie = await _mediaContentRepository.GetMovieWithGivenIdAsync(movieId);
+        if (movie == null) throw new MovieNotFoundException(movieId);
+
+        return new MovieResponseDTO
+        {
+            MediaContentDetailedResponse = new MediaContentDetailedResponseDTO()
+            {
+                Id = movie.Id,
+                Title = movie.Title,
+                Description = movie.Description,
+                YoutubeTrailerURL = movie.YoutubeTrailerURL,
+                PosterImageName = movie.PosterImageName,
+                Country = movie.Country,
+                Duration = movie.Duration,
+                OriginalLanguage = movie.OriginalLanguage,
+                ReleaseDate = movie.ReleaseDate,
+                StreamingServices = movie.StreamingServices
+                    .Select(ss => new StreamingServiceResponseDTO
+                    {
+                        Id = ss.Id,
+                        Country = ss.Country,
+                        DefaultPrice = ss.DefaultPrice,
+                        Description = ss.Description,
+                        Name = ss.Name,
+                        LogoImage = ss.LogoImage,
+                        WebsiteLink = ss.WebsiteLink
+                    }).ToList(),
+                Reviews = movie.Reviews.Select(r => new ReviewResponseDTO()
+                {
+                    Id = r.Id,
+                    MediaTitle = r.MediaContent.Title,
+                    WatchedOn = r.WatchHistory.WatchDate,
+                    Comment = r.Comment,
+                    Nickname = r.User.Nickname,
+                }).ToList(),
+                AudioOption = new OptionDTO()
+                {
+                    Languages = movie.AudioOption?.Languages
+                },
+                SubtitleOption = new OptionDTO()
+                {
+                    Languages = movie.SubtitleOption?.Languages
+                }
+            },
+            Genres = movie.Genres.Select(g => g.ToString()).ToList()
+        };
+    }
+
 
     private void ValidateGenres(List<string> genres)
     {
