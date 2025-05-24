@@ -59,9 +59,17 @@ public class UserController : ControllerBase
             await _userService.RemoveUserWithGivenIdAsync(userId);
             return Ok($"User {userId} deleted successfully.");
         }
-        catch (RemoveDataFailedException ex)
+        catch (ArgumentException ex)
         {
-            return StatusCode(500, $"Failed to remove user {userId}. Please try again. {ex.Message}");
+            return BadRequest(ex.Message);
+        }
+        catch (UserNotFoundException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"Unexpected error: {ex.Message}");
         }
     }
 

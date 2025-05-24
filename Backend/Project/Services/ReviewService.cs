@@ -1,7 +1,6 @@
 ﻿using Project.Context;
 using Project.DTOs.ReviewDTOs;
 using Project.Exceptions;
-using Project.Models;
 using Project.Repositories;
 
 namespace Project.Services;
@@ -35,5 +34,101 @@ public class ReviewService
         _subscriptionRepository = subscriptionRepository;
         _streamingServiceRepository = streamingServiceRepository;
         _subscriptionConfirmationRepository = subscriptionConfirmationRepository;
+    }
+
+    /* Remove review with given id */
+    public async Task RemoveReviewWithGivenIdAsync(int reviewId)
+    {
+        if (reviewId <= 0) throw new ArgumentException("Review id can not be equal or smaller than 0.");
+        await using var transaction = await _context.Database.BeginTransactionAsync();
+
+        try
+        {
+            await _reviewRepository.RemoveAsync(reviewId);
+
+            await _context.SaveChangesAsync();
+            await transaction.CommitAsync();
+        }
+        catch
+        {
+            await transaction.RollbackAsync();
+            throw;
+        }
+    }
+
+    /* Returns all the reviews with their media titles. */
+    public async Task<List<ReviewResponseDTO>> GetAllReviewsWithMediaTitlesAsync()
+    {
+        var reviews = await _reviewRepository.GetAllReviewsWithMediaTitlesAsync();
+        return reviews.Select(r => new ReviewResponseDTO()
+        {
+            Id = r.Id,
+            MediaTitle = r.MediaContent.Title,
+            Comment = r.Comment,
+            Nickname = r.User.Nickname,
+            WatchedOn = r.WatchHistory.WatchDate,
+        }).ToList();
+    }
+
+    /* Return review by id */
+    public async Task<ReviewResponseDTO> GetReviewByIdAsync(int reviewId)
+    {
+        var review = await _reviewRepository.GetReviewByIdAsync(reviewId);
+        if (review == null) throw new ReviewNotFoundException(reviewId);
+        return new ReviewResponseDTO()
+        {
+            Id = review.Id,
+            Comment = review.Comment,
+            MediaTitle = review.MediaContent.Title,
+            Nickname = review.User.Nickname,
+            WatchedOn = review.WatchHistory.WatchDate
+        };
+    }
+
+    /* Update review */
+    public async Task UpdateReviewAsync(UpdateReviewDTO reviewDto)
+    {
+        await using var transaction = await _context.Database.BeginTransactionAsync();
+
+        try
+        {
+            if (reviewDto.Id <= 0) throw new ArgumentException("Review id can not be equal or smaller than 0.");
+
+            if (reviewDto == null)
+                throw new ArgumentNullException(nameof(reviewDto));
+
+            var review = await _reviewRepository.GetReviewByIdAsync(reviewDto.Id) ??
+                         throw new ReviewNotFoundException(reviewDto.Id);
+
+            ValidateReview(comment: reviewDto.Comment);
+
+            review.Comment = reviewDto.Comment;
+           
+            await _context.SaveChangesAsync();
+            await transaction.CommitAsync();
+        }
+        catch
+        {
+            await transaction.RollbackAsync();
+            throw;
+        }
+    }
+
+    private void ValidateReview(string comment)
+    {
+        if (string.IsNullOrWhiteSpace(comment) || comment.Length < 2 || comment.Length > 100)
+            throw new ArgumentException("Comment must be between 2 and 100 characters.", nameof(comment));
+
+
+        if (comment.IndexOf("http://", StringComparison.OrdinalIgnoreCase) >= 0 ||
+            comment.IndexOf("https://", StringComparison.OrdinalIgnoreCase) >= 0)
+            throw new ArgumentException("Do not include links in your review.", nameof(comment));
+
+        if (!comment.Any(char.IsLetter))
+            throw new ArgumentException("Comment must include at least one letter.", nameof(comment));
+
+        if (comment.Length > 5 && comment == comment.ToUpperInvariant())
+            throw new ArgumentException("Please avoid writing the entire comment in uppercase.", nameof(comment));
+
     }
 }

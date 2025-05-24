@@ -36,20 +36,14 @@ public class ReviewRepository
     {
         await _context.Reviews.AddAsync(review);
     }
-    public async Task UpdateReviewAsync(Review updatedReview)
-    {
-        var existingReview = await _context.Reviews.FindAsync(updatedReview.Id);
-        if (existingReview == null) throw new ReviewNotFoundException(updatedReview.Id);
-
-        existingReview.Comment = updatedReview.Comment;
-    }
-    public async Task DeleteReviewAsync(int reviewId)
+    public async Task RemoveAsync(int reviewId)
     {
         var review = await _context.Reviews.FindAsync(reviewId);
         if (review == null) throw new ReviewNotFoundException(reviewId);
 
         _context.Reviews.Remove(review);
     }
+    
     public async Task<Review?> GetReviewByIdAsync(int reviewId)
     {
         return await _context.Reviews
@@ -58,12 +52,14 @@ public class ReviewRepository
             .Include(r => r.WatchHistory)
             .FirstOrDefaultAsync(r => r.Id == reviewId);
     }
-    public async Task<IEnumerable<Review>> GetReviewsForMediaIdAsync(int mediaId)
+   
+
+    public async Task<IEnumerable<Review>> GetAllReviewsWithMediaTitlesAsync()
     {
         return await _context.Reviews
             .Include(r => r.User)
-            .Include(r => r.WatchHistory)
-            .Where(r => r.MediaId == mediaId)
+            .Include(r => r.MediaContent)
+            .ThenInclude(r => r.WatchHistories)
             .ToListAsync();
     }
    

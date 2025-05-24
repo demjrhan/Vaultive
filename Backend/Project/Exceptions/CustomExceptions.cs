@@ -153,10 +153,4 @@
             : base($"User with ID {userId} has not submitted a review for media id '{mediaId}'.") { }
     }
     
-    /* HTTP */
-   
-    public class RemoveDataFailedException : Exception
-    {
-        public RemoveDataFailedException(Exception innerException) : base("Removing data from database is failed.", innerException) { }
-    }
 }
