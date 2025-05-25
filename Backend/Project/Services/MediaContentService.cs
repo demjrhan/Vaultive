@@ -93,12 +93,11 @@ public class MediaContentService
                     .Where(ss => requestedIds.Contains(ss.Id))
                     .ToListAsync();
 
-                var foundIds   = streamingServices.Select(ss => ss.Id);
+                var foundIds = streamingServices.Select(ss => ss.Id);
                 var missingIds = requestedIds.Except(foundIds).ToList();
 
                 if (missingIds.Any())
                     throw new StreamingServiceDoesNotExistsException(missingIds);
-
             }
 
             AudioOption? audioOption = null;
@@ -177,16 +176,16 @@ public class MediaContentService
             throw new ArgumentException("MediaContent inside of input can not be null..", nameof(movieDto));
 
         var movie = await _mediaContentRepository.GetMovieWithGivenIdAsync(movieId);
-        if (movie == null) throw new MediaContentDoesNotExistsException(new [] {movieId});
+        if (movie == null) throw new MediaContentDoesNotExistsException(new[] { movieId });
 
         ValidateChanges(movieDto, movie);
-        
+
         /* Movie Title must be unique but if the movie trying to update itself, no error is thrown. */
         if (await _context.MediaContents.AnyAsync(m => m.Title == movieDto.MediaContent.Title && m.Id != movieId))
             throw new MediaContentTitleMustBeUniqueException(movieDto.MediaContent.Title);
         /* Next step is making sure if there is at least one option is existing since it is a composition-overlapping */
-            ValidateOptions(movieDto.MediaContent.AudioOption, movieDto.MediaContent.SubtitleOption);
-            
+        ValidateOptions(movieDto.MediaContent.AudioOption, movieDto.MediaContent.SubtitleOption);
+
 
         ValidateMediaContent(
             title: movieDto.MediaContent.Title,
@@ -224,7 +223,8 @@ public class MediaContentService
                     MediaContent = movie,
                     Languages = movieDto.MediaContent.AudioOption.Languages
                 };
-            } else if (movie.AudioOption != null && movieDto.MediaContent.AudioOption == null)
+            }
+            else if (movie.AudioOption != null && movieDto.MediaContent.AudioOption == null)
             {
                 movie.AudioOption = null;
             }
@@ -240,7 +240,8 @@ public class MediaContentService
                     MediaContent = movie,
                     Languages = movieDto.MediaContent.SubtitleOption.Languages
                 };
-            }else if (movie.SubtitleOption != null && movieDto.MediaContent.SubtitleOption == null)
+            }
+            else if (movie.SubtitleOption != null && movieDto.MediaContent.SubtitleOption == null)
             {
                 movie.SubtitleOption = null;
             }
@@ -268,7 +269,7 @@ public class MediaContentService
 
                 if (missingIds.Any())
                     throw new StreamingServiceDoesNotExistsException(missingIds);
-                
+
                 foreach (var svc in toAddStreamingServices)
                     movie.StreamingServices.Add(svc);
             }
@@ -389,7 +390,7 @@ public class MediaContentService
         if (mediaId <= 0) throw new ArgumentException("Media id can not be equal or smaller than 0.");
 
         var mediaContent = await _mediaContentRepository.GetMediaContentWithGivenIdAsync(mediaId);
-        if (mediaContent == null) throw new MediaContentDoesNotExistsException(new [] {mediaId});
+        if (mediaContent == null) throw new MediaContentDoesNotExistsException(new[] { mediaId });
 
         return new MediaContentDetailedDTO
         {
@@ -542,61 +543,61 @@ public class MediaContentService
         if (subtitleLanguages != null && !subtitleLanguages.Any())
             throw new ArgumentException("At least one subtitle language is required.", nameof(subtitleLanguages));
     }
-    
-   private void ValidateChanges(UpdateMovieDTO movieDto, Movie movie)
-{
-    var newGenres = ParseGenres(movieDto.Genres);  // assume returns ICollection<Genre>
-    bool genresEqual = new HashSet<Genre>(newGenres)
-        .SetEquals(movie.Genres);
 
-    var mc = movieDto.MediaContent;
-    bool titleEqual         = string.Equals(mc.Title,             movie.Title,             StringComparison.OrdinalIgnoreCase);
-    bool descEqual          = string.Equals(mc.Description,       movie.Description,       StringComparison.OrdinalIgnoreCase);
-    bool releaseDateEqual   = mc.ReleaseDate == movie.ReleaseDate;
-    bool langEqual          = string.Equals(mc.OriginalLanguage, movie.OriginalLanguage, StringComparison.OrdinalIgnoreCase);
-    bool countryEqual       = string.Equals(mc.Country,          movie.Country,          StringComparison.OrdinalIgnoreCase);
-    bool durationEqual      = mc.Duration == movie.Duration;
-
-    bool audioEqual;
-    if (mc.AudioOption?.Languages == null && movie.AudioOption?.Languages == null)
-        audioEqual = true;
-    else if (mc.AudioOption?.Languages == null || movie.AudioOption?.Languages == null)
-        audioEqual = false;
-    else
-        audioEqual = new HashSet<string>(mc.AudioOption.Languages, StringComparer.OrdinalIgnoreCase)
-            .SetEquals(movie.AudioOption.Languages);
-
-    bool subtitleEqual;
-    if (mc.SubtitleOption?.Languages == null && movie.SubtitleOption?.Languages == null)
-        subtitleEqual = true;
-    else if (mc.SubtitleOption?.Languages == null || movie.SubtitleOption?.Languages == null)
-        subtitleEqual = false;
-    else
-        subtitleEqual = new HashSet<string>(mc.SubtitleOption.Languages, StringComparer.OrdinalIgnoreCase)
-            .SetEquals(movie.SubtitleOption.Languages);
-
-    var currentIds = new HashSet<int>(movie.StreamingServices.Select(s => s.Id));
-    var newIds     = new HashSet<int>(mc.StreamingServiceIds);
-    bool servicesEqual = currentIds.SetEquals(newIds);
-
-    bool posterEqual    = string.Equals(mc.PosterImageName, movie.PosterImageName, StringComparison.OrdinalIgnoreCase);
-    bool trailerEqual   = string.Equals(mc.YoutubeTrailerURL, movie.YoutubeTrailerURL, StringComparison.OrdinalIgnoreCase);
-
-    if (genresEqual
-     && titleEqual
-     && descEqual
-     && releaseDateEqual
-     && langEqual
-     && countryEqual
-     && durationEqual
-     && audioEqual
-     && subtitleEqual
-     && servicesEqual
-     && posterEqual
-     && trailerEqual)
+    private void ValidateChanges(UpdateMovieDTO movieDto, Movie movie)
     {
-        throw new NoChangesDetectedException();
-    }
-}
+        var newGenres = ParseGenres(movieDto.Genres); // assume returns ICollection<Genre>
+        bool genresEqual = new HashSet<Genre>(newGenres)
+            .SetEquals(movie.Genres);
 
+        var mc = movieDto.MediaContent;
+        bool titleEqual = string.Equals(mc.Title, movie.Title, StringComparison.OrdinalIgnoreCase);
+        bool descEqual = string.Equals(mc.Description, movie.Description, StringComparison.OrdinalIgnoreCase);
+        bool releaseDateEqual = mc.ReleaseDate == movie.ReleaseDate;
+        bool langEqual = string.Equals(mc.OriginalLanguage, movie.OriginalLanguage, StringComparison.OrdinalIgnoreCase);
+        bool countryEqual = string.Equals(mc.Country, movie.Country, StringComparison.OrdinalIgnoreCase);
+        bool durationEqual = mc.Duration == movie.Duration;
+
+        bool audioEqual;
+        if (mc.AudioOption?.Languages == null && movie.AudioOption?.Languages == null)
+            audioEqual = true;
+        else if (mc.AudioOption?.Languages == null || movie.AudioOption?.Languages == null)
+            audioEqual = false;
+        else
+            audioEqual = new HashSet<string>(mc.AudioOption.Languages, StringComparer.OrdinalIgnoreCase)
+                .SetEquals(movie.AudioOption.Languages);
+
+        bool subtitleEqual;
+        if (mc.SubtitleOption?.Languages == null && movie.SubtitleOption?.Languages == null)
+            subtitleEqual = true;
+        else if (mc.SubtitleOption?.Languages == null || movie.SubtitleOption?.Languages == null)
+            subtitleEqual = false;
+        else
+            subtitleEqual = new HashSet<string>(mc.SubtitleOption.Languages, StringComparer.OrdinalIgnoreCase)
+                .SetEquals(movie.SubtitleOption.Languages);
+
+        var currentIds = new HashSet<int>(movie.StreamingServices.Select(s => s.Id));
+        var newIds = new HashSet<int>(mc.StreamingServiceIds);
+        bool servicesEqual = currentIds.SetEquals(newIds);
+
+        bool posterEqual = string.Equals(mc.PosterImageName, movie.PosterImageName, StringComparison.OrdinalIgnoreCase);
+        bool trailerEqual = string.Equals(mc.YoutubeTrailerURL, movie.YoutubeTrailerURL,
+            StringComparison.OrdinalIgnoreCase);
+
+        if (genresEqual
+            && titleEqual
+            && descEqual
+            && releaseDateEqual
+            && langEqual
+            && countryEqual
+            && durationEqual
+            && audioEqual
+            && subtitleEqual
+            && servicesEqual
+            && posterEqual
+            && trailerEqual)
+        {
+            throw new NoChangesDetectedException();
+        }
+    }
 }

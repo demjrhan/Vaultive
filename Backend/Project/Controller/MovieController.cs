@@ -1,11 +1,9 @@
 ﻿namespace Project.Controller;
 
-
 using Microsoft.AspNetCore.Mvc;
 using DTOs.MediaContentDTOs;
 using Exceptions;
 using Services;
-
 
 [Route("api/[controller]")]
 [ApiController]
@@ -45,6 +43,7 @@ public class MovieController : ControllerBase
             return BadRequest(ex.Message);
         }
     }
+
     [HttpGet("Get/{movieId:int}")]
     public async Task<IActionResult> GetMovieWithGivenIdAsync(int movieId)
     {
@@ -52,6 +51,10 @@ public class MovieController : ControllerBase
         {
             var result = await _mediaContentService.GetMovieWithGivenIdAsync(movieId);
             return Ok(result);
+        }
+        catch (ArgumentException ex)
+        {
+            return BadRequest(ex.Message);
         }
         catch (MovieDoesNotExistsException ex)
         {
@@ -125,6 +128,10 @@ public class MovieController : ControllerBase
         {
             return BadRequest(ex.Message);
         }
+        catch (MediaContentTitleMustBeUniqueException ex)
+        {
+            return BadRequest(ex.Message);
+        }
         catch (InvalidGenreException ex)
         {
             return BadRequest(ex.Message);
@@ -134,5 +141,4 @@ public class MovieController : ControllerBase
             return StatusCode(500, $"Unexpected error: {ex.Message}");
         }
     }
-
 }

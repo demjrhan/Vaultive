@@ -90,5 +90,55 @@ public class StreamingServiceController : ControllerBase
         }
     }
     
-   
+    [HttpGet("Get/{streamingServiceId:int}")]
+    public async Task<IActionResult> GetStreamingServiceWithGivenIdAsync(int streamingServiceId)
+    {
+        try
+        {
+            var result = await _streamingServiceService.GetAllStreamingServicesWithGivenIdAsync(streamingServiceId);
+            return Ok(result);
+        }
+        catch (ArgumentException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+        catch (StreamingServiceDoesNotExistsException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"Unexpected error: {ex.Message}");
+        }
+    }
+    
+    [HttpPut("Update")]
+    public async Task<IActionResult> UpdateStreamingServicesAsync(int streamingServiceId, [FromBody] UpdateStreamingServiceDTO streamingServiceDto)
+    {
+        try
+        {
+            await _streamingServiceService.UpdateStreamingServiceWithGivenIdAsync(streamingServiceId, streamingServiceDto);
+            return Ok("Streaming Service update was successful.");
+        }
+        catch (ArgumentNullException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+        catch (ArgumentException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+        catch (StreamingServiceDoesNotExistsException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+        catch (StreamingServiceNameMustBeUniqueException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"Unexpected error: {ex.Message}");
+        }
+    }
 }
