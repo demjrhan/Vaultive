@@ -26,7 +26,7 @@ public class SubscriptionController : ControllerBase
         {
             return BadRequest(ex.Message);
         }
-        catch (UserNotFoundException ex)
+        catch (UserDoesNotExistsException ex)
         {
             return BadRequest(ex.Message);
         }
@@ -62,7 +62,7 @@ public class SubscriptionController : ControllerBase
         {
             return BadRequest(ex.Message);
         }
-        catch (SubscriptionsNotFoundException ex)
+        catch (SubscriptionsDoesNotExistsException ex)
         {
             return BadRequest(ex.Message);
         }

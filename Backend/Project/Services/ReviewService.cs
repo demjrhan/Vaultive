@@ -74,7 +74,7 @@ public class ReviewService
     public async Task<ReviewDTO> GetReviewByIdAsync(int reviewId)
     {
         var review = await _reviewRepository.GetReviewByIdAsync(reviewId);
-        if (review == null) throw new ReviewNotFoundException(reviewId);
+        if (review == null) throw new ReviewDoesNotExistsException(reviewId);
         return new ReviewDTO()
         {
             Id = review.Id,
@@ -98,7 +98,7 @@ public class ReviewService
                 throw new ArgumentNullException(nameof(reviewDto));
 
             var review = await _reviewRepository.GetReviewByIdAsync(reviewDto.Id) ??
-                         throw new ReviewNotFoundException(reviewDto.Id);
+                         throw new ReviewDoesNotExistsException(reviewDto.Id);
 
             ValidateReview(comment: reviewDto.Comment);
 

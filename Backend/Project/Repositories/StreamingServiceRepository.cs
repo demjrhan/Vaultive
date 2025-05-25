@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Project.Context;
+using Project.Exceptions;
 using Project.Models;
 
 namespace Project.Repositories;
@@ -29,5 +30,11 @@ public class StreamingServiceRepository
             .ThenInclude(s => s.Confirmations)
             .ToListAsync();
 
+    }
+    public async Task RemoveAsync(int streamingServiceId)
+    {
+        var streamingService = await GetStreamingServiceByIdAsync(streamingServiceId);
+        if (streamingService == null) throw new StreamingServiceDoesNotExistsException(new [] {streamingServiceId});
+        _context.StreamingServices.Remove(streamingService);
     }
 }

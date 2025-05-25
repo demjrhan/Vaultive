@@ -85,7 +85,7 @@ public class MediaContentService
                 .ToListAsync();
 
             if (!streamingServices.Any())
-                throw new StreamingServiceNotFoundException(movieDto.MediaContent.StreamingServiceIds);
+                throw new StreamingServiceDoesNotExistsException(movieDto.MediaContent.StreamingServiceIds);
 
             AudioOption? audioOption = null;
             if (movieDto.MediaContent.AudioOption != null)
@@ -414,7 +414,7 @@ public class MediaContentService
         if (movieId <= 0) throw new ArgumentException("Movie id can not be equal or smaller than 0.");
 
         var movie = await _mediaContentRepository.GetMovieWithGivenIdAsync(movieId);
-        if (movie == null) throw new MovieNotFoundException(movieId);
+        if (movie == null) throw new MovieDoesNotExistsException(movieId);
 
         return new MovieDTO
         {

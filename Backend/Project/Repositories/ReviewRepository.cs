@@ -39,7 +39,7 @@ public class ReviewRepository
     public async Task RemoveAsync(int reviewId)
     {
         var review = await _context.Reviews.FindAsync(reviewId);
-        if (review == null) throw new ReviewNotFoundException(reviewId);
+        if (review == null) throw new ReviewDoesNotExistsException(reviewId);
 
         _context.Reviews.Remove(review);
     }

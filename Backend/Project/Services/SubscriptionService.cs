@@ -47,7 +47,7 @@ public class SubscriptionService
         {
             var existing = await _subscriptionRepository.GetSubscriptionWithGivenIdAsync(subscriptionId);
             if (existing == null)
-                throw new SubscriptionsNotFoundException(subscriptionId);
+                throw new SubscriptionsDoesNotExistsException(subscriptionId);
 
 
             await _subscriptionRepository.RemoveAsync(subscriptionId);
@@ -95,7 +95,7 @@ public class SubscriptionService
         if (userId <= 0) throw new ArgumentException("User id can not be equal or smaller than 0.");
 
         if (await _userRepository.GetUserWithGivenId(userId) == null)
-            throw new UserNotFoundException(userId);
+            throw new UserDoesNotExistsException(userId);
 
         var confirmations = await _subscriptionRepository.GetUserSubscriptionConfirmationsAsync(userId);
         var today = DateOnly.FromDateTime(DateTime.Now);

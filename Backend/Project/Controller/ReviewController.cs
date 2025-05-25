@@ -38,7 +38,7 @@ namespace Project.Controller;
                 var reviews = await _reviewService.GetReviewByIdAsync(reviewId);
                 return Ok(reviews);
             }
-            catch (ReviewNotFoundException ex)
+            catch (ReviewDoesNotExistsException ex)
             {
                 return BadRequest(ex.Message);
             }
@@ -56,7 +56,7 @@ namespace Project.Controller;
                 await _reviewService.UpdateReviewAsync(dto);
                 return Ok(new { message = "Review updated successfully" });
             }
-            catch (ReviewNotFoundException ex)
+            catch (ReviewDoesNotExistsException ex)
             {
                 return BadRequest(ex.Message);
             }
@@ -86,7 +86,7 @@ namespace Project.Controller;
             {
                 return BadRequest(ex.Message);
             }
-            catch (ReviewNotFoundException ex)
+            catch (ReviewDoesNotExistsException ex)
             {
                 return BadRequest(ex.Message);
             }

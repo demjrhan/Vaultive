@@ -42,9 +42,9 @@
         }
     }
 
-    public class UserNotFoundException : Exception
+    public class UserDoesNotExistsException : Exception
     {
-        public UserNotFoundException(int userId)
+        public UserDoesNotExistsException(int userId)
             : base($"User with id {userId} does not exists.")
         {
         }
@@ -76,17 +76,17 @@
     }
 
     /* subscription */
-    public class SubscriptionConfirmationNotFoundException : Exception
+    public class SubscriptionConfirmationDoesNotExistException : Exception
     {
-        public SubscriptionConfirmationNotFoundException(int subscriptionId)
+        public SubscriptionConfirmationDoesNotExistException(int subscriptionId)
             : base($"Subscription confirmation not found with given subscribe id {subscriptionId}.")
         {
         }
     }
 
-    public class SubscriptionsNotFoundException : Exception
+    public class SubscriptionsDoesNotExistsException : Exception
     {
-        public SubscriptionsNotFoundException(int subscriptionId)
+        public SubscriptionsDoesNotExistsException(int subscriptionId)
             : base($"Subscription not found with given Id {subscriptionId}.")
         {
         }
@@ -118,9 +118,9 @@
 
 
     /* watch history */
-    public class WatchHistoryNotFoundException : Exception
+    public class WatchHistoryDoesNotExistsException : Exception
     {
-        public WatchHistoryNotFoundException(int userId)
+        public WatchHistoryDoesNotExistsException(int userId)
             : base($"Watch history not found with given userId {userId}.")
         {
         }
@@ -134,9 +134,9 @@
         }
     }
 
-    public class MovieNotFoundException : Exception
+    public class MovieDoesNotExistsException : Exception
     {
-        public MovieNotFoundException(int movieId)
+        public MovieDoesNotExistsException(int movieId)
             : base($"Movie with id '{movieId}' does not exist.")
         {
         }
@@ -158,9 +158,9 @@
         }
     }
 
-    public class StreamingServiceNotFoundException : Exception
+    public class StreamingServiceDoesNotExistsException : Exception
     {
-        public StreamingServiceNotFoundException(IEnumerable<int> serviceIds)
+        public StreamingServiceDoesNotExistsException(IEnumerable<int> serviceIds)
             : base(GenerateMessage(serviceIds))
         {
         }
@@ -176,17 +176,17 @@
 
 
     /* Option */
-    public class SubtitleOptionNotFoundException : Exception
+    public class SubtitleOptionDoesNotExistsException : Exception
     {
-        public SubtitleOptionNotFoundException(string mediaTitle)
+        public SubtitleOptionDoesNotExistsException(string mediaTitle)
             : base($"Subtitle option not found for media '{mediaTitle}'.")
         {
         }
     }
 
-    public class AudioOptionNotFoundException : Exception
+    public class AudioOptionDoesNotExistsException : Exception
     {
-        public AudioOptionNotFoundException(string mediaTitle)
+        public AudioOptionDoesNotExistsException(string mediaTitle)
             : base($"Audio option not found for media '{mediaTitle}'.")
         {
         }
@@ -202,9 +202,9 @@
 
 
     /* review */
-    public class ReviewNotFoundException : Exception
+    public class ReviewDoesNotExistsException : Exception
     {
-        public ReviewNotFoundException(int reviewId)
+        public ReviewDoesNotExistsException(int reviewId)
             : base($"Review with ID {reviewId} was not found.")
         {
         }
@@ -218,9 +218,9 @@
         }
     }
 
-    public class UserReviewNotFoundToMediaContentException : Exception
+    public class UserReviewDoesNotExistsToMediaContentException : Exception
     {
-        public UserReviewNotFoundToMediaContentException(int userId, int mediaId)
+        public UserReviewDoesNotExistsToMediaContentException(int userId, int mediaId)
             : base($"User with ID {userId} has not submitted a review for media id '{mediaId}'.")
         {
         }

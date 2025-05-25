@@ -46,7 +46,7 @@ public class SubscriptionRepository
     public async Task RemoveAsync(int subscriptionId)
     {
         var subscription = await _context.Subscriptions.FindAsync(subscriptionId);
-        if (subscription == null) throw new SubscriptionsNotFoundException(subscriptionId);
+        if (subscription == null) throw new SubscriptionsDoesNotExistsException(subscriptionId);
         _context.Subscriptions.Remove(subscription);
     }
 

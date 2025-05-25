@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Project.Exceptions;
 using Project.Services;
 
 namespace Project.Controller;
@@ -16,7 +17,7 @@ public class StreamingServiceController : ControllerBase
         _streamingServiceService = streamingServiceService;
     }
     [HttpGet("AllDetailed")]
-    public async Task<IActionResult> GetAllStreamingServicesAsync()
+    public async Task<IActionResult> GetAllStreamingServicesDetailedAsync()
     {
         try
         {
@@ -26,6 +27,41 @@ public class StreamingServiceController : ControllerBase
         catch (Exception ex)
         {
             return BadRequest(ex.Message);
+        }
+    }
+    [HttpGet("All")]
+    public async Task<IActionResult> GetAllStreamingServicesAsync()
+    {
+        try
+        {
+            var result = await _streamingServiceService.GetAllStreamingServicesAsync();
+            return Ok(result);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+    
+    [HttpDelete("Remove/{streamingServiceId:int}")]
+    public async Task<IActionResult> RemoveStreamingServiceAsync(int streamingServiceId)
+    {
+        try
+        {
+            await _streamingServiceService.RemoveStreamingServiceWithGivenIdAsync(streamingServiceId);
+            return Ok("Streaming service deleted successfully.");
+        }
+        catch (StreamingServiceDoesNotExistsException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+        catch (ArgumentException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"Unexpected error: {ex.Message}");
         }
     }
 }

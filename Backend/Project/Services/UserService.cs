@@ -134,7 +134,7 @@ public class UserService
 
 
             var user = await _userRepository.GetUserWithGivenId(userDto.Id) ??
-                       throw new UserNotFoundException(userDto.Id);
+                       throw new UserDoesNotExistsException(userDto.Id);
 
             ValidateUser(
                 firstname: userDto.Firstname,
@@ -209,7 +209,7 @@ public class UserService
     {
         if (userId <= 0) throw new ArgumentException("User id can not be equal or smaller than 0.");
         var user = await _userRepository.GetUserWithGivenId(userId) ??
-                   throw new UserNotFoundException(userId);
+                   throw new UserDoesNotExistsException(userId);
 
         return new UserDetailedDTO()
         {
@@ -251,7 +251,7 @@ public class UserService
             var mediaContent = await _mediaContentRepository.GetMediaContentWithGivenIdAsync(mediaId) ??
                                throw new MediaContentDoesNotExistsException(mediaId);
 
-            var user = await _userRepository.GetUserWithGivenId(userId) ?? throw new UserNotFoundException(userId);
+            var user = await _userRepository.GetUserWithGivenId(userId) ?? throw new UserDoesNotExistsException(userId);
 
 
             if (user.WatchHistories.Any(wh => wh.MediaId == mediaId && wh.TimeLeftOf == 0))
@@ -311,12 +311,12 @@ public class UserService
                                throw new MediaContentDoesNotExistsException(addReviewDto.MediaId);
 
             var user = await _userRepository.GetUserWithGivenId(addReviewDto.UserId) ??
-                       throw new UserNotFoundException(addReviewDto.UserId);
+                       throw new UserDoesNotExistsException(addReviewDto.UserId);
 
 
             var watchHistory =
                 await _watchHistoryRepository.GetWatchHistoryOfUserToGivenMediaIdAsync(user.Id, mediaContent.Id) ??
-                throw new WatchHistoryNotFoundException(user.Id);
+                throw new WatchHistoryDoesNotExistsException(user.Id);
 
             var existingReview =
                 await _reviewRepository.GetReviewOfUserToMediaContentAsync(user.Id, mediaContent.Id);
@@ -353,11 +353,11 @@ public class UserService
         {
             var streamingService = await _streamingServiceRepository.GetStreamingServiceByIdAsync(dto.StreamingServiceId);
             if (streamingService == null)
-                throw new StreamingServiceNotFoundException(new[] { dto.StreamingServiceId });
+                throw new StreamingServiceDoesNotExistsException(new[] { dto.StreamingServiceId });
 
             var user = await _userRepository.GetUserWithGivenId(dto.UserId);
             if (user == null)
-                throw new UserNotFoundException(dto.UserId);
+                throw new UserDoesNotExistsException(dto.UserId);
 
             var activeSubscriptions = await _subscriptionService.GetActiveSubscriptionsOfUserIdAsync(user.Id);
             if (activeSubscriptions.Any(ss => ss.StreamingServiceName == streamingService.Name))

@@ -82,7 +82,7 @@ public class UserController : ControllerBase
         {
             return BadRequest(ex.Message);
         }
-        catch (UserNotFoundException ex)
+        catch (UserDoesNotExistsException ex)
         {
             return BadRequest(ex.Message);
         }
@@ -122,7 +122,7 @@ public class UserController : ControllerBase
         {
             return BadRequest(ex.Message);
         }
-        catch (UserNotFoundException ex)
+        catch (UserDoesNotExistsException ex)
         {
             return BadRequest(ex.Message);
         }
@@ -187,7 +187,7 @@ public class UserController : ControllerBase
         {
             return BadRequest(ex.Message);
         }
-        catch (WatchHistoryNotFoundException ex)
+        catch (WatchHistoryDoesNotExistsException ex)
         {
             return BadRequest(ex.Message);
         }
@@ -195,7 +195,7 @@ public class UserController : ControllerBase
         {
             return BadRequest(ex.Message);
         }
-        catch (UserNotFoundException ex)
+        catch (UserDoesNotExistsException ex)
         {
             return BadRequest(ex.Message);
         }
@@ -222,11 +222,11 @@ public class UserController : ControllerBase
             return Ok($"User with id {addSubscriptionDto.UserId} subscribed to streaming service with id {addSubscriptionDto.StreamingServiceId} successfully.");
         }
 
-        catch (StreamingServiceNotFoundException ex)
+        catch (StreamingServiceDoesNotExistsException ex)
         {
             return BadRequest(ex.Message);
         }
-        catch (UserNotFoundException ex)
+        catch (UserDoesNotExistsException ex)
         {
             return BadRequest(ex.Message);
         }

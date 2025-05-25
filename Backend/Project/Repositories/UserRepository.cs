@@ -22,7 +22,7 @@ public class UserRepository
     public async Task RemoveAsync(int userId)
     {
         var user = await _context.Users.FindAsync(userId);
-        if (user == null) throw new UserNotFoundException(userId);
+        if (user == null) throw new UserDoesNotExistsException(userId);
         _context.Users.Remove(user);
     }
     public async Task<IEnumerable<User>> GetAllUsersAsync()

@@ -53,7 +53,7 @@ public class MovieController : ControllerBase
             var result = await _mediaContentService.GetMovieWithGivenIdAsync(movieId);
             return Ok(result);
         }
-        catch (MovieNotFoundException ex)
+        catch (MovieDoesNotExistsException ex)
         {
             return BadRequest(ex.Message);
         }
@@ -83,7 +83,7 @@ public class MovieController : ControllerBase
         {
             return BadRequest($"Invalid genre: {ex.Message}");
         }
-        catch (StreamingServiceNotFoundException ex)
+        catch (StreamingServiceDoesNotExistsException ex)
         {
             return NotFound(ex.Message);
         }

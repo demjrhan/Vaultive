@@ -75,4 +75,40 @@ public class StreamingServiceService
             
         }).ToList();
     }
+    
+    /* Returns all the streaming services. */
+    public async Task<List<StreamingServiceDTO>> GetAllStreamingServicesAsync()
+    {
+        var streamingServices = await _streamingServiceRepository.GetAllStreamingServicesAsync();
+        return streamingServices.Select(ss => new StreamingServiceDTO()
+        {
+            Id = ss.Id,
+            Name = ss.Name,
+            WebsiteLink = ss.WebsiteLink,
+            LogoImage = ss.LogoImage,
+            Country = ss.Country,
+            DefaultPrice = ss.DefaultPrice,
+            Description = ss.Description
+        }).ToList();
+    }
+    
+    /* Remove the streaming service with the given id */
+    public async Task RemoveStreamingServiceWithGivenIdAsync(int streamingServiceId)
+    {
+        if (streamingServiceId <= 0) throw new ArgumentException("Streaming service id can not be equal or smaller than 0.");
+        await using var transaction = await _context.Database.BeginTransactionAsync();
+
+        try
+        {
+            await _streamingServiceRepository.RemoveAsync(streamingServiceId);
+
+            await _context.SaveChangesAsync();
+            await transaction.CommitAsync();
+        }
+        catch
+        {
+            await transaction.RollbackAsync();
+            throw;
+        }
+    }
 }
