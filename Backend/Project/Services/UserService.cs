@@ -351,7 +351,7 @@ public class UserService
 
         try
         {
-            var streamingService = await _streamingServiceRepository.GetStreamingServiceById(dto.StreamingServiceId);
+            var streamingService = await _streamingServiceRepository.GetStreamingServiceByIdAsync(dto.StreamingServiceId);
             if (streamingService == null)
                 throw new StreamingServiceNotFoundException(new[] { dto.StreamingServiceId });
 
@@ -394,11 +394,9 @@ public class UserService
             throw;
         }
     }
-
-
+    
     /* Validations */
-
-    public async Task<bool> CanUserWatchContent(User user, MediaContent mediaContent)
+    private async Task<bool> CanUserWatchContent(User user, MediaContent mediaContent)
     {
         var activeSubscriptions = await _subscriptionService
             .GetActiveSubscriptionsOfUserIdAsync(user.Id);
@@ -414,8 +412,7 @@ public class UserService
             .Intersect(contentNames)
             .Any();
     }
-
-
+    
     private static Status ParseStatus(string status)
     {
         return Enum.TryParse<Status>(status, true, out var result)

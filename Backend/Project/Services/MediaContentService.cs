@@ -69,8 +69,8 @@ public class MediaContentService
             country: movieDto.MediaContent.Country,
             duration: movieDto.MediaContent.Duration,
             releaseDate: movieDto.MediaContent.ReleaseDate,
-            audioLanguages: movieDto.MediaContent.AudioOption.Languages,
-            subtitleLanguages: movieDto.MediaContent.SubtitleOption.Languages
+            audioLanguages: movieDto.MediaContent.AudioOption?.Languages,
+            subtitleLanguages: movieDto.MediaContent.SubtitleOption?.Languages
         );
 
 

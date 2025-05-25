@@ -3,8 +3,8 @@ using Project.DTOs.ReviewDTOs;
 using Project.Exceptions;
 using Project.Services;
 
-namespace Project.Controller
-{
+namespace Project.Controller;
+
     [ApiController]
     [Route("api/[controller]")]
     public class ReviewController : ControllerBase
@@ -74,7 +74,7 @@ namespace Project.Controller
             }
         }
 
-        [HttpDelete("Delete/{reviewId:int}")]
+        [HttpDelete("Remove/{reviewId:int}")]
         public async Task<IActionResult> RemoveReviewAsync(int reviewId)
         {
             try
@@ -96,4 +96,3 @@ namespace Project.Controller
             }
         }
     }
-}

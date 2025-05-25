@@ -37,6 +37,33 @@ public class SubscriptionService
         _subscriptionConfirmationRepository = subscriptionConfirmationRepository;
     }
 
+
+    public async Task RemoveSubscriptionWithGivenIdAsync(int subscriptionId)
+    {
+        if (subscriptionId <= 0) throw new ArgumentException("Subscription id can not be equal or smaller than 0.");
+
+        await using var transaction = await _context.Database.BeginTransactionAsync();
+        try
+        {
+            var existing = await _subscriptionRepository.GetSubscriptionWithGivenIdAsync(subscriptionId);
+            if (existing == null)
+                throw new SubscriptionsNotFoundException(subscriptionId);
+
+
+            await _subscriptionRepository.RemoveAsync(subscriptionId);
+
+            await _context.SaveChangesAsync();
+            await transaction.CommitAsync();
+
+        }
+        catch
+        {
+            await transaction.RollbackAsync();
+            throw;
+        }
+        
+        
+    }
     public async Task<IEnumerable<SubscriptionWithConfirmationsDTO>> GetAllSubscriptionsWithConfirmations()
     {
         var subscriptions = await _subscriptionRepository.GetAllSubscriptionsAsync();
@@ -47,6 +74,7 @@ public class SubscriptionService
                 Id = s.Id,
                 DaysLeft = s.DurationInDays,
                 StreamingServiceName = s.StreamingService.Name,
+                AmountPaid = s.Confirmations.Sum(sc => sc.Price) // Total amount paid.
             },
             Confirmations = s.Confirmations.Select(c => new SubscriptionConfirmationDTO()
             {
@@ -82,12 +110,13 @@ public class SubscriptionService
             Id = c.Id,
             DaysLeft = c.Subscription.DurationInDays,
             StreamingServiceName = c.Subscription.StreamingService.Name,
+            AmountPaid = c.Price
         });
 
         return result;
     }
 
-    public int CalculateRemainingDaysOfConfirmation(DateOnly endDate)
+    private int CalculateRemainingDaysOfConfirmation(DateOnly endDate)
     {
         var today = DateOnly.FromDateTime(DateTime.UtcNow);
 
@@ -97,4 +126,8 @@ public class SubscriptionService
               - today.DayNumber
               + 1;
     }
+
+  
+    
+    
 }

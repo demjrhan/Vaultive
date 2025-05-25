@@ -1,4 +1,7 @@
 using Project.Context;
+using Project.DTOs.MediaContentDTOs;
+using Project.DTOs.StreamingServiceDTOs;
+using Project.DTOs.SubscriptionDTOs;
 using Project.Repositories;
 
 namespace Project.Services;
@@ -32,5 +35,44 @@ public class StreamingServiceService
         _subscriptionRepository = subscriptionRepository;
         _streamingServiceRepository = streamingServiceRepository;
         _subscriptionConfirmationRepository = subscriptionConfirmationRepository;
+    }
+
+    /* Returns all the streaming services with their supported movies and subscriptions. */
+    public async Task<List<StreamingServiceDetailedDTO>> GetAllStreamingServicesDetailedAsync()
+    {
+        var streamingServices = await _streamingServiceRepository.GetAllStreamingServicesAsync();
+        return streamingServices.Select(ss => new StreamingServiceDetailedDTO()
+        {
+            Service = new StreamingServiceDTO()
+            {
+                Id = ss.Id,
+                Name = ss.Name,
+                WebsiteLink = ss.WebsiteLink,
+                LogoImage = ss.LogoImage,
+                Country = ss.Country,
+                DefaultPrice = ss.DefaultPrice,
+                Description = ss.Description,
+            },
+            MediaContents = ss.MediaContents.Select(m => new MediaContentDTO()
+            {
+                Id = m.Id,
+                Title = m.Title,
+                Country = m.Country,
+                Description = m.Description,
+                Duration = m.Duration,
+                OriginalLanguage = m.OriginalLanguage,
+                ReleaseDate = m.ReleaseDate
+            }).ToList(),
+            Subscriptions = ss.Subscriptions.Select(s => new SubscriptionDTO()
+            {
+                Id = s.Id,
+                AmountPaid = s.Confirmations.MaxBy(sc => sc.StartTime)!.Price,
+                DaysLeft = s.DurationInDays,
+                StreamingServiceName = s.StreamingService.Name
+            }).ToList()
+            
+          
+            
+        }).ToList();
     }
 }

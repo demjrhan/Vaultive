@@ -49,5 +49,27 @@ public class SubscriptionController : ControllerBase
             return StatusCode(500, $"Unexpected error: {ex.Message}");
         }
     }
+
+    [HttpDelete("Remove/{subscriptionId:int}")]
+    public async Task<IActionResult> RemoveSubscriptionAsync(int subscriptionId)
+    {
+        try
+        {
+            await _subscriptionService.RemoveSubscriptionWithGivenIdAsync(subscriptionId);
+            return Ok(new { message = "Subscription deleted successfully."});
+        }
+        catch (ArgumentException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+        catch (SubscriptionsNotFoundException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"Unexpected error: {ex.Message}");
+        }
+    }
   
 }
