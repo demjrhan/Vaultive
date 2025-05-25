@@ -249,7 +249,7 @@ public class UserService
             if (mediaId <= 0) throw new ArgumentException("Media id can not be equal or smaller than 0.");
 
             var mediaContent = await _mediaContentRepository.GetMediaContentWithGivenIdAsync(mediaId) ??
-                               throw new MediaContentDoesNotExistsException(mediaId);
+                               throw new MediaContentDoesNotExistsException(new [] {mediaId});
 
             var user = await _userRepository.GetUserWithGivenId(userId) ?? throw new UserDoesNotExistsException(userId);
 
@@ -308,7 +308,7 @@ public class UserService
             if (addReviewDto.MediaId <= 0) throw new ArgumentException("Media id can not be equal or smaller than 0.");
 
             var mediaContent = await _mediaContentRepository.GetMediaContentWithGivenIdAsync(addReviewDto.MediaId) ??
-                               throw new MediaContentDoesNotExistsException(addReviewDto.MediaId);
+                               throw new MediaContentDoesNotExistsException(new [] {addReviewDto.MediaId});
 
             var user = await _userRepository.GetUserWithGivenId(addReviewDto.UserId) ??
                        throw new UserDoesNotExistsException(addReviewDto.UserId);

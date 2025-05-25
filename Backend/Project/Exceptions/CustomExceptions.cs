@@ -3,12 +3,18 @@
     /* Media Content */
     public class MediaContentDoesNotExistsException : Exception
     {
-        public MediaContentDoesNotExistsException(int mediaContentId)
-            : base($"MediaContent with id: '{mediaContentId}' does not exist.")
+        public MediaContentDoesNotExistsException(IEnumerable<int> mediaContentIds)
+            : base(GenerateMessage(mediaContentIds))
         {
         }
+        private static string GenerateMessage(IEnumerable<int> mediaContentIds)
+        {
+            var ids = mediaContentIds as IList<int> ?? mediaContentIds.ToList();
+            return ids.Count == 1
+                ? $"MediaContent with id: '{ids.First()}' does not exist."
+                : $"MediaContents with IDs [{string.Join(", ", ids)}] do not exist.";
+        }
     }
-
     public class NoMediaContentExistsException : Exception
     {
         public NoMediaContentExistsException()
@@ -173,7 +179,13 @@
                 : $"Streaming services with IDs [{string.Join(", ", ids)}] do not exist.";
         }
     }
-
+    public class StreamingServiceNameMustBeUniqueException : Exception
+    {
+        public StreamingServiceNameMustBeUniqueException(string name)
+            : base($"{name} already exists.")
+        {
+        }
+    }
 
     /* Option */
     public class SubtitleOptionDoesNotExistsException : Exception

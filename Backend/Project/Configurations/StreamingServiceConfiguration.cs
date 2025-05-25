@@ -18,11 +18,12 @@ namespace Project.Configurations
                 .HasForeignKey(s => s.StreamingServiceId);
 
             builder.Property(ss => ss.Name).HasMaxLength(50).IsRequired();
-            builder.Property(ss => ss.Country).HasMaxLength(50).IsRequired();
+            builder.Property(ss => ss.Country).HasMaxLength(2).IsRequired();
             builder.Property(ss => ss.Description).HasMaxLength(100).IsRequired();
-            builder.Property(ss => ss.LogoImage).IsRequired();
             builder.Property(ss => ss.WebsiteLink).IsRequired();
             builder.Property(s => s.DefaultPrice).IsRequired().HasColumnType("decimal(5,2)");
+
+            builder.HasIndex(ss => ss.Name).IsUnique();
         }
     }
 }

@@ -24,7 +24,7 @@ namespace Project.Configurations
             builder.Property(u => u.Lastname).HasMaxLength(50);
             builder.Property(u => u.Nickname).HasMaxLength(50).IsRequired();
             builder.Property(u => u.Email).HasMaxLength(50).IsRequired();
-            builder.Property(u => u.Country).HasMaxLength(50).IsRequired();
+            builder.Property(u => u.Country).HasMaxLength(2).IsRequired();
 
             builder.Property(u => u.Status)
                 .HasConversion<string>();

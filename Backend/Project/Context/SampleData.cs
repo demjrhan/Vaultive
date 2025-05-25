@@ -57,17 +57,17 @@ public static class SampleData
                 new()
                 {
                     Name = "Apple TV", Country = "US", Description = "Premium streaming by Apple", DefaultPrice = 5.99m,
-                    LogoImage = "apple-tv-logo", WebsiteLink = "https://tv.apple.com/pl"
+                     WebsiteLink = "https://tv.apple.com/pl"
                 },
                 new()
                 {
                     Name = "Disney Plus", Country = "US", Description = "Family and Marvel content",
                     DefaultPrice = 24.99m,
-                    LogoImage = "disney-plus-logo", WebsiteLink = "https://www.disneyplus.com/en-de"
+                     WebsiteLink = "https://www.disneyplus.com/en-de"
                 },
                 new()
                 {
-                    Name = "HBO Max", Country = "US", Description = "HBO Originals and more", LogoImage = "max-logo",
+                    Name = "HBO Max", Country = "US", Description = "HBO Originals and more",
                     DefaultPrice = 9.99m, WebsiteLink = "https://www.max.com/pl/pl"
                 },
             };

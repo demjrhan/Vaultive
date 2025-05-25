@@ -32,7 +32,7 @@ namespace Project.Configurations
             builder.Property(m => m.Description).HasMaxLength(50).IsRequired();
             builder.Property(m => m.ReleaseDate).IsRequired().HasColumnType("datetime");
             builder.Property(m => m.OriginalLanguage).HasMaxLength(50).IsRequired();
-            builder.Property(m => m.Country).HasMaxLength(50).IsRequired();
+            builder.Property(m => m.Country).HasMaxLength(2).IsRequired();
             builder.Property(m => m.Duration).IsRequired();
             builder.Property(m => m.Title).HasMaxLength(50).IsRequired();
             

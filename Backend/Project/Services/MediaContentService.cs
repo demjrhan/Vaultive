@@ -79,13 +79,27 @@ public class MediaContentService
         try
         {
             var enums = ParseGenres(movieDto.Genres);
+            List<StreamingService> streamingServices = new List<StreamingService>();
+            if (movieDto.MediaContent.StreamingServiceIds.Any())
+            {
+                if (movieDto.MediaContent.StreamingServiceIds.Any(id => id <= 0))
+                    throw new ArgumentException(
+                        "All streaming service IDs must be positive integers.",
+                        nameof(movieDto.MediaContent.StreamingServiceIds));
 
-            var streamingServices = await _context.StreamingServices
-                .Where(ss => movieDto.MediaContent.StreamingServiceIds.Contains(ss.Id))
-                .ToListAsync();
+                var requestedIds = movieDto.MediaContent.StreamingServiceIds.Distinct().ToList();
 
-            if (!streamingServices.Any())
-                throw new StreamingServiceDoesNotExistsException(movieDto.MediaContent.StreamingServiceIds);
+                streamingServices = await _context.StreamingServices
+                    .Where(ss => requestedIds.Contains(ss.Id))
+                    .ToListAsync();
+
+                var foundIds   = streamingServices.Select(ss => ss.Id);
+                var missingIds = requestedIds.Except(foundIds).ToList();
+
+                if (missingIds.Any())
+                    throw new StreamingServiceDoesNotExistsException(missingIds);
+
+            }
 
             AudioOption? audioOption = null;
             if (movieDto.MediaContent.AudioOption != null)
@@ -169,7 +183,7 @@ public class MediaContentService
             ValidateOptions(movieDto.MediaContent.AudioOption, movieDto.MediaContent.SubtitleOption);
 
         var movie = await _mediaContentRepository.GetMovieWithGivenIdAsync(movieId);
-        if (movie == null) throw new MediaContentDoesNotExistsException(movieId);
+        if (movie == null) throw new MediaContentDoesNotExistsException(new [] {movieId});
 
         ValidateMediaContent(
             title: movieDto.MediaContent.Title,
@@ -245,6 +259,13 @@ public class MediaContentService
                 var toAddStreamingServices = await _context.StreamingServices
                     .Where(s => toAddIds.Contains(s.Id))
                     .ToListAsync();
+
+                var foundIds = toAddStreamingServices.Select(ss => ss.Id);
+                var missingIds = toAddIds.Except(foundIds).ToList();
+
+                if (missingIds.Any())
+                    throw new StreamingServiceDoesNotExistsException(missingIds);
+                
                 foreach (var svc in toAddStreamingServices)
                     movie.StreamingServices.Add(svc);
             }
@@ -295,7 +316,6 @@ public class MediaContentService
                     .Select(ss => new StreamingServiceResponseFrontendDTO()
                     {
                         Name = ss.Name,
-                        LogoImage = ss.LogoImage,
                         WebsiteLink = ss.WebsiteLink
                     }).ToList(),
                 Reviews = m.Reviews.Select(r => new ReviewResponseFrontendDTO()
@@ -336,7 +356,6 @@ public class MediaContentService
                         DefaultPrice = ss.DefaultPrice,
                         Description = ss.Description,
                         Name = ss.Name,
-                        LogoImage = ss.LogoImage,
                         WebsiteLink = ss.WebsiteLink
                     }).ToList(),
                 Reviews = m.Reviews.Select(r => new ReviewDTO()
@@ -366,7 +385,7 @@ public class MediaContentService
         if (mediaId <= 0) throw new ArgumentException("Media id can not be equal or smaller than 0.");
 
         var mediaContent = await _mediaContentRepository.GetMediaContentWithGivenIdAsync(mediaId);
-        if (mediaContent == null) throw new MediaContentDoesNotExistsException(mediaId);
+        if (mediaContent == null) throw new MediaContentDoesNotExistsException(new [] {mediaId});
 
         return new MediaContentDetailedDTO
         {
@@ -386,7 +405,6 @@ public class MediaContentService
                     DefaultPrice = ss.DefaultPrice,
                     Description = ss.Description,
                     Name = ss.Name,
-                    LogoImage = ss.LogoImage,
                     WebsiteLink = ss.WebsiteLink
                 }).ToList(),
             Reviews = mediaContent.Reviews.Select(r => new ReviewDTO()
@@ -437,7 +455,6 @@ public class MediaContentService
                         DefaultPrice = ss.DefaultPrice,
                         Description = ss.Description,
                         Name = ss.Name,
-                        LogoImage = ss.LogoImage,
                         WebsiteLink = ss.WebsiteLink
                     }).ToList(),
                 Reviews = movie.Reviews.Select(r => new ReviewDTO()
@@ -504,6 +521,10 @@ public class MediaContentService
 
         if (string.IsNullOrWhiteSpace(country))
             throw new ArgumentException("Country is required.", nameof(country));
+
+        if (country.Length != 2)
+            throw new ArgumentException("Country must be an ISO alpha-2 code (e.g. \"US\", \"PL\").",
+                nameof(country));
 
         if (duration <= 0)
             throw new ArgumentException("Duration must be positive.", nameof(duration));

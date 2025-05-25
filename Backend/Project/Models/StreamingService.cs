@@ -14,6 +14,5 @@ public class StreamingService
     
     /* properties for frontend visual */
     
-    public string LogoImage { get; set; } = null!;
     public string WebsiteLink { get; set; } = null!;
 }

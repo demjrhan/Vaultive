@@ -37,4 +37,8 @@ public class StreamingServiceRepository
         if (streamingService == null) throw new StreamingServiceDoesNotExistsException(new [] {streamingServiceId});
         _context.StreamingServices.Remove(streamingService);
     }
+    public async Task AddAsync(StreamingService streamingService)
+    {
+        await _context.StreamingServices.AddAsync(streamingService);
+    }
 }

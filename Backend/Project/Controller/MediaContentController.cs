@@ -37,8 +37,6 @@ public class MediaContentController : ControllerBase
         }
     }
 
-   
-
     [HttpGet("Get/{mediaId:int}")]
     public async Task<IActionResult> GetMediaContentWithGivenIdAsync(int mediaId)
     {

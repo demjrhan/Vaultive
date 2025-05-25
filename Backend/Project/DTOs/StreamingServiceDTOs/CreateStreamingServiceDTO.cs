@@ -1,13 +1,13 @@
 ﻿namespace Project.DTOs.StreamingServiceDTOs;
 
-public class StreamingServiceDTO
+public class CreateStreamingServiceDTO
 {
-    public int Id { get; set; }
     public string Name { get; set; } = null!;
     public string Country { get; set; } = null!;
     public string Description { get; set; } = null!;
-    
     public decimal DefaultPrice { get; set; }
+
+    public ICollection<int> SupportedMediaContents { get; set; }
     
     public string WebsiteLink { get; set; } = null!;
 }

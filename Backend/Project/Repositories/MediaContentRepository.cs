@@ -62,7 +62,7 @@ public class MediaContentRepository
     public async Task RemoveAsync(int mediaId)
     {
         var media = await GetMediaContentWithGivenIdAsync(mediaId);
-        if (media == null) throw new MediaContentDoesNotExistsException(mediaId);
+        if (media == null) throw new MediaContentDoesNotExistsException(new [] {mediaId});
         _context.MediaContents.Remove(media);
     }
 }
