@@ -112,6 +112,24 @@ public class StreamingServiceController : ControllerBase
         }
     }
     
+    [HttpGet("Get/{mediaTitle}")]
+    public async Task<IActionResult> GetStreamingServiceWithGivenIdAsync(string mediaTitle)
+    {
+        try
+        {
+            var result = await _streamingServiceService.GetSupportedStreamingServicesOfMediaContent(mediaTitle);
+            return Ok(result);
+        }
+        catch (ArgumentNullException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"Unexpected error: {ex.Message}");
+        }
+    }
+    
     [HttpPut("Update")]
     public async Task<IActionResult> UpdateStreamingServicesAsync(int streamingServiceId, [FromBody] UpdateStreamingServiceDTO streamingServiceDto)
     {

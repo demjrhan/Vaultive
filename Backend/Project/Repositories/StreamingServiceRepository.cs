@@ -14,6 +14,16 @@ public class StreamingServiceRepository
         _context = masterContext;
     }
 
+    public async Task<IEnumerable<StreamingService>> GetSupportedStreamingServicesOfMediaContent(string mediaTitle)
+    {
+        return await _context.StreamingServices
+            .Include(ss => ss.Subscriptions)
+            .ThenInclude(s => s.Confirmations)
+            .Include(ss => ss.MediaContents)
+            .Where(ss => ss.MediaContents.Any(m => m.Title == mediaTitle))
+            .ToListAsync();
+    }
+
     public async Task<StreamingService?> GetStreamingServiceByIdAsync(int streamingServiceId)
     {
         return await _context.StreamingServices.Include(ss => ss.Subscriptions)

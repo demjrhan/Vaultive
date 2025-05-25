@@ -186,6 +186,7 @@
                 : $"Streaming services with IDs [{string.Join(", ", ids)}] do not exist.";
         }
     }
+  
     public class StreamingServiceNameMustBeUniqueException : Exception
     {
         public StreamingServiceNameMustBeUniqueException(string name)
@@ -195,21 +196,7 @@
     }
 
     /* Option */
-    public class SubtitleOptionDoesNotExistsException : Exception
-    {
-        public SubtitleOptionDoesNotExistsException(string mediaTitle)
-            : base($"Subtitle option not found for media '{mediaTitle}'.")
-        {
-        }
-    }
-
-    public class AudioOptionDoesNotExistsException : Exception
-    {
-        public AudioOptionDoesNotExistsException(string mediaTitle)
-            : base($"Audio option not found for media '{mediaTitle}'.")
-        {
-        }
-    }
+  
 
     public class AtLeastOneOptionMustExistsException : Exception
     {

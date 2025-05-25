@@ -231,6 +231,25 @@ public class StreamingServiceService
             throw;
         }
     }
+    
+    /* Get all supported streaming services of media content ( by title ) */
+    public async Task<List<StreamingServiceDTO>> GetSupportedStreamingServicesOfMediaContent(string mediaTitle)
+    {
+        if (string.IsNullOrWhiteSpace(mediaTitle))
+            throw new ArgumentNullException(nameof(mediaTitle));
+
+        var streamingServices = await _streamingServiceRepository.GetSupportedStreamingServicesOfMediaContent(mediaTitle);
+        return streamingServices.Select(ss => new StreamingServiceDTO()
+        {
+            Id = ss.Id,
+            Name = ss.Name,
+            WebsiteLink = ss.WebsiteLink,
+            LogoImage = ss.LogoImage,
+            Country = ss.Country,
+            DefaultPrice = ss.DefaultPrice,
+            Description = ss.Description
+        }).ToList();
+    }
 
     /* Adding new streaming service data to database. */
     public async Task AddStreamingServiceAsync(CreateStreamingServiceDTO streamingServiceDto)
