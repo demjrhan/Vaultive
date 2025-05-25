@@ -67,7 +67,7 @@
     public class NoChangesDetectedException : Exception
     {
         public NoChangesDetectedException()
-            : base("The provided data is identical to the current user information. No changes were made.")
+            : base("The provided data is identical to the current data on database. No changes were made.")
         {
         }
     }
@@ -80,7 +80,14 @@
         {
         }
     }
-
+    public class UserCanNotReviewMediaContentException : Exception
+    {
+        public UserCanNotReviewMediaContentException(int userId)
+            : base(
+                $"{userId} can not review the media content, does not satisfy the required subscriptions for streaming services.")
+        {
+        }
+    }
     /* subscription */
     public class SubscriptionConfirmationDoesNotExistException : Exception
     {
@@ -230,11 +237,4 @@
         }
     }
 
-    public class UserReviewDoesNotExistsToMediaContentException : Exception
-    {
-        public UserReviewDoesNotExistsToMediaContentException(int userId, int mediaId)
-            : base($"User with ID {userId} has not submitted a review for media id '{mediaId}'.")
-        {
-        }
-    }
 }

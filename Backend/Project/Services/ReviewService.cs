@@ -114,7 +114,7 @@ public class ReviewService
         }
     }
 
-    private void ValidateReview(string comment)
+    public void ValidateReview(string comment)
     {
         if (string.IsNullOrWhiteSpace(comment) || comment.Length < 2 || comment.Length > 100)
             throw new ArgumentException("Comment must be between 2 and 100 characters.", nameof(comment));

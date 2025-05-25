@@ -5,7 +5,9 @@ const mainContainer = document.querySelector('.main-container');
 const detailImage = document.querySelector('.movie-image-detail');
 const detailTitle = document.querySelector('.movie-title-detail');
 const platformLinksDetail = document.querySelector('.platform-links-detail');
-const scrollContainer = platformLinksDetail.querySelector('.logo-images-scroll');
+const scrollContainer = platformLinksDetail.querySelector(
+  '.logo-images-scroll',
+);
 const detailDescription = document.querySelector(
   '.movie-text-description-detail',
 );
@@ -22,12 +24,11 @@ const textarea = document.getElementById('review-textarea');
 
 const API_BASE_URL = 'http://localhost:5034/api';
 
-
-
-
 let detailOpenedFrom = 'home';
 
 export function showMovieDetail(movie, from = 'home') {
+  textarea.value = '';
+  textarea.style.color = 'white';
   detailOpenedFrom = from;
 
   const posterImage = movie.mediaContent?.posterImageName
@@ -53,15 +54,15 @@ export function showMovieDetail(movie, from = 'home') {
     <img src="${posterImage}" alt="${movie.mediaContent?.title}">
   `;
 
-  const logos = movie.mediaContent?.streamingServices
-    ?.map(
-      (s) =>
-        `<a href="${s.websiteLink}" target="_blank">
+  const logos =
+    movie.mediaContent?.streamingServices
+      ?.map(
+        (s) =>
+          `<a href="${s.websiteLink}" target="_blank">
          <img src="../public/img/streamers/${s.logoImage}.png" alt="${s.name}">
-       </a>`
-    )
-    .join('') ?? '';
-
+       </a>`,
+      )
+      .join('') ?? '';
 
   const count = movie.mediaContent?.streamingServices.length ?? 0;
 
@@ -69,8 +70,7 @@ export function showMovieDetail(movie, from = 'home') {
   console.log(count);
   if (count <= 2) {
     html = logos;
-  }
-  else {
+  } else {
     for (let i = 0; i < 25; i++) {
       html += logos;
     }
@@ -78,9 +78,7 @@ export function showMovieDetail(movie, from = 'home') {
   scrollContainer.innerHTML = html;
   scrollContainer.classList.remove('logo-images-static', 'logo-images-scroll');
   scrollContainer.classList.toggle('logo-images-static', count <= 2);
-  scrollContainer.classList.toggle('logo-images-scroll',  count >  2);
-
-
+  scrollContainer.classList.toggle('logo-images-scroll', count > 2);
 
   detailContainer.style.display = 'flex';
 
@@ -97,9 +95,6 @@ export function showMovieDetail(movie, from = 'home') {
     streamingServicePopUpContainer.style.filter = 'grayscale(100%) blur(10px)';
     streamingServicePopUpContainer.classList.add('overlay-disabled');
   }
-
-  textarea.value = '';
-  textarea.style.color = 'white';
 
   reviewContent.innerHTML = '';
 
@@ -131,71 +126,59 @@ export function showMovieDetail(movie, from = 'home') {
     textarea.readOnly = true;
   });
 
-
-
   submitReview.addEventListener('mouseout', () => {
     textarea.style.filter = 'blur(0)';
     const existingOverlay = document.getElementById('blur-overlay');
     if (existingOverlay) existingOverlay.remove();
     textarea.readOnly = false;
-  })
-
-
-  submitReview.addEventListener('click', async () => {
-      const comment = textarea.value?.trim();
-      const mediaId = movie?.mediaContent?.id;
-
-      const response = await fetch(`${API_BASE_URL}/User/Review`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          userId: 1,
-          mediaId: mediaId,
-          comment: comment,
-        })
-      });
-
-      if (!response.ok) {
-        const previousText = textarea.value;
-        textarea.readOnly = true;
-
-        setTimeout(() => {
-          response.text()
-            .then(errorMessage => {
-              textarea.value = errorMessage;
-              textarea.readOnly = false;
-            })
-            .catch(err => {
-              textarea.value = 'Unfortunately, we were unable to submit your review. Please try again later.';
-              textarea.readOnly = false;
-            });
-          textarea.style.color = 'red';
-
-          setTimeout(() => {
-            textarea.value = previousText;
-            textarea.style.color = 'white';
-            textarea.readOnly = false;
-          }, 5000);
-        }, 1);
-      }
-      else {
-        appendReviewToUI({ comment });
-
-        setTimeout(() => {
-          textarea.style.color = 'green';
-          textarea.value = 'Successfully submitted your review. Thank you!';
-
-          setTimeout(() => {
-            textarea.value = '';
-            textarea.style.color = 'white';
-            textarea.readOnly = false;
-          }, 5000);
-        }, 1);
-      }
   });
 
+  submitReview.addEventListener('click', async () => {
+    const comment = textarea.value?.trim();
+    const mediaId = movie?.mediaContent?.id;
+
+    const response = await fetch(`${API_BASE_URL}/User/Review`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        userId: 1,
+        mediaId: mediaId,
+        comment: comment,
+      }),
+    });
+
+    if (!response.ok) {
+      const previousText = textarea.value;
+
+      textarea.disabled = true;
+      textarea.style.color = 'red';
+      textarea.value =
+        'Unfortunately, we were unable to submit your review. Please try again later.';
+
+      textarea.blur();
+
+      setTimeout(() => {
+        textarea.disabled = false;
+        textarea.style.color = '';
+        textarea.value = previousText;
+      }, 5000);
+    } else {
+      appendReviewToUI({ comment });
+
+      setTimeout(() => {
+        textarea.style.color = 'green';
+        textarea.value = 'Successfully submitted your review. Thank you!';
+
+        setTimeout(() => {
+          textarea.value = '';
+          textarea.style.color = 'white';
+          textarea.readOnly = false;
+        }, 5000);
+      }, 1);
+    }
+  });
 
   addReview.addEventListener('click', () => {
     const isVisible = addReviewContainer.classList.contains('visible');

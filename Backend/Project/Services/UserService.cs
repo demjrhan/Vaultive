@@ -16,6 +16,7 @@ namespace Project.Services;
 public class UserService
 {
     private readonly ReviewRepository _reviewRepository;
+    private readonly ReviewService _reviewService;
     private readonly UserRepository _userRepository;
     private readonly StreamingServiceRepository _streamingServiceRepository;
     private readonly SubscriptionConfirmationRepository _subscriptionConfirmationRepository;
@@ -29,6 +30,7 @@ public class UserService
     public UserService(
         MasterContext context,
         ReviewRepository reviewRepository,
+        ReviewService reviewService,
         UserRepository userRepository,
         MediaContentRepository mediaContentRepository,
         WatchHistoryRepository watchHistoryRepository,
@@ -39,6 +41,7 @@ public class UserService
     {
         _context = context;
         _reviewRepository = reviewRepository;
+        _reviewService = reviewService;
         _userRepository = userRepository;
         _mediaContentRepository = mediaContentRepository;
         _watchHistoryRepository = watchHistoryRepository;
@@ -126,15 +129,16 @@ public class UserService
             if (userDto == null)
                 throw new ArgumentNullException(nameof(userDto));
 
+            var user = await _userRepository.GetUserWithGivenId(userDto.Id) ??
+                       throw new UserDoesNotExistsException(userDto.Id);
+
+            ValidateChanges(userDto, user);
+            
             if (await _context.Users.AnyAsync(u => u.Email == userDto.Email && u.Id != userDto.Id))
                 throw new EmailAlreadyExistsException(userDto.Email);
 
             if (await _context.Users.AnyAsync(u => u.Nickname == userDto.Nickname && u.Id != userDto.Id))
                 throw new NicknameAlreadyExistsException(userDto.Nickname);
-
-
-            var user = await _userRepository.GetUserWithGivenId(userDto.Id) ??
-                       throw new UserDoesNotExistsException(userDto.Id);
 
             ValidateUser(
                 firstname: userDto.Firstname,
@@ -257,7 +261,7 @@ public class UserService
             if (user.WatchHistories.Any(wh => wh.MediaId == mediaId && wh.TimeLeftOf == 0))
                 throw new MediaContentAlreadyWatchedException(user.Nickname, mediaContent.Title);
 
-            var canWatch = await CanUserWatchContent(user, mediaContent);
+            var canWatch = await CanUserWatchTheContent(user, mediaContent);
             if (!canWatch) throw new UserCanNotWatchMediaContentException(userId);
 
             var activeSubscriptions = await _subscriptionService.GetActiveSubscriptionsOfUserIdAsync(userId);
@@ -307,23 +311,25 @@ public class UserService
             if (addReviewDto.UserId <= 0) throw new ArgumentException("User id can not be equal or smaller than 0.");
             if (addReviewDto.MediaId <= 0) throw new ArgumentException("Media id can not be equal or smaller than 0.");
 
+            _reviewService.ValidateReview(addReviewDto.Comment);
+
             var mediaContent = await _mediaContentRepository.GetMediaContentWithGivenIdAsync(addReviewDto.MediaId) ??
                                throw new MediaContentDoesNotExistsException(new [] {addReviewDto.MediaId});
 
             var user = await _userRepository.GetUserWithGivenId(addReviewDto.UserId) ??
                        throw new UserDoesNotExistsException(addReviewDto.UserId);
-
-
+            
             var watchHistory =
                 await _watchHistoryRepository.GetWatchHistoryOfUserToGivenMediaIdAsync(user.Id, mediaContent.Id) ??
                 throw new WatchHistoryDoesNotExistsException(user.Id);
-
+            
             var existingReview =
                 await _reviewRepository.GetReviewOfUserToMediaContentAsync(user.Id, mediaContent.Id);
 
             if (existingReview != null)
                 throw new DuplicateReviewException(user.Nickname, mediaContent.Title);
 
+            
             var review = new Review
             {
                 Comment = addReviewDto.Comment,
@@ -396,7 +402,7 @@ public class UserService
     }
     
     /* Validations */
-    private async Task<bool> CanUserWatchContent(User user, MediaContent mediaContent)
+    private async Task<bool> CanUserWatchTheContent(User user, MediaContent mediaContent)
     {
         var activeSubscriptions = await _subscriptionService
             .GetActiveSubscriptionsOfUserIdAsync(user.Id);
@@ -412,7 +418,29 @@ public class UserService
             .Intersect(contentNames)
             .Any();
     }
-    
+
+    private void ValidateChanges(UpdateUserDTO userDto, User user)
+    {
+        bool firstNameEqual  = string.Equals(userDto.Firstname, user.Firstname, StringComparison.OrdinalIgnoreCase);
+        bool lastNameEqual   = string.Equals(userDto.Lastname,  user.Lastname,  StringComparison.OrdinalIgnoreCase);
+        bool nicknameEqual   = string.Equals(userDto.Nickname,  user.Nickname,  StringComparison.OrdinalIgnoreCase);
+        bool emailEqual      = string.Equals(userDto.Email,     user.Email,     StringComparison.OrdinalIgnoreCase);
+        bool countryEqual    = string.Equals(userDto.Country,   user.Country,   StringComparison.OrdinalIgnoreCase);
+
+        var status = ParseStatus(userDto.Status);
+        bool statusEqual = status == user.Status;
+
+        if (firstNameEqual
+            && lastNameEqual
+            && nicknameEqual
+            && emailEqual
+            && countryEqual
+            && statusEqual)
+        {
+            throw new NoChangesDetectedException();
+        }
+    }
+
     private static Status ParseStatus(string status)
     {
         return Enum.TryParse<Status>(status, true, out var result)
