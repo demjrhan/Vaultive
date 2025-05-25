@@ -316,7 +316,8 @@ public class MediaContentService
                     .Select(ss => new StreamingServiceResponseFrontendDTO()
                     {
                         Name = ss.Name,
-                        WebsiteLink = ss.WebsiteLink
+                        WebsiteLink = ss.WebsiteLink,
+                        LogoImage = ss.LogoImage
                     }).ToList(),
                 Reviews = m.Reviews.Select(r => new ReviewResponseFrontendDTO()
                 {

@@ -51,6 +51,7 @@ public class StreamingServiceService
                 Id = ss.Id,
                 Name = ss.Name,
                 WebsiteLink = ss.WebsiteLink,
+                LogoImage = ss.LogoImage,
                 Country = ss.Country,
                 DefaultPrice = ss.DefaultPrice,
                 Description = ss.Description,
@@ -84,6 +85,7 @@ public class StreamingServiceService
             Id = ss.Id,
             Name = ss.Name,
             WebsiteLink = ss.WebsiteLink,
+            LogoImage = ss.LogoImage,
             Country = ss.Country,
             DefaultPrice = ss.DefaultPrice,
             Description = ss.Description
@@ -162,6 +164,7 @@ public class StreamingServiceService
                 DefaultPrice = streamingServiceDto.DefaultPrice,
                 Description = streamingServiceDto.Description,
                 WebsiteLink = streamingServiceDto.WebsiteLink,
+                LogoImage = streamingServiceDto.LogoImage,
                 Name = streamingServiceDto.Name,
                 MediaContents = mediaContents
             });

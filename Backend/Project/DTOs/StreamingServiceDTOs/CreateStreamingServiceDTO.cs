@@ -9,5 +9,6 @@ public class CreateStreamingServiceDTO
 
     public ICollection<int> SupportedMediaContents { get; set; }
     
+    public string LogoImage { get; set; } = null!;
     public string WebsiteLink { get; set; } = null!;
 }
