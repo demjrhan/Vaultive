@@ -5,6 +5,7 @@ const mainContainer = document.querySelector('.main-container');
 const detailImage = document.querySelector('.movie-image-detail');
 const detailTitle = document.querySelector('.movie-title-detail');
 const platformLinksDetail = document.querySelector('.platform-links-detail');
+const scrollContainer = platformLinksDetail.querySelector('.logo-images-scroll');
 const detailDescription = document.querySelector(
   '.movie-text-description-detail',
 );
@@ -52,15 +53,34 @@ export function showMovieDetail(movie, from = 'home') {
     <img src="${posterImage}" alt="${movie.mediaContent?.title}">
   `;
 
-  platformLinksDetail.innerHTML =
-    movie.mediaContent?.streamingServices
-      ?.map(
-        (s) =>
-          `<a href="${s.websiteLink}" target="_blank">
-              <img src="../public/img/streamers/${s.logoImage}.png" alt="${s.name}">
-           </a>`,
-      )
-      .join('') ?? '';
+  const logos = movie.mediaContent?.streamingServices
+    ?.map(
+      (s) =>
+        `<a href="${s.websiteLink}" target="_blank">
+         <img src="../public/img/streamers/${s.logoImage}.png" alt="${s.name}">
+       </a>`
+    )
+    .join('') ?? '';
+
+
+  const count = movie.mediaContent?.streamingServices.length ?? 0;
+
+  let html = '';
+  console.log(count);
+  if (count <= 2) {
+    html = logos;
+  }
+  else {
+    for (let i = 0; i < 25; i++) {
+      html += logos;
+    }
+  }
+  scrollContainer.innerHTML = html;
+  scrollContainer.classList.remove('logo-images-static', 'logo-images-scroll');
+  scrollContainer.classList.toggle('logo-images-static', count <= 2);
+  scrollContainer.classList.toggle('logo-images-scroll',  count >  2);
+
+
 
   detailContainer.style.display = 'flex';
 
