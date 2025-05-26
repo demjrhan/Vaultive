@@ -1,8 +1,9 @@
 ﻿using Project.Models.Enumerations;
+using Project.Models.Interfaces;
 
 namespace Project.Models;
 
-public class User
+public class User : IUser
 {
     public int Id { get; set; }
 

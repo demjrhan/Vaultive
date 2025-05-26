@@ -14,6 +14,8 @@ public class SubscriptionController : ControllerBase
     {
         _subscriptionService = subscriptionService;
     }
+    
+    
     [HttpGet("ActiveSubscriptionsOfUser/{userId:int}")]
     public async Task<IActionResult> GetActiveSubscriptionsOfUserIdAsync(int userId)
     {
@@ -50,7 +52,7 @@ public class SubscriptionController : ControllerBase
         }
     }
 
-    [HttpDelete("Remove/{subscriptionId:int}")]
+    [HttpDelete("Remove{subscriptionId:int}")]
     public async Task<IActionResult> RemoveSubscriptionAsync(int subscriptionId)
     {
         try

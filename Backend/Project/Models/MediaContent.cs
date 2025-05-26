@@ -1,7 +1,9 @@
 ﻿
+using Project.Models.Interfaces;
+
 namespace Project.Models;
 
-public abstract class MediaContent
+public abstract class MediaContent : IMediaContent
 {
 
     public int Id { get; set; }

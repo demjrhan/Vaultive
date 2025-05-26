@@ -18,51 +18,13 @@ public class UserController : ControllerBase
         _userService = userService;
     }
 
-    [HttpPost("Add")]
-    public async Task<IActionResult> AddMovieAsync([FromBody] CreateUserDTO userDto)
+    [HttpGet("Get/{userId:int}")]
+    public async Task<IActionResult> GetUserWithGivenIdAsync(int userId)
     {
         try
         {
-            await _userService.AddUserAsync(userDto);
-            return Created(string.Empty, $"User {userDto.Firstname} added successfully.");
-        }
-        catch (InvalidUserStatusException ex)
-        {
-            return BadRequest($"Invalid status: {ex.Message}");
-        }
-        catch (NicknameAlreadyExistsException ex)
-        {
-            return BadRequest(ex.Message);
-        }
-        catch (EmailAlreadyExistsException ex)
-        {
-            return BadRequest(ex.Message);
-        }
-        catch (ArgumentNullException ex)
-        {
-            return BadRequest(ex.Message);
-        }
-        catch (ArgumentException ex)
-        {
-            return BadRequest(ex.Message);
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, $"Unexpected error: {ex.Message}");
-        }
-    }
-
-    [HttpDelete("Remove/{userId:int}")]
-    public async Task<IActionResult> RemoveUserAsync(int userId)
-    {
-        try
-        {
-            await _userService.RemoveUserWithGivenIdAsync(userId);
-            return Ok($"User {userId} deleted successfully.");
-        }
-        catch (ArgumentException ex)
-        {
-            return BadRequest(ex.Message);
+            var result = await _userService.GetUserWithGivenIdAsync(userId);
+            return Ok(result);
         }
         catch (Exception ex)
         {
@@ -83,88 +45,6 @@ public class UserController : ControllerBase
             return BadRequest(ex.Message);
         }
         catch (UserDoesNotExistsException ex)
-        {
-            return BadRequest(ex.Message);
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, $"Unexpected error: {ex.Message}");
-        }
-    }
-
-    [HttpGet("Get/{userId:int}")]
-    public async Task<IActionResult> GetUserWithGivenIdAsync(int userId)
-    {
-        try
-        {
-            var result = await _userService.GetUserWithGivenIdAsync(userId);
-            return Ok(result);
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, $"Unexpected error: {ex.Message}");
-        }
-    }
-
-    [HttpPut("Watch")]
-    public async Task<IActionResult> WatchMediaContentAsync(int userId, int mediaId)
-    {
-        try
-        {
-            await _userService.WatchMediaContentAsync(userId, mediaId);
-            return Ok($"User {userId} successfully watched media content {mediaId}.");
-        }
-        catch (ArgumentException ex)
-        {
-            return BadRequest(ex.Message);
-        }
-        catch (MediaContentDoesNotExistsException ex)
-        {
-            return BadRequest(ex.Message);
-        }
-        catch (UserDoesNotExistsException ex)
-        {
-            return BadRequest(ex.Message);
-        }
-        catch (MediaContentAlreadyWatchedException ex)
-        {
-            return BadRequest(ex.Message);
-        }
-        catch (UserHasNoActiveSubscriptionException ex)
-        {
-            return BadRequest(ex.Message);
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, $"Unexpected error: {ex.Message}");
-        }
-    }
-
-    [HttpPut("Update")]
-    public async Task<IActionResult> UpdateUserAsync([FromBody] UpdateUserDTO userDto)
-    {
-        try
-        {
-            await _userService.UpdateUserWithGivenIdAsync(userDto);
-            return Ok($"User {userDto.Id} update was successful.");
-        }
-        catch (InvalidUserStatusException ex)
-        {
-            return BadRequest($"Invalid status: {ex.Message}");
-        }
-        catch (NicknameAlreadyExistsException ex)
-        {
-            return BadRequest(ex.Message);
-        }
-        catch (EmailAlreadyExistsException ex)
-        {
-            return BadRequest(ex.Message);
-        }
-        catch (ArgumentNullException ex)
-        {
-            return BadRequest(ex.Message);
-        }
-        catch (ArgumentException ex)
         {
             return BadRequest(ex.Message);
         }
@@ -233,6 +113,126 @@ public class UserController : ControllerBase
         catch (SubscriptionAlreadyExistsException ex)
         {
             return BadRequest(ex.Message);
+        }
+        catch (ArgumentException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"Unexpected error: {ex.Message}");
+        }
+    }
+    
+    [HttpPost("Add")]
+    public async Task<IActionResult> AddMovieAsync([FromBody] CreateUserDTO userDto)
+    {
+        try
+        {
+            await _userService.AddUserAsync(userDto);
+            return Created(string.Empty, $"User {userDto.Firstname} added successfully.");
+        }
+        catch (InvalidUserStatusException ex)
+        {
+            return BadRequest($"Invalid status: {ex.Message}");
+        }
+        catch (NicknameAlreadyExistsException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+        catch (EmailAlreadyExistsException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+        catch (ArgumentNullException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+        catch (ArgumentException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"Unexpected error: {ex.Message}");
+        }
+    }
+    
+    [HttpPut("Update")]
+    public async Task<IActionResult> UpdateUserAsync([FromBody] UpdateUserDTO userDto)
+    {
+        try
+        {
+            await _userService.UpdateUserWithGivenIdAsync(userDto);
+            return Ok($"User {userDto.Id} update was successful.");
+        }
+        catch (InvalidUserStatusException ex)
+        {
+            return BadRequest($"Invalid status: {ex.Message}");
+        }
+        catch (NicknameAlreadyExistsException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+        catch (EmailAlreadyExistsException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+        catch (ArgumentNullException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+        catch (ArgumentException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"Unexpected error: {ex.Message}");
+        }
+    }
+    
+    [HttpPut("Watch")]
+    public async Task<IActionResult> WatchMediaContentAsync(int userId, int mediaId)
+    {
+        try
+        {
+            await _userService.WatchMediaContentAsync(userId, mediaId);
+            return Ok($"User {userId} successfully watched media content {mediaId}.");
+        }
+        catch (ArgumentException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+        catch (MediaContentDoesNotExistsException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+        catch (UserDoesNotExistsException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+        catch (MediaContentAlreadyWatchedException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+        catch (UserHasNoActiveSubscriptionException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"Unexpected error: {ex.Message}");
+        }
+    }
+
+    [HttpDelete("Remove/{userId:int}")]
+    public async Task<IActionResult> RemoveUserAsync(int userId)
+    {
+        try
+        {
+            await _userService.RemoveUserWithGivenIdAsync(userId);
+            return Ok($"User {userId} deleted successfully.");
         }
         catch (ArgumentException ex)
         {

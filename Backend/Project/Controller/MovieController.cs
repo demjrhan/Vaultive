@@ -15,6 +15,28 @@ public class MovieController : ControllerBase
     {
         _mediaContentService = mediaContentService;
     }
+    
+    [HttpGet("Get/{movieId:int}")]
+    public async Task<IActionResult> GetMovieWithGivenIdAsync(int movieId)
+    {
+        try
+        {
+            var result = await _mediaContentService.GetMovieWithGivenIdAsync(movieId);
+            return Ok(result);
+        }
+        catch (ArgumentException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+        catch (MovieDoesNotExistsException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"Unexpected error: {ex.Message}");
+        }
+    }
 
     [HttpGet("All")]
     public async Task<IActionResult> GetAllMoviesFrontEndAsync()
@@ -41,28 +63,6 @@ public class MovieController : ControllerBase
         catch (Exception ex)
         {
             return BadRequest(ex.Message);
-        }
-    }
-
-    [HttpGet("Get/{movieId:int}")]
-    public async Task<IActionResult> GetMovieWithGivenIdAsync(int movieId)
-    {
-        try
-        {
-            var result = await _mediaContentService.GetMovieWithGivenIdAsync(movieId);
-            return Ok(result);
-        }
-        catch (ArgumentException ex)
-        {
-            return BadRequest(ex.Message);
-        }
-        catch (MovieDoesNotExistsException ex)
-        {
-            return BadRequest(ex.Message);
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, $"Unexpected error: {ex.Message}");
         }
     }
 

@@ -16,20 +16,7 @@ namespace Project.Controller;
             _reviewService = reviewService;
         }
 
-        [HttpGet("All")]
-        public async Task<IActionResult> GetAllReviewsWithMediaTitlesAsync()
-        {
-            try
-            {
-                var result = await _reviewService.GetAllReviewsWithMediaTitlesAsync();
-                return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-
+        
         [HttpGet("Get/{reviewId:int}")]
         public async Task<IActionResult> GetReviewByIdAsync(int reviewId)
         {
@@ -47,6 +34,21 @@ namespace Project.Controller;
                 return StatusCode(500, $"Unexpected error: {ex.Message}");
             }
         }
+        
+        [HttpGet("All")]
+        public async Task<IActionResult> GetAllReviewsWithMediaTitlesAsync()
+        {
+            try
+            {
+                var result = await _reviewService.GetAllReviewsWithMediaTitlesAsync();
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        
 
         [HttpPut("Update")]
         public async Task<IActionResult> UpdateReviewAsync([FromBody] UpdateReviewDTO dto)
