@@ -368,6 +368,8 @@ public class UserService
             var activeSubscriptions = await _subscriptionService.GetActiveSubscriptionsOfUserIdAsync(user.Id);
             if (activeSubscriptions.Any(ss => ss.StreamingServiceName == streamingService.Name))
                 throw new SubscriptionAlreadyExistsException(user.Id, streamingService.Id);
+            
+            var today = DateOnly.FromDateTime(DateTime.Now);
 
             var inactiveSubscription =
                await _subscriptionService.GetInactiveSubscriptionOfUserIdAsync(streamingService.Name, user.Id);
@@ -379,8 +381,8 @@ public class UserService
                 if (subscription == null) throw new SubscriptionsDoesNotExistsException(inactiveSubscription.Id);
                 var subscriptionConfirmation = new SubscriptionConfirmation()
                 {
-                    EndTime = DateOnly.FromDateTime(DateTime.UtcNow.AddMonths(dto.DurationInMonth)),
-                    StartTime = DateOnly.FromDateTime(DateTime.Now),
+                    StartTime = today,
+                    EndTime = today.AddMonths(dto.DurationInMonth),
                     PaymentMethod = dto.PaymentMethod,
                     Price = SubscriptionPriceCalculator.CalculateAmount(streamingService.DefaultPrice, user),
                     Subscription = subscription,
@@ -401,7 +403,6 @@ public class UserService
                 };
                 await _subscriptionRepository.AddSubscriptionAsync(subscription);
 
-                var today = DateOnly.FromDateTime(DateTime.Now);
                 var confirmation = new SubscriptionConfirmation
                 {
                     StartTime = today,
