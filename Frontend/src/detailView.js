@@ -67,7 +67,6 @@ export function showMovieDetail(movie, from = 'home') {
   const count = movie.mediaContent?.streamingServices.length ?? 0;
 
   let html = '';
-  console.log(count);
   if (count <= 2) {
     html = logos;
   } else {
@@ -176,7 +175,7 @@ export function showMovieDetail(movie, from = 'home') {
     } else {
       setTimeout(() => {
         textarea.style.color = 'green';
-        textarea.value = 'Successfully submitted your review. Thank you!';
+        textarea.value = 'Successfully submitted your review please refresh the page. Thank you!';
 
         setTimeout(() => {
           textarea.value = '';

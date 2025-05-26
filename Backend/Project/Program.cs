@@ -24,7 +24,9 @@ builder.Services.AddCors(options =>
             .AllowAnyHeader();
     });
 });
+
 builder.Services.AddDbContext<MasterContext>(options => options.UseSqlite("Data Source=vaultive.db"));
+
 builder.Services.AddScoped<UserRepository>();
 builder.Services.AddScoped<UserService>();
 
