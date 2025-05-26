@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Project.Models;
+using Project.Models.Enumerations;
 
 namespace Project.Context;
 

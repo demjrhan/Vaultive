@@ -380,20 +380,7 @@ public class MediaContentService
 
 
             var desiredGenres = ParseGenres(dto.Genres);
-
-            var existingGenres = movie.Genres.ToList();
-
-            var toRemoveGenres = existingGenres
-                .Where(g => !desiredGenres.Contains(g))
-                .ToList();
-            foreach (var g in toRemoveGenres)
-                movie.Genres.Remove(g);
-
-            var toAddGenres = desiredGenres
-                .Where(g => !existingGenres.Contains(g))
-                .ToList();
-            foreach (var g in toAddGenres)
-                movie.Genres.Add(g);
+            movie.Genres = desiredGenres;
 
 
             await _context.SaveChangesAsync();
@@ -518,20 +505,10 @@ public class MediaContentService
                 foreach (var svc in toAddStreamingServices)
                     documentary.StreamingServices.Add(svc);
             }
+            
+            
             var desiredTopics = ParseTopics(dto.Topics);
-            var existingTopics = documentary.Topics.ToList();
-
-            var toRemoveTopics = existingTopics
-                .Where(t => !desiredTopics.Contains(t))
-                .ToList();
-            foreach (var t in toRemoveTopics)
-                documentary.Topics.Remove(t);
-
-            var toAddTopics = desiredTopics
-                .Where(t => !existingTopics.Contains(t))
-                .ToList();
-            foreach (var t in toAddTopics)
-                documentary.Topics.Add(t);
+            documentary.Topics = desiredTopics;
             
             await _context.SaveChangesAsync();
             await transaction.CommitAsync();
