@@ -1,6 +1,6 @@
 ﻿namespace Project.DTOs.SubscriptionDTOs;
 
-public class AddSubscriptionDTO
+public class AddOrRenewSubscriptionDTO
 {
     
     public int StreamingServiceId { get; set; }

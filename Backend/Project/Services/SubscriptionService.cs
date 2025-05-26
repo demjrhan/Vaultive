@@ -54,16 +54,14 @@ public class SubscriptionService
 
             await _context.SaveChangesAsync();
             await transaction.CommitAsync();
-
         }
         catch
         {
             await transaction.RollbackAsync();
             throw;
         }
-        
-        
     }
+
     public async Task<IEnumerable<SubscriptionWithConfirmationsDTO>> GetAllSubscriptionsWithConfirmations()
     {
         var subscriptions = await _subscriptionRepository.GetAllSubscriptionsAsync();
@@ -107,13 +105,73 @@ public class SubscriptionService
 
         var result = activeConfirmations.Select(c => new SubscriptionDTO
         {
-            Id = c.Id,
-            DaysLeft = c.Subscription.DurationInDays,
+            Id = c.SubscriptionId,
+            DaysLeft = CalculateRemainingDaysOfConfirmation(c.EndTime),
             StreamingServiceName = c.Subscription.StreamingService.Name,
             AmountPaid = c.Price
         });
 
         return result;
+    }
+
+    public async Task<IEnumerable<SubscriptionDTO>> GetInactiveSubscriptionsOfUserIdAsync(int userId)
+    {
+        if (userId <= 0) throw new ArgumentException("User id can not be equal or smaller than 0.");
+
+        if (await _userRepository.GetUserWithGivenId(userId) == null)
+            throw new UserDoesNotExistsException(userId);
+
+        var confirmations = await _subscriptionRepository.GetUserSubscriptionConfirmationsAsync(userId);
+        var today = DateOnly.FromDateTime(DateTime.Now);
+
+        var inactiveConfirmations = confirmations
+            .GroupBy(c => c.SubscriptionId)
+            .Select(g => g.OrderByDescending(c => c.StartTime).First())
+            .Where(latest => latest.EndTime < today);
+
+        var result = inactiveConfirmations.Select(c => new SubscriptionDTO
+        {
+            Id = c.SubscriptionId,
+            DaysLeft = CalculateRemainingDaysOfConfirmation(c.EndTime),
+            StreamingServiceName = c.Subscription.StreamingService.Name,
+            AmountPaid = c.Price
+        });
+
+        return result;
+    }
+
+    public async Task<SubscriptionDTO?> GetInactiveSubscriptionOfUserIdAsync(string streamingServiceName,
+        int userId)
+    {
+        if (string.IsNullOrEmpty(streamingServiceName))
+            throw new ArgumentException("Streaming service name can not be neither null or empty.");
+        if (userId <= 0) throw new ArgumentException("User id can not be equal or smaller than 0.");
+
+        if (await _userRepository.GetUserWithGivenId(userId) == null)
+            throw new UserDoesNotExistsException(userId);
+
+        var confirmations = await _subscriptionRepository.GetUserSubscriptionConfirmationsAsync(userId);
+        var today = DateOnly.FromDateTime(DateTime.Now);
+
+        var inactiveSubscription = confirmations
+            .GroupBy(c => c.SubscriptionId)
+            .Select(g => g.OrderByDescending(c => c.StartTime).First())
+            .Where(latest => latest.EndTime < today)
+            .FirstOrDefault(c => c.Subscription.StreamingService.Name == streamingServiceName);
+
+        if (inactiveSubscription != null)
+        {
+            return new SubscriptionDTO
+            {
+                Id = inactiveSubscription.SubscriptionId,
+                DaysLeft = CalculateRemainingDaysOfConfirmation(inactiveSubscription.EndTime),
+                StreamingServiceName = inactiveSubscription.Subscription.StreamingService.Name,
+                AmountPaid = inactiveSubscription.Price
+            };
+        }
+        
+
+        return null;
     }
 
     private int CalculateRemainingDaysOfConfirmation(DateOnly endDate)
@@ -126,8 +184,4 @@ public class SubscriptionService
               - today.DayNumber
               + 1;
     }
-
-  
-    
-    
 }

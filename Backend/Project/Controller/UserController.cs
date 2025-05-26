@@ -94,12 +94,12 @@ public class UserController : ControllerBase
     }
     
     [HttpPost("Subscribe")]
-    public async Task<IActionResult> SubscribeAsync([FromBody] AddSubscriptionDTO addSubscriptionDto)
+    public async Task<IActionResult> SubscribeAsync([FromBody] AddOrRenewSubscriptionDTO addOrRenewSubscriptionDto)
     {
         try
         {
-            await _userService.SubscribeAsync(addSubscriptionDto);
-            return Ok($"User with id {addSubscriptionDto.UserId} subscribed to streaming service with id {addSubscriptionDto.StreamingServiceId} successfully.");
+            await _userService.SubscribeAsync(addOrRenewSubscriptionDto);
+            return Ok($"User with id {addOrRenewSubscriptionDto.UserId} subscribed to streaming service with id {addOrRenewSubscriptionDto.StreamingServiceId} successfully.");
         }
 
         catch (StreamingServiceDoesNotExistsException ex)

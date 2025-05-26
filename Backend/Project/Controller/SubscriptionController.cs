@@ -37,6 +37,29 @@ public class SubscriptionController : ControllerBase
             return StatusCode(500, $"Unexpected error: {ex.Message}");
         }
     }
+    
+    
+    [HttpGet("InactiveSubscriptionsOfUser/{userId:int}")]
+    public async Task<IActionResult> GetInactiveSubscriptionsOfUserIdAsync(int userId)
+    {
+        try
+        {
+            var result = await _subscriptionService.GetInactiveSubscriptionsOfUserIdAsync(userId);
+            return Ok(result);
+        }
+        catch (ArgumentException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+        catch (UserDoesNotExistsException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"Unexpected error: {ex.Message}");
+        }
+    }
 
     [HttpGet("SubscriptionsWithConfirmations")]
     public async Task<IActionResult> GetAllSubscriptionsWithConfirmations()
@@ -73,5 +96,5 @@ public class SubscriptionController : ControllerBase
             return StatusCode(500, $"Unexpected error: {ex.Message}");
         }
     }
-  
+    
 }

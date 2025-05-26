@@ -132,8 +132,8 @@ public static class SampleData
                         UserId = michal.Id,
                         SubscriptionId = subscriptions[2].Id,
                         PaymentMethod = "DebitCard",
-                        StartTime = DateOnly.FromDateTime(DateTime.UtcNow.AddDays(-15)),
-                        EndTime   = DateOnly.FromDateTime(DateTime.UtcNow.AddDays(15)),
+                        StartTime = DateOnly.FromDateTime(DateTime.UtcNow.AddDays(-45)),
+                        EndTime   = DateOnly.FromDateTime(DateTime.UtcNow.AddDays(-15)),
                         Price = SubscriptionPriceCalculator.CalculateAmount(hbo.DefaultPrice, michal)
                     }
                 });

@@ -351,7 +351,7 @@ public class UserService
     }
 
     /* Make user subscribe to streaming service*/
-    public async Task SubscribeAsync(AddSubscriptionDTO dto)
+    public async Task SubscribeAsync(AddOrRenewSubscriptionDTO dto)
     {
         await using var transaction = await _context.Database.BeginTransactionAsync();
 
@@ -369,26 +369,53 @@ public class UserService
             if (activeSubscriptions.Any(ss => ss.StreamingServiceName == streamingService.Name))
                 throw new SubscriptionAlreadyExistsException(user.Id, streamingService.Id);
 
-            var subscription = new Subscription
+            var inactiveSubscription =
+               await _subscriptionService.GetInactiveSubscriptionOfUserIdAsync(streamingService.Name, user.Id);
+            if (inactiveSubscription != null)
             {
-                StreamingServiceId = dto.StreamingServiceId,
-                StreamingService = streamingService
-            };
-            await _subscriptionRepository.AddSubscriptionAsync(subscription);
+                var subscription = await _subscriptionRepository
+                    .GetSubscriptionWithGivenIdAsync(inactiveSubscription.Id);
 
-            var today = DateOnly.FromDateTime(DateTime.Now);
-            var confirmation = new SubscriptionConfirmation
+                if (subscription == null) throw new SubscriptionsDoesNotExistsException(inactiveSubscription.Id);
+                var subscriptionConfirmation = new SubscriptionConfirmation()
+                {
+                    EndTime = DateOnly.FromDateTime(DateTime.UtcNow.AddMonths(dto.DurationInMonth)),
+                    StartTime = DateOnly.FromDateTime(DateTime.Now),
+                    PaymentMethod = dto.PaymentMethod,
+                    Price = SubscriptionPriceCalculator.CalculateAmount(streamingService.DefaultPrice, user),
+                    Subscription = subscription,
+                    User = user,
+                    UserId = user.Id,
+                    SubscriptionId = subscription.Id,
+
+
+                };
+                await _subscriptionConfirmationRepository.AddSubscriptionConfirmationAsync(subscriptionConfirmation);
+            }
+            else
             {
-                StartTime = today,
-                EndTime = today.AddMonths(dto.DurationInMonth),
-                PaymentMethod = dto.PaymentMethod,
-                Price = SubscriptionPriceCalculator.CalculateAmount(streamingService.DefaultPrice, user),
-                Subscription = subscription,
-                SubscriptionId = subscription.Id,
-                User = user,
-                UserId = user.Id
-            };
-            await _subscriptionConfirmationRepository.AddSubscriptionConfirmationAsync(confirmation);
+                var subscription = new Subscription
+                {
+                    StreamingServiceId = dto.StreamingServiceId,
+                    StreamingService = streamingService
+                };
+                await _subscriptionRepository.AddSubscriptionAsync(subscription);
+
+                var today = DateOnly.FromDateTime(DateTime.Now);
+                var confirmation = new SubscriptionConfirmation
+                {
+                    StartTime = today,
+                    EndTime = today.AddMonths(dto.DurationInMonth),
+                    PaymentMethod = dto.PaymentMethod,
+                    Price = SubscriptionPriceCalculator.CalculateAmount(streamingService.DefaultPrice, user),
+                    Subscription = subscription,
+                    SubscriptionId = subscription.Id,
+                    User = user,
+                    UserId = user.Id
+                };
+                await _subscriptionConfirmationRepository.AddSubscriptionConfirmationAsync(confirmation);
+            }
+           
 
             await _context.SaveChangesAsync();
 
@@ -401,6 +428,7 @@ public class UserService
         }
     }
     
+  
     /* Validations */
     private async Task<bool> CanUserWatchTheContent(User user, MediaContent mediaContent)
     {
