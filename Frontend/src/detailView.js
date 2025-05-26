@@ -218,7 +218,6 @@ export function showMovieDetail(movie, from = 'home') {
   showcase.classList.add('overlay-disabled');
 }
 
-
 export function closeDetailOnEscape() {
   window.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && detailContainer.style.display === 'flex') {
