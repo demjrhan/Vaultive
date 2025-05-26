@@ -154,7 +154,21 @@
         {
         }
     }
-
+    public class ShortFilmDoesNotExistsException : Exception
+    {
+        public ShortFilmDoesNotExistsException(int movieId)
+            : base($"Short film with id '{movieId}' does not exist.")
+        {
+        }
+    }
+    
+    public class DocumentaryDoesNotExistsException : Exception
+    {
+        public DocumentaryDoesNotExistsException(int movieId)
+            : base($"Documentary film with id '{movieId}' does not exist.")
+        {
+        }
+    }
     public class InvalidGenreException : Exception
     {
         public InvalidGenreException(string genre)

@@ -8,28 +8,28 @@ namespace Project.Controller;
 
 [Route("api/[controller]")]
 [ApiController]
-public class DocumentaryController : ControllerBase
+public class ShortFilmController : ControllerBase
 {
     private readonly MediaContentService _mediaContentService;
 
-    public DocumentaryController(MediaContentService mediaContentService)
+    public ShortFilmController(MediaContentService mediaContentService)
     {
         _mediaContentService = mediaContentService;
     }
     
-    [HttpGet("Get/{documentaryId:int}")]
-    public async Task<IActionResult> GetDocumentaryWithGivenIdAsync(int documentaryId)
+     [HttpGet("Get/{shortFilmId:int}")]
+    public async Task<IActionResult> GetShortFilmWithGivenIdAsync(int shortFilmId)
     {
         try
         {
-            var result = await _mediaContentService.GetDocumentaryWithGivenIdAsync(documentaryId);
+            var result = await _mediaContentService.GetShortFilmWithGivenIdAsync(shortFilmId);
             return Ok(result);
         }
         catch (ArgumentException ex)
         {
             return BadRequest(ex.Message);
         }
-        catch (DocumentaryDoesNotExistsException ex)
+        catch (ShortFilmDoesNotExistsException ex)
         {
             return BadRequest(ex.Message);
         }
@@ -40,11 +40,11 @@ public class DocumentaryController : ControllerBase
     }
     
     [HttpGet("AllDetailed")]
-    public async Task<IActionResult> GetAllDocumentariesDetailedAsync()
+    public async Task<IActionResult> GetAllShortFilmsDetailedAsync()
     {
         try
         {
-            var result = await _mediaContentService.GetAllDocumentariesDetailedAsync();
+            var result = await _mediaContentService.GetAllShortFilmsDetailedAsync();
             return Ok(result);
         }
         catch (Exception ex)
@@ -54,12 +54,12 @@ public class DocumentaryController : ControllerBase
     }
 
     [HttpPost("Add")]
-    public async Task<IActionResult> AddDocumentaryAsync([FromBody] CreateDocumentaryDTO dto)
+    public async Task<IActionResult> AddShortFilmAsync([FromBody] CreateShortFilmDTO dto)
     {
         try
         {
-            await _mediaContentService.AddDocumentaryAsync(dto);
-            return Created(string.Empty, "Documentary added successfully.");
+            await _mediaContentService.AddShortFilmAsync(dto);
+            return Created(string.Empty, "Short film added successfully.");
         }
         catch (ArgumentNullException ex)
         {
@@ -96,11 +96,11 @@ public class DocumentaryController : ControllerBase
     }
     
     [HttpPut("Update")]
-    public async Task<IActionResult> UpdateDocumentaryAsync(int documentaryId, [FromBody] UpdateDocumentaryDTO dto)
+    public async Task<IActionResult> UpdateShortFilmAsync(int shortFilmId, [FromBody] UpdateShortFilmDTO dto)
     {
         try
         {
-            await _mediaContentService.UpdateDocumentaryWithGivenIdAsync(documentaryId, dto);
+            await _mediaContentService.UpdateShortFilmWithGivenIdAsync(shortFilmId, dto);
             return Ok("Content update was successful.");
         }
         catch (ArgumentNullException ex)
@@ -140,5 +140,4 @@ public class DocumentaryController : ControllerBase
             return StatusCode(500, $"Unexpected error: {ex.Message}");
         }
     }
-
 }

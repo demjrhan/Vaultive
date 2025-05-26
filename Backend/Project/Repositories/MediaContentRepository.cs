@@ -26,6 +26,19 @@ public class MediaContentRepository
             .Include(m => m.SubtitleOption)
             .ToListAsync();
     }
+    public async Task<IEnumerable<ShortFilm>> GetAllShortFilmsAsync
+        ()
+    {
+        return await _context.ShortFilms
+            .Include(m => m.StreamingServices)
+            .Include(m => m.Reviews)
+            .ThenInclude(r => r.User)
+            .Include(m => m.WatchHistories)
+            .ThenInclude(wh => wh.User)
+            .Include(m => m.AudioOption)
+            .Include(m => m.SubtitleOption)
+            .ToListAsync();
+    }
     public async Task<IEnumerable<Documentary>> GetAllDocumentariesAsync()
     {
         return await _context.Documentaries
@@ -54,6 +67,18 @@ public class MediaContentRepository
     public async Task<Movie?> GetMovieWithGivenIdAsync(int movieId)
     {
         return await _context.Movies
+            .Include(m => m.StreamingServices)
+            .Include(m => m.Reviews)
+            .ThenInclude(r => r.User)
+            .Include(m => m.WatchHistories)
+            .ThenInclude(wh => wh.User)
+            .Include(m => m.AudioOption)
+            .Include(m => m.SubtitleOption)
+            .FirstOrDefaultAsync(m => m.Id == movieId);
+    }
+    public async Task<ShortFilm?> GetShortFilmWithGivenIdAsync(int movieId)
+    {
+        return await _context.ShortFilms
             .Include(m => m.StreamingServices)
             .Include(m => m.Reviews)
             .ThenInclude(r => r.User)

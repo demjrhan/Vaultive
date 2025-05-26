@@ -13,6 +13,7 @@ public class MasterContext : DbContext
     public DbSet<Documentary> Documentaries { get; set; }
     public DbSet<MediaContent> MediaContents { get; set; }
     public DbSet<Movie> Movies { get; set; }
+    public DbSet<ShortFilm> ShortFilms { get; set; }
     public DbSet<Review> Reviews { get; set; }
     public DbSet<StreamingService> StreamingServices { get; set; }
     public DbSet<Subscription> Subscriptions { get; set; }
