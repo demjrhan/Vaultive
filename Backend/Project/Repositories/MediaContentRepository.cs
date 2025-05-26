@@ -26,7 +26,18 @@ public class MediaContentRepository
             .Include(m => m.SubtitleOption)
             .ToListAsync();
     }
-
+    public async Task<IEnumerable<Documentary>> GetAllDocumentariesAsync()
+    {
+        return await _context.Documentaries
+            .Include(d => d.StreamingServices)
+            .Include(d => d.Reviews)
+            .ThenInclude(r => r.User)
+            .Include(d => d.WatchHistories)
+            .ThenInclude(wh => wh.User)
+            .Include(d => d.AudioOption)
+            .Include(d => d.SubtitleOption)
+            .ToListAsync();
+    }
     public async Task<MediaContent?> GetMediaContentWithGivenIdAsync(int mediaId)
     {
         return await _context.MediaContents
@@ -40,7 +51,6 @@ public class MediaContentRepository
             .FirstOrDefaultAsync(m => m.Id == mediaId);
     }
 
-    /* Used for updating the media content */
     public async Task<Movie?> GetMovieWithGivenIdAsync(int movieId)
     {
         return await _context.Movies
@@ -52,6 +62,18 @@ public class MediaContentRepository
             .Include(m => m.AudioOption)
             .Include(m => m.SubtitleOption)
             .FirstOrDefaultAsync(m => m.Id == movieId);
+    }
+    public async Task<Documentary?> GetDocumentaryWithGivenIdAsync(int documentaryId)
+    {
+        return await _context.Documentaries
+            .Include(d => d.StreamingServices)
+            .Include(d => d.Reviews)
+            .ThenInclude(r => r.User)
+            .Include(d => d.WatchHistories)
+            .ThenInclude(wh => wh.User)
+            .Include(d => d.AudioOption)
+            .Include(d => d.SubtitleOption)
+            .FirstOrDefaultAsync(d => d.Id == documentaryId);
     }
 
     public async Task AddAsync(MediaContent mediaContent)

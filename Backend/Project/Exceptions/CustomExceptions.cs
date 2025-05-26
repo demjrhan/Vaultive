@@ -170,6 +170,23 @@
         {
         }
     }
+    
+    public class AtLeastOneTopicMustExistsException : Exception
+    {
+        public AtLeastOneTopicMustExistsException()
+            : base("At least one topic must be existing in the media content.")
+        {
+        }
+    }
+
+    public class InvalidTopicException : Exception
+    {
+        public InvalidTopicException(string topic)
+            : base($"Topic '{topic}' is not a valid topic.")
+        {
+        }
+    }
+
 
     public class StreamingServiceDoesNotExistsException : Exception
     {

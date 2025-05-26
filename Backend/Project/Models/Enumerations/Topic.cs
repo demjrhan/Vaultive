@@ -8,5 +8,6 @@ public enum Topic
     Health,
     Violence,
     Science,
-    Environment
+    Environment,
+    Wildlife
 }

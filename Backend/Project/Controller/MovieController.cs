@@ -15,7 +15,7 @@ public class MovieController : ControllerBase
     {
         _mediaContentService = mediaContentService;
     }
-    
+
     [HttpGet("Get/{movieId:int}")]
     public async Task<IActionResult> GetMovieWithGivenIdAsync(int movieId)
     {
@@ -79,6 +79,10 @@ public class MovieController : ControllerBase
             return BadRequest(ex.Message);
         }
         catch (ArgumentException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+        catch (NoChangesDetectedException ex)
         {
             return BadRequest(ex.Message);
         }

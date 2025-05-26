@@ -44,33 +44,33 @@ public class MediaContentService
     }
 
     /* Adding new movie data to database. */
-    public async Task AddMovieAsync(CreateMovieDTO movieDto)
+    public async Task AddMovieAsync(CreateMovieDTO dto)
     {
-        if (movieDto == null)
-            throw new ArgumentNullException(nameof(movieDto));
+        if (dto == null)
+            throw new ArgumentNullException(nameof(dto));
 
-        if (movieDto.MediaContent == null)
-            throw new ArgumentException("MediaContent inside of input can not be null..", nameof(movieDto));
+        if (dto.MediaContent == null)
+            throw new ArgumentException("MediaContent inside of input can not be null..", nameof(dto));
 
         /* Movie Title must be unique. */
-        if (await _context.MediaContents.AnyAsync(m => m.Title == movieDto.MediaContent.Title))
-            throw new MediaContentTitleMustBeUniqueException(movieDto.MediaContent.Title);
+        if (await _context.MediaContents.AnyAsync(m => m.Title == dto.MediaContent.Title))
+            throw new MediaContentTitleMustBeUniqueException(dto.MediaContent.Title);
 
 
         /* Before starting the process we are validating if the given genres are parse-able to actual Genre enumeration class. */
-        ValidateGenres(movieDto.Genres);
+        ValidateGenres(dto.Genres);
         /* Next step is making sure if there is at least one option is existing since it is a composition-overlapping */
-        ValidateOptions(movieDto.MediaContent.AudioOption, movieDto.MediaContent.SubtitleOption);
+        ValidateOptions(dto.MediaContent.AudioOption, dto.MediaContent.SubtitleOption);
 
         ValidateMediaContent(
-            title: movieDto.MediaContent.Title,
-            description: movieDto.MediaContent.Description,
-            originalLanguage: movieDto.MediaContent.OriginalLanguage,
-            country: movieDto.MediaContent.Country,
-            duration: movieDto.MediaContent.Duration,
-            releaseDate: movieDto.MediaContent.ReleaseDate,
-            audioLanguages: movieDto.MediaContent.AudioOption?.Languages,
-            subtitleLanguages: movieDto.MediaContent.SubtitleOption?.Languages
+            title: dto.MediaContent.Title,
+            description: dto.MediaContent.Description,
+            originalLanguage: dto.MediaContent.OriginalLanguage,
+            country: dto.MediaContent.Country,
+            duration: dto.MediaContent.Duration,
+            releaseDate: dto.MediaContent.ReleaseDate,
+            audioLanguages: dto.MediaContent.AudioOption?.Languages,
+            subtitleLanguages: dto.MediaContent.SubtitleOption?.Languages
         );
 
 
@@ -78,16 +78,16 @@ public class MediaContentService
 
         try
         {
-            var enums = ParseGenres(movieDto.Genres);
+            var enums = ParseGenres(dto.Genres);
             List<StreamingService> streamingServices = new List<StreamingService>();
-            if (movieDto.MediaContent.StreamingServiceIds.Any())
+            if (dto.MediaContent.StreamingServiceIds.Any())
             {
-                if (movieDto.MediaContent.StreamingServiceIds.Any(id => id <= 0))
+                if (dto.MediaContent.StreamingServiceIds.Any(id => id <= 0))
                     throw new ArgumentException(
                         "All streaming service IDs must be positive integers.",
-                        nameof(movieDto.MediaContent.StreamingServiceIds));
+                        nameof(dto.MediaContent.StreamingServiceIds));
 
-                var requestedIds = movieDto.MediaContent.StreamingServiceIds.Distinct().ToList();
+                var requestedIds = dto.MediaContent.StreamingServiceIds.Distinct().ToList();
 
                 streamingServices = await _context.StreamingServices
                     .Where(ss => requestedIds.Contains(ss.Id))
@@ -101,36 +101,36 @@ public class MediaContentService
             }
 
             AudioOption? audioOption = null;
-            if (movieDto.MediaContent.AudioOption != null)
+            if (dto.MediaContent.AudioOption != null)
             {
                 audioOption = new AudioOption
                 {
-                    Languages = movieDto.MediaContent.AudioOption.Languages
+                    Languages = dto.MediaContent.AudioOption.Languages
                 };
             }
 
             SubtitleOption? subtitleOption = null;
-            if (movieDto.MediaContent.SubtitleOption != null)
+            if (dto.MediaContent.SubtitleOption != null)
             {
                 subtitleOption = new SubtitleOption
                 {
-                    Languages = movieDto.MediaContent.SubtitleOption.Languages
+                    Languages = dto.MediaContent.SubtitleOption.Languages
                 };
             }
 
 
             await _mediaContentRepository.AddAsync(new Movie()
             {
-                Title = movieDto.MediaContent.Title,
+                Title = dto.MediaContent.Title,
                 AudioOption = audioOption,
                 SubtitleOption = subtitleOption,
-                Country = movieDto.MediaContent.Country,
-                Duration = movieDto.MediaContent.Duration,
-                Description = movieDto.MediaContent.Description,
-                OriginalLanguage = movieDto.MediaContent.OriginalLanguage,
-                ReleaseDate = movieDto.MediaContent.ReleaseDate,
-                PosterImageName = movieDto.MediaContent.PosterImageName,
-                YoutubeTrailerURL = movieDto.MediaContent.YoutubeTrailerURL,
+                Country = dto.MediaContent.Country,
+                Duration = dto.MediaContent.Duration,
+                Description = dto.MediaContent.Description,
+                OriginalLanguage = dto.MediaContent.OriginalLanguage,
+                ReleaseDate = dto.MediaContent.ReleaseDate,
+                PosterImageName = dto.MediaContent.PosterImageName,
+                YoutubeTrailerURL = dto.MediaContent.YoutubeTrailerURL,
                 Genres = enums,
                 StreamingServices = streamingServices
             });
@@ -144,6 +144,108 @@ public class MediaContentService
             throw;
         }
     }
+
+    /* Adding new documentary data to database. */
+
+    public async Task AddDocumentaryAsync(CreateDocumentaryDTO dto)
+    {
+        if (dto == null)
+            throw new ArgumentNullException(nameof(dto));
+
+        if (dto.MediaContent == null)
+            throw new ArgumentException("MediaContent inside of input cannot be null.", nameof(dto));
+
+        /* Documentary Title must be unique. */
+        if (await _context.MediaContents.AnyAsync(m => m.Title == dto.MediaContent.Title))
+            throw new MediaContentTitleMustBeUniqueException(dto.MediaContent.Title);
+
+        /* Before starting the process we are validating if the given genres are parse-able to actual Genre enumeration class. */
+        ValidateTopics(dto.Topics);
+
+        /* Next step is making sure if there is at least one option is existing since it is a composition-overlapping */
+        ValidateOptions(dto.MediaContent.AudioOption, dto.MediaContent.SubtitleOption);
+
+        ValidateMediaContent(
+            title: dto.MediaContent.Title,
+            description: dto.MediaContent.Description,
+            originalLanguage: dto.MediaContent.OriginalLanguage,
+            country: dto.MediaContent.Country,
+            duration: dto.MediaContent.Duration,
+            releaseDate: dto.MediaContent.ReleaseDate,
+            audioLanguages: dto.MediaContent.AudioOption?.Languages,
+            subtitleLanguages: dto.MediaContent.SubtitleOption?.Languages
+        );
+
+        await using var transaction = await _context.Database.BeginTransactionAsync();
+
+        try
+        {
+            var topicEnums = ParseTopics(dto.Topics);
+
+            List<StreamingService> streamingServices = new List<StreamingService>();
+            if (dto.MediaContent.StreamingServiceIds.Any())
+            {
+                if (dto.MediaContent.StreamingServiceIds.Any(id => id <= 0))
+                    throw new ArgumentException(
+                        "All streaming service IDs must be positive integers.",
+                        nameof(dto.MediaContent.StreamingServiceIds));
+
+                var requestedIds = dto.MediaContent.StreamingServiceIds.Distinct().ToList();
+                streamingServices = await _context.StreamingServices
+                    .Where(ss => requestedIds.Contains(ss.Id))
+                    .ToListAsync();
+
+                var foundIds = streamingServices.Select(ss => ss.Id);
+                var missingIds = requestedIds.Except(foundIds).ToList();
+                if (missingIds.Any())
+                    throw new StreamingServiceDoesNotExistsException(missingIds);
+            }
+
+            AudioOption? audioOption = null;
+            if (dto.MediaContent.AudioOption != null)
+            {
+                audioOption = new AudioOption
+                {
+                    Languages = dto.MediaContent.AudioOption.Languages
+                };
+            }
+
+            SubtitleOption? subtitleOption = null;
+            if (dto.MediaContent.SubtitleOption != null)
+            {
+                subtitleOption = new SubtitleOption
+                {
+                    Languages = dto.MediaContent.SubtitleOption.Languages
+                };
+            }
+
+            var documentary = new Documentary
+            {
+                Title = dto.MediaContent.Title,
+                Description = dto.MediaContent.Description,
+                OriginalLanguage = dto.MediaContent.OriginalLanguage,
+                Country = dto.MediaContent.Country,
+                Duration = dto.MediaContent.Duration,
+                ReleaseDate = dto.MediaContent.ReleaseDate,
+                PosterImageName = dto.MediaContent.PosterImageName,
+                YoutubeTrailerURL = dto.MediaContent.YoutubeTrailerURL,
+                AudioOption = audioOption,
+                SubtitleOption = subtitleOption,
+                Topics = topicEnums,
+                StreamingServices = streamingServices
+            };
+
+            await _mediaContentRepository.AddAsync(documentary);
+            await _context.SaveChangesAsync();
+            await transaction.CommitAsync();
+        }
+        catch
+        {
+            await transaction.RollbackAsync();
+            throw;
+        }
+    }
+
 
     /* Remove the media content with the given id */
     public async Task RemoveMediaContentWithGivenIdAsync(int mediaId)
@@ -166,36 +268,38 @@ public class MediaContentService
     }
 
     /* Update the media content with the given id */
-    public async Task UpdateMovieWithGivenIdAsync(int movieId, UpdateMovieDTO movieDto)
+    public async Task UpdateMovieWithGivenIdAsync(int movieId, UpdateMovieDTO dto)
     {
         if (movieId <= 0) throw new ArgumentException("Movie id can not be equal or smaller than 0.");
 
-        if (movieDto == null)
-            throw new ArgumentNullException(nameof(movieDto));
-        if (movieDto.MediaContent == null)
-            throw new ArgumentException("MediaContent inside of input can not be null..", nameof(movieDto));
+        if (dto == null)
+            throw new ArgumentNullException(nameof(dto));
+        if (dto.MediaContent == null)
+            throw new ArgumentException("MediaContent inside of input can not be null..", nameof(dto));
 
         var movie = await _mediaContentRepository.GetMovieWithGivenIdAsync(movieId);
         if (movie == null) throw new MediaContentDoesNotExistsException(new[] { movieId });
 
-        ValidateChanges(movieDto, movie);
+        ValidateChanges(dto, movie);
+        
+        ValidateGenres(dto.Genres);
 
         /* Movie Title must be unique but if the movie trying to update itself, no error is thrown. */
-        if (await _context.MediaContents.AnyAsync(m => m.Title == movieDto.MediaContent.Title && m.Id != movieId))
-            throw new MediaContentTitleMustBeUniqueException(movieDto.MediaContent.Title);
+        if (await _context.MediaContents.AnyAsync(m => m.Title == dto.MediaContent.Title && m.Id != movieId))
+            throw new MediaContentTitleMustBeUniqueException(dto.MediaContent.Title);
         /* Next step is making sure if there is at least one option is existing since it is a composition-overlapping */
-        ValidateOptions(movieDto.MediaContent.AudioOption, movieDto.MediaContent.SubtitleOption);
+        ValidateOptions(dto.MediaContent.AudioOption, dto.MediaContent.SubtitleOption);
 
 
         ValidateMediaContent(
-            title: movieDto.MediaContent.Title,
-            description: movieDto.MediaContent.Description,
-            originalLanguage: movieDto.MediaContent.OriginalLanguage,
-            country: movieDto.MediaContent.Country,
-            duration: movieDto.MediaContent.Duration,
-            releaseDate: movieDto.MediaContent.ReleaseDate,
-            audioLanguages: movieDto.MediaContent.AudioOption?.Languages,
-            subtitleLanguages: movieDto.MediaContent.SubtitleOption?.Languages
+            title: dto.MediaContent.Title,
+            description: dto.MediaContent.Description,
+            originalLanguage: dto.MediaContent.OriginalLanguage,
+            country: dto.MediaContent.Country,
+            duration: dto.MediaContent.Duration,
+            releaseDate: dto.MediaContent.ReleaseDate,
+            audioLanguages: dto.MediaContent.AudioOption?.Languages,
+            subtitleLanguages: dto.MediaContent.SubtitleOption?.Languages
         );
 
 
@@ -203,45 +307,45 @@ public class MediaContentService
 
         try
         {
-            movie.Title = movieDto.MediaContent.Title;
-            movie.Description = movieDto.MediaContent.Description;
-            movie.ReleaseDate = movieDto.MediaContent.ReleaseDate;
-            movie.OriginalLanguage = movieDto.MediaContent.OriginalLanguage;
-            movie.Country = movieDto.MediaContent.Country;
-            movie.Duration = movieDto.MediaContent.Duration;
-            movie.PosterImageName = movieDto.MediaContent.PosterImageName;
-            movie.YoutubeTrailerURL = movieDto.MediaContent.YoutubeTrailerURL;
+            movie.Title = dto.MediaContent.Title;
+            movie.Description = dto.MediaContent.Description;
+            movie.ReleaseDate = dto.MediaContent.ReleaseDate;
+            movie.OriginalLanguage = dto.MediaContent.OriginalLanguage;
+            movie.Country = dto.MediaContent.Country;
+            movie.Duration = dto.MediaContent.Duration;
+            movie.PosterImageName = dto.MediaContent.PosterImageName;
+            movie.YoutubeTrailerURL = dto.MediaContent.YoutubeTrailerURL;
 
-            if (movie.AudioOption != null && movieDto.MediaContent.AudioOption != null)
+            if (movie.AudioOption != null && dto.MediaContent.AudioOption != null)
             {
-                movie.AudioOption.Languages = movieDto.MediaContent.AudioOption.Languages;
+                movie.AudioOption.Languages = dto.MediaContent.AudioOption.Languages;
             }
-            else if (movie.AudioOption == null && movieDto.MediaContent.AudioOption != null)
+            else if (movie.AudioOption == null && dto.MediaContent.AudioOption != null)
             {
                 movie.AudioOption = new AudioOption()
                 {
                     MediaContent = movie,
-                    Languages = movieDto.MediaContent.AudioOption.Languages
+                    Languages = dto.MediaContent.AudioOption.Languages
                 };
             }
-            else if (movie.AudioOption != null && movieDto.MediaContent.AudioOption == null)
+            else if (movie.AudioOption != null && dto.MediaContent.AudioOption == null)
             {
                 movie.AudioOption = null;
             }
 
-            if (movie.SubtitleOption != null && movieDto.MediaContent.SubtitleOption != null)
+            if (movie.SubtitleOption != null && dto.MediaContent.SubtitleOption != null)
             {
-                movie.SubtitleOption.Languages = movieDto.MediaContent.SubtitleOption.Languages;
+                movie.SubtitleOption.Languages = dto.MediaContent.SubtitleOption.Languages;
             }
-            else if (movie.SubtitleOption == null && movieDto.MediaContent.SubtitleOption != null)
+            else if (movie.SubtitleOption == null && dto.MediaContent.SubtitleOption != null)
             {
                 movie.SubtitleOption = new SubtitleOption()
                 {
                     MediaContent = movie,
-                    Languages = movieDto.MediaContent.SubtitleOption.Languages
+                    Languages = dto.MediaContent.SubtitleOption.Languages
                 };
             }
-            else if (movie.SubtitleOption != null && movieDto.MediaContent.SubtitleOption == null)
+            else if (movie.SubtitleOption != null && dto.MediaContent.SubtitleOption == null)
             {
                 movie.SubtitleOption = null;
             }
@@ -249,7 +353,7 @@ public class MediaContentService
             var existingIds = movie.StreamingServices
                 .Select(s => s.Id)
                 .ToHashSet();
-            var desiredIds = movieDto.MediaContent.StreamingServiceIds;
+            var desiredIds = dto.MediaContent.StreamingServiceIds;
 
             var toRemoveStreamingServices = movie.StreamingServices
                 .Where(s => !desiredIds.Contains(s.Id))
@@ -275,7 +379,7 @@ public class MediaContentService
             }
 
 
-            var desiredGenres = ParseGenres(movieDto.Genres);
+            var desiredGenres = ParseGenres(dto.Genres);
 
             var existingGenres = movie.Genres.ToList();
 
@@ -302,6 +406,142 @@ public class MediaContentService
         }
     }
 
+    /* Update the documentary content with the given id */
+    public async Task UpdateDocumentaryWithGivenIdAsync(int documentaryId, UpdateDocumentaryDTO dto)
+    {
+        if (documentaryId <= 0)
+            throw new ArgumentException("Documentary id cannot be equal to or less than 0.", nameof(documentaryId));
+
+        if (dto == null)
+            throw new ArgumentNullException(nameof(dto));
+        if (dto.MediaContent == null)
+            throw new ArgumentException("MediaContent inside of input cannot be null.", nameof(dto));
+
+        var documentary = await _mediaContentRepository.GetDocumentaryWithGivenIdAsync(documentaryId);
+        if (documentary == null)
+            throw new MediaContentDoesNotExistsException(new[] { documentaryId });
+
+        ValidateDocumentaryChanges(dto, documentary);
+
+        if (await _context.MediaContents.AnyAsync(m =>
+                m.Title == dto.MediaContent.Title && m.Id != documentaryId))
+        {
+            throw new MediaContentTitleMustBeUniqueException(dto.MediaContent.Title);
+        }
+        
+        ValidateTopics(dto.Topics);
+
+        ValidateOptions(dto.MediaContent.AudioOption, dto.MediaContent.SubtitleOption);
+
+        ValidateMediaContent(
+            title: dto.MediaContent.Title,
+            description: dto.MediaContent.Description,
+            originalLanguage: dto.MediaContent.OriginalLanguage,
+            country: dto.MediaContent.Country,
+            duration: dto.MediaContent.Duration,
+            releaseDate: dto.MediaContent.ReleaseDate,
+            audioLanguages: dto.MediaContent.AudioOption?.Languages,
+            subtitleLanguages: dto.MediaContent.SubtitleOption?.Languages
+        );
+
+        await using var transaction = await _context.Database.BeginTransactionAsync();
+        try
+        {
+            documentary.Title = dto.MediaContent.Title;
+            documentary.Description = dto.MediaContent.Description;
+            documentary.ReleaseDate = dto.MediaContent.ReleaseDate;
+            documentary.OriginalLanguage = dto.MediaContent.OriginalLanguage;
+            documentary.Country = dto.MediaContent.Country;
+            documentary.Duration = dto.MediaContent.Duration;
+            documentary.PosterImageName = dto.MediaContent.PosterImageName;
+            documentary.YoutubeTrailerURL = dto.MediaContent.YoutubeTrailerURL;
+
+            if (documentary.AudioOption != null && dto.MediaContent.AudioOption != null)
+            {
+                documentary.AudioOption.Languages = dto.MediaContent.AudioOption.Languages;
+            }
+            else if (documentary.AudioOption == null && dto.MediaContent.AudioOption != null)
+            {
+                documentary.AudioOption = new AudioOption
+                {
+                    MediaContent = documentary,
+                    Languages = dto.MediaContent.AudioOption.Languages
+                };
+            }
+            else if (documentary.AudioOption != null && dto.MediaContent.AudioOption == null)
+            {
+                documentary.AudioOption = null;
+            }
+
+            if (documentary.SubtitleOption != null && dto.MediaContent.SubtitleOption != null)
+            {
+                documentary.SubtitleOption.Languages = dto.MediaContent.SubtitleOption.Languages;
+            }
+            else if (documentary.SubtitleOption == null && dto.MediaContent.SubtitleOption != null)
+            {
+                documentary.SubtitleOption = new SubtitleOption
+                {
+                    MediaContent = documentary,
+                    Languages = dto.MediaContent.SubtitleOption.Languages
+                };
+            }
+            else if (documentary.SubtitleOption != null && dto.MediaContent.SubtitleOption == null)
+            {
+                documentary.SubtitleOption = null;
+            }
+            
+            
+            var existingIds = documentary.StreamingServices
+                .Select(s => s.Id)
+                .ToHashSet();
+            var desiredIds = dto.MediaContent.StreamingServiceIds;
+
+            var toRemoveStreamingServices = documentary.StreamingServices
+                .Where(s => !desiredIds.Contains(s.Id))
+                .ToList();
+            foreach (var svc in toRemoveStreamingServices)
+                documentary.StreamingServices.Remove(svc);
+            
+            var toAddIds = desiredIds.Except(existingIds).ToList();
+            if (toAddIds.Any())
+            {
+                var toAddStreamingServices = await _context.StreamingServices
+                    .Where(s => toAddIds.Contains(s.Id))
+                    .ToListAsync();
+
+                var foundIds = toAddStreamingServices.Select(ss => ss.Id);
+                var missingIds = toAddIds.Except(foundIds).ToList();
+
+                if (missingIds.Any())
+                    throw new StreamingServiceDoesNotExistsException(missingIds);
+
+                foreach (var svc in toAddStreamingServices)
+                    documentary.StreamingServices.Add(svc);
+            }
+            var desiredTopics = ParseTopics(dto.Topics);
+            var existingTopics = documentary.Topics.ToList();
+
+            var toRemoveTopics = existingTopics
+                .Where(t => !desiredTopics.Contains(t))
+                .ToList();
+            foreach (var t in toRemoveTopics)
+                documentary.Topics.Remove(t);
+
+            var toAddTopics = desiredTopics
+                .Where(t => !existingTopics.Contains(t))
+                .ToList();
+            foreach (var t in toAddTopics)
+                documentary.Topics.Add(t);
+            
+            await _context.SaveChangesAsync();
+            await transaction.CommitAsync();
+        }
+        catch
+        {
+            await transaction.RollbackAsync();
+            throw;
+        }
+    }
 
     /* Returns all the movies with their reviews and streaming services. */
     public async Task<List<MovieResponseFrontendDTO>> GetAllMoviesFrontEndAsync()
@@ -385,6 +625,55 @@ public class MediaContentService
         }).ToList();
     }
 
+    /* Returns all the documentaries with their reviews and streaming services with all included details. */
+
+    public async Task<List<DocumentaryDTO>> GetAllDocumentariesDetailedAsync()
+    {
+        var docs = await _mediaContentRepository.GetAllDocumentariesAsync();
+
+        return docs.Select(d => new DocumentaryDTO
+        {
+            MediaContentDetailed = new MediaContentDetailedDTO
+            {
+                Id = d.Id,
+                Title = d.Title,
+                Description = d.Description,
+                YoutubeTrailerURL = d.YoutubeTrailerURL,
+                PosterImageName = d.PosterImageName,
+                Country = d.Country,
+                Duration = d.Duration,
+                OriginalLanguage = d.OriginalLanguage,
+                ReleaseDate = d.ReleaseDate,
+                StreamingServices = d.StreamingServices
+                    .Select(ss => new StreamingServiceDTO
+                    {
+                        Id = ss.Id,
+                        Country = ss.Country,
+                        DefaultPrice = ss.DefaultPrice,
+                        Description = ss.Description,
+                        Name = ss.Name,
+                        WebsiteLink = ss.WebsiteLink
+                    }).ToList(),
+                Reviews = d.Reviews.Select(r => new ReviewDTO
+                {
+                    Id = r.Id,
+                    MediaTitle = r.MediaContent.Title,
+                    WatchedOn = r.WatchHistory.WatchDate,
+                    Comment = r.Comment,
+                    Nickname = r.User.Nickname,
+                }).ToList(),
+                AudioOption = new OptionDTO
+                {
+                    Languages = d.AudioOption?.Languages
+                },
+                SubtitleOption = new OptionDTO
+                {
+                    Languages = d.SubtitleOption?.Languages
+                }
+            },
+            Topics = d.Topics.Select(t => t.ToString()).ToList()
+        }).ToList();
+    }
     /* Get one media content by id including all details, with given id */
     public async Task<MediaContentDetailedDTO> GetMediaContentWithGivenIdAsync(int mediaId)
     {
@@ -491,6 +780,12 @@ public class MediaContentService
             throw new AtLeastOneGenreMustExistsException();
     }
 
+    private void ValidateTopics(ICollection<string> topics)
+    {
+        if (topics == null || !topics.Any())
+            throw new AtLeastOneTopicMustExistsException();
+    }
+
     private void ValidateOptions(OptionDTO? audioOption, OptionDTO? subtitleOption)
     {
         if (audioOption == null && subtitleOption == null)
@@ -505,6 +800,16 @@ public class MediaContentService
                 : throw new InvalidGenreException(g))
             .ToHashSet();
     }
+
+    private static HashSet<Topic> ParseTopics(IEnumerable<string> topics)
+    {
+        return topics
+            .Select(t => Enum.TryParse<Topic>(t, true, out var result)
+                ? result
+                : throw new InvalidTopicException(t))
+            .ToHashSet();
+    }
+
 
     private void ValidateMediaContent(
         string title,
@@ -547,7 +852,7 @@ public class MediaContentService
 
     private void ValidateChanges(UpdateMovieDTO movieDto, Movie movie)
     {
-        var newGenres = ParseGenres(movieDto.Genres); // assume returns ICollection<Genre>
+        var newGenres = ParseGenres(movieDto.Genres);
         bool genresEqual = new HashSet<Genre>(newGenres)
             .SetEquals(movie.Genres);
 
@@ -586,6 +891,64 @@ public class MediaContentService
             StringComparison.OrdinalIgnoreCase);
 
         if (genresEqual
+            && titleEqual
+            && descEqual
+            && releaseDateEqual
+            && langEqual
+            && countryEqual
+            && durationEqual
+            && audioEqual
+            && subtitleEqual
+            && servicesEqual
+            && posterEqual
+            && trailerEqual)
+        {
+            throw new NoChangesDetectedException();
+        }
+    }
+
+    private void ValidateDocumentaryChanges(UpdateDocumentaryDTO dto, Documentary documentary)
+    {
+        var newTopics = ParseTopics(dto.Topics);
+        bool topicsEqual = new HashSet<Topic>(newTopics)
+            .SetEquals(documentary.Topics);
+
+        var mc = dto.MediaContent;
+        bool titleEqual = string.Equals(mc.Title, documentary.Title, StringComparison.OrdinalIgnoreCase);
+        bool descEqual = string.Equals(mc.Description, documentary.Description, StringComparison.OrdinalIgnoreCase);
+        bool releaseDateEqual = mc.ReleaseDate == documentary.ReleaseDate;
+        bool langEqual = string.Equals(mc.OriginalLanguage, documentary.OriginalLanguage,
+            StringComparison.OrdinalIgnoreCase);
+        bool countryEqual = string.Equals(mc.Country, documentary.Country, StringComparison.OrdinalIgnoreCase);
+        bool durationEqual = mc.Duration == documentary.Duration;
+        bool posterEqual = string.Equals(mc.PosterImageName, documentary.PosterImageName,
+            StringComparison.OrdinalIgnoreCase);
+        bool trailerEqual = string.Equals(mc.YoutubeTrailerURL, documentary.YoutubeTrailerURL,
+            StringComparison.OrdinalIgnoreCase);
+
+        bool audioEqual;
+        if (mc.AudioOption?.Languages == null && documentary.AudioOption?.Languages == null)
+            audioEqual = true;
+        else if (mc.AudioOption?.Languages == null || documentary.AudioOption?.Languages == null)
+            audioEqual = false;
+        else
+            audioEqual = new HashSet<string>(mc.AudioOption.Languages, StringComparer.OrdinalIgnoreCase)
+                .SetEquals(documentary.AudioOption.Languages);
+
+        bool subtitleEqual;
+        if (mc.SubtitleOption?.Languages == null && documentary.SubtitleOption?.Languages == null)
+            subtitleEqual = true;
+        else if (mc.SubtitleOption?.Languages == null || documentary.SubtitleOption?.Languages == null)
+            subtitleEqual = false;
+        else
+            subtitleEqual = new HashSet<string>(mc.SubtitleOption.Languages, StringComparer.OrdinalIgnoreCase)
+                .SetEquals(documentary.SubtitleOption.Languages);
+
+        var existingServiceIds = new HashSet<int>(documentary.StreamingServices.Select(s => s.Id));
+        var desiredServiceIds = new HashSet<int>(mc.StreamingServiceIds ?? Enumerable.Empty<int>());
+        bool servicesEqual = existingServiceIds.SetEquals(desiredServiceIds);
+
+        if (topicsEqual
             && titleEqual
             && descEqual
             && releaseDateEqual
