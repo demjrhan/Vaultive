@@ -201,6 +201,20 @@
     transform: scale(1.1);
 }
 
+
+.review-user {
+    display: flex;
+    flex-direction: column;
+    left: 0;
+}
+.review-watched-on {
+    font-size: 0.8rem;
+    color: white;
+    font-weight: bold;
+    text-align: center;
+    padding: 0;
+    margin:0;
+}
 .review-nickname {
     font-size: 1.2rem;
     font-weight: bold;
@@ -210,7 +224,7 @@
     border-radius: 6px;
     padding: 0 0.5rem 0 0.5rem;
     box-shadow: 0 0 10px rgba(255, 255, 255, 1);
-    left: 0;
+
 }
 
 
@@ -246,6 +260,7 @@
     font-size: 1rem;
     resize: none;
     overflow-y: auto;
+
     /* Hide scrollbar for Firefox */
     scrollbar-width: none;
     margin-bottom: 1em;

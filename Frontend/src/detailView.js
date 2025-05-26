@@ -103,6 +103,13 @@ export function showMovieDetail(movie, from = 'home') {
       const reviewWrapper = document.createElement('div');
       reviewWrapper.classList.add('review-item');
 
+      const userWrapper = document.createElement('div');
+      userWrapper.classList.add('review-user');
+
+      const watchedOn = document.createElement('div');
+      watchedOn.classList.add('review-watched-on');
+      watchedOn.textContent = review.watchedOn;
+
       const nickname = document.createElement('div');
       nickname.classList.add('review-nickname');
       nickname.textContent = review.nickname;
@@ -111,7 +118,9 @@ export function showMovieDetail(movie, from = 'home') {
       comment.classList.add('review-comment');
       comment.textContent = review.comment;
 
-      reviewWrapper.appendChild(nickname);
+      userWrapper.appendChild(watchedOn);
+      userWrapper.appendChild(nickname);
+      reviewWrapper.appendChild(userWrapper)
       reviewWrapper.appendChild(comment);
       reviewContent.appendChild(reviewWrapper);
     });
@@ -165,8 +174,6 @@ export function showMovieDetail(movie, from = 'home') {
         textarea.value = previousText;
       }, 5000);
     } else {
-      appendReviewToUI({ comment });
-
       setTimeout(() => {
         textarea.style.color = 'green';
         textarea.value = 'Successfully submitted your review. Thank you!';
@@ -211,27 +218,23 @@ export function showMovieDetail(movie, from = 'home') {
   showcase.classList.add('overlay-disabled');
 }
 
-/* Hardcoded now. */
-function appendReviewToUI(review) {
-  const reviewWrapper = document.createElement('div');
-  reviewWrapper.classList.add('review-item');
-
-  const nickname = document.createElement('div');
-  nickname.classList.add('review-nickname');
-  nickname.textContent = 'Demir';
-
-  const comment = document.createElement('div');
-  comment.classList.add('review-comment');
-  comment.textContent = review.comment;
-
-  reviewWrapper.appendChild(nickname);
-  reviewWrapper.appendChild(comment);
-  reviewContent.appendChild(reviewWrapper);
-}
 
 export function closeDetailOnEscape() {
   window.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && detailContainer.style.display === 'flex') {
+
+      addReview.style.boxShadow = ' 0 0 35px rgba(255, 255, 255, 1)';
+      addReviewContainer.classList.remove('visible');
+      setTimeout(() => {
+        addReviewContainer.style.display = 'none';
+      }, 300);
+      addReview.innerText = 'Add';
+
+      textarea.value = '';
+      textarea.style.color = 'white';
+      textarea.readOnly = false;
+      textarea.disabled = false;
+
       closeDetailView();
 
       const scrollY = document.body.style.top;

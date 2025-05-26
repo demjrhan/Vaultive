@@ -328,6 +328,7 @@ public class MediaContentService
                     Id = r.Id,
                     Comment = r.Comment,
                     Nickname = r.User.Nickname,
+                    WatchedOn = r.WatchHistory.WatchDate,
                 }).ToList()
             },
             Genres = m.Genres.Select(g => g.ToString()).ToList()
