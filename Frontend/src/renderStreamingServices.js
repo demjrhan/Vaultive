@@ -1,15 +1,11 @@
 import { showMovieDetail } from './detailView.js';
 
-const API_BASE_URL = 'http://localhost:5034/api/Movie';
 
-export async function renderStreamingServices() {
+export async function renderStreamingServices(movies) {
   const popupContentBox = document.querySelector('.streaming-popup-container .content-box-streaming');
   popupContentBox.innerHTML = '';
 
-  try {
-    const response = await fetch(`${API_BASE_URL}/All`);
-    if (!response.ok) throw new Error('Failed to fetch movies');
-    const movies = await response.json();
+
     const streamingMap = new Map();
 
     movies.forEach(movie => {
@@ -62,10 +58,6 @@ export async function renderStreamingServices() {
       popupContentBox.appendChild(streamingContainer);
     });
 
-  } catch (error) {
-    console.error('Error loading movies:', error);
-    popupContentBox.innerHTML =
-      '<p class="error-message">Failed to load movies.</p>';
-  }
+
 }
 
