@@ -133,41 +133,63 @@ function openDetailContainer(from) {
     streamingServicePopUpContainer.classList.add('overlay-disabled');
   }
 }
-
-function renderReviews(movie) {
+async function renderReviews(movie) {
   reviewContent.innerHTML = '';
-  const reviews = movie.mediaContent?.reviews || [];
+  const mediaId = movie.mediaContent?.id;
+  console.log(`${API_BASE_URL}/Review/MediaContentsReviews/${mediaId}`);
 
-  if (reviews.length > 0) {
-    reviews.forEach(review => {
-      const reviewWrapper = document.createElement('div');
-      reviewWrapper.classList.add('review-item');
+  try {
+    const response = await fetch(
+      `${API_BASE_URL}/Review/MediaContentsReviews/${mediaId}`
+    );
 
-      const userWrapper = document.createElement('div');
-      userWrapper.classList.add('review-user');
+    if (!response.ok) {
+      const p = document.createElement('p');
+      p.textContent = 'Something went wrong with fetching reviews. Please try again later.';
+      reviewContent.appendChild(p);
+      return;
+    }
 
-      const watchedOn = document.createElement('div');
-      watchedOn.classList.add('review-watched-on');
-      watchedOn.textContent = review.watchedOn;
+    const reviews = (await response.json()) || [];
 
-      const nickname = document.createElement('div');
-      nickname.classList.add('review-nickname');
-      nickname.textContent = review.nickname;
+    if (reviews.length > 0) {
+      reviews.forEach(review => {
+        const reviewWrapper = document.createElement('div');
+        reviewWrapper.classList.add('review-item');
 
-      const comment = document.createElement('div');
-      comment.classList.add('review-comment');
-      comment.textContent = review.comment;
+        const userWrapper = document.createElement('div');
+        userWrapper.classList.add('review-user');
 
-      userWrapper.append(watchedOn, nickname);
-      reviewWrapper.append(userWrapper, comment);
-      reviewContent.appendChild(reviewWrapper);
-    });
-  } else {
+        const watchedOn = document.createElement('div');
+        watchedOn.classList.add('review-watched-on');
+        watchedOn.textContent = review.watchedOn;
+
+        const nickname = document.createElement('div');
+        nickname.classList.add('review-nickname');
+        nickname.textContent = review.nickname;
+
+        const comment = document.createElement('div');
+        comment.classList.add('review-comment');
+        comment.textContent = review.comment;
+
+        userWrapper.append(watchedOn, nickname);
+        reviewWrapper.append(userWrapper, comment);
+        reviewContent.appendChild(reviewWrapper);
+      });
+    } else {
+      const p = document.createElement('p');
+      p.textContent = 'No reviews yet. Be the first to write one!';
+      reviewContent.appendChild(p);
+    }
+
+  } catch (error) {
     const p = document.createElement('p');
-    p.textContent = 'No reviews yet. Be the first to write one!';
+    p.textContent = 'Something went wrong with fetching reviews. Please try again later.';
     reviewContent.appendChild(p);
+    console.error(error);
   }
 }
+
 
 function setupReviewSubmission(movie) {
   submitReview.addEventListener('mouseover', () => {
@@ -197,7 +219,18 @@ function setupReviewSubmission(movie) {
         setTimeout(() => {
           textarea.style.color = 'green';
           textarea.value =
-            'Successfully submitted your review please refresh the page. Thank you!';
+            'Successfully submitted your review. Thank you!';
+
+          renderReviews(movie);
+
+          detailContainer.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+          });
+
+          toggleAddReviewButton(false);
+          addReviewContainer.classList.remove('visible');
+          addReviewContainer.style.display = 'none';
 
           setTimeout(() => {
             textarea.value = '';

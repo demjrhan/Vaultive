@@ -36,11 +36,11 @@ namespace Project.Controller;
         }
         
         [HttpGet("All")]
-        public async Task<IActionResult> GetAllReviewsWithMediaTitlesAsync()
+        public async Task<IActionResult> GetAllReviewsAsync()
         {
             try
             {
-                var result = await _reviewService.GetAllReviewsWithMediaTitlesAsync();
+                var result = await _reviewService.GetAllReviewsAsync();
                 return Ok(result);
             }
             catch (Exception ex)
@@ -48,7 +48,20 @@ namespace Project.Controller;
                 return BadRequest(ex.Message);
             }
         }
-        
+        [HttpGet("MediaContentsReviews/{mediaId:int}")]
+        public async Task<IActionResult> GetReviewsOfMediaContentByIdAsync(int mediaId)
+        {
+            try
+            {
+                var result = await _reviewService.GetReviewsOfMediaContentByIdAsync(mediaId);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
 
         [HttpPut("Update")]
         public async Task<IActionResult> UpdateReviewAsync([FromBody] UpdateReviewDTO dto)

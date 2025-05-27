@@ -1,6 +1,6 @@
 ﻿namespace Project.DTOs.FrontendDTOs;
 
-public class StreamingServiceResponseFrontendDTO
+public class StreamingServiceFrontendDTO
 {
     public string Name { get; set; } = null!;
     

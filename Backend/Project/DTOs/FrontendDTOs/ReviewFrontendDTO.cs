@@ -1,6 +1,6 @@
 ﻿namespace Project.DTOs.FrontendDTOs;
 
-public class ReviewResponseFrontendDTO
+public class ReviewFrontendDTO
 {
     public int Id { get; set; }
     public string? Comment { get; set; }

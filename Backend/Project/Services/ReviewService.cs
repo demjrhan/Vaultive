@@ -1,4 +1,5 @@
 ﻿using Project.Context;
+using Project.DTOs.FrontendDTOs;
 using Project.DTOs.ReviewDTOs;
 using Project.Exceptions;
 using Project.Repositories;
@@ -56,10 +57,10 @@ public class ReviewService
         }
     }
 
-    /* Returns all the reviews with their media titles. */
-    public async Task<List<ReviewDTO>> GetAllReviewsWithMediaTitlesAsync()
+    /* Returns all the reviews. */
+    public async Task<List<ReviewDTO>> GetAllReviewsAsync()
     {
-        var reviews = await _reviewRepository.GetAllReviewsWithMediaTitlesAsync();
+        var reviews = await _reviewRepository.GetAllReviewsAsync();
         return reviews.Select(r => new ReviewDTO()
         {
             Id = r.Id,
@@ -69,7 +70,21 @@ public class ReviewService
             WatchedOn = r.WatchHistory.WatchDate,
         }).ToList();
     }
-
+    
+    /* Returns all the reviews of media content.*/
+    public async Task<List<ReviewFrontendDTO>> GetReviewsOfMediaContentByIdAsync(int mediaId)
+    {
+        var reviews = await _reviewRepository.GetReviewsOfMediaContentByIdAsync(mediaId);
+        return reviews.Select(r => new ReviewFrontendDTO()
+        {
+            Id = r.Id,
+            Comment = r.Comment,
+            Nickname = r.User.Nickname,
+            WatchedOn = r.WatchHistory.WatchDate,
+        }).ToList();
+    }
+    
+    
     /* Return review by id */
     public async Task<ReviewDTO> GetReviewByIdAsync(int reviewId)
     {

@@ -54,7 +54,7 @@ public class ReviewRepository
     }
    
 
-    public async Task<IEnumerable<Review>> GetAllReviewsWithMediaTitlesAsync()
+    public async Task<IEnumerable<Review>> GetAllReviewsAsync()
     {
         return await _context.Reviews
             .Include(r => r.User)
@@ -62,6 +62,16 @@ public class ReviewRepository
             .ThenInclude(r => r.WatchHistories)
             .ToListAsync();
     }
-   
+
+    public async Task<IEnumerable<Review>> GetReviewsOfMediaContentByIdAsync(int mediaId)
+    {
+        return await _context.Reviews
+            .Include(r => r.User)
+            .Include(r => r.MediaContent)
+            .ThenInclude(r => r.WatchHistories)
+            .Where(r => r.MediaId == mediaId)
+            .ToListAsync();
+    }
+
 
 }

@@ -747,12 +747,12 @@ public class MediaContentService
     }
 
     /* Returns all the movies with their reviews and streaming services. */
-    public async Task<List<MovieResponseFrontendDTO>> GetAllMoviesFrontEndAsync()
+    public async Task<List<MovieFrontendDTO>> GetAllMoviesFrontEndAsync()
     {
         var movies = await _mediaContentRepository.GetAllMoviesAsync();
-        return movies.Select(m => new MovieResponseFrontendDTO
+        return movies.Select(m => new MovieFrontendDTO
         {
-            MediaContent = new MediaContentFrontendResponseDTO()
+            MediaContent = new MediaContentFrontendDTO()
             {
                 Id = m.Id,
                 Title = m.Title,
@@ -760,19 +760,12 @@ public class MediaContentService
                 YoutubeTrailerURL = m.YoutubeTrailerURL,
                 PosterImageName = m.PosterImageName,
                 StreamingServices = m.StreamingServices
-                    .Select(ss => new StreamingServiceResponseFrontendDTO()
+                    .Select(ss => new StreamingServiceFrontendDTO()
                     {
                         Name = ss.Name,
                         WebsiteLink = ss.WebsiteLink,
                         LogoImage = ss.LogoImage
-                    }).ToList(),
-                Reviews = m.Reviews.Select(r => new ReviewResponseFrontendDTO()
-                {
-                    Id = r.Id,
-                    Comment = r.Comment,
-                    Nickname = r.User.Nickname,
-                    WatchedOn = r.WatchHistory.WatchDate,
-                }).ToList()
+                    }).ToList()
             },
             Genres = m.Genres.Select(g => g.ToString()).ToList()
         }).ToList();
