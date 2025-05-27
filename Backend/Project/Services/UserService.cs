@@ -6,7 +6,6 @@ using Project.DTOs.SubscriptionDTOs;
 using Project.DTOs.UserDTOs;
 using Project.DTOs.WatchHistoryDTOs;
 using Project.Exceptions;
-using Project.Helper;
 using Project.Models;
 using Project.Models.Enumerations;
 using Project.Repositories;
@@ -195,6 +194,7 @@ public class UserService
                 ActiveSubscriptions = await _subscriptionService.GetActiveSubscriptionsOfUserIdAsync(user.Id),
                 WatchHistories = user.WatchHistories.Select(wh => new WatchHistoryDTO()
                 {
+                    Id = wh.Id,
                     MediaId = wh.MediaId,
                     MediaTitle = wh.MediaContent.Title,
                     TimeLeftOf = wh.TimeLeftOf,
@@ -234,6 +234,7 @@ public class UserService
             ActiveSubscriptions = await _subscriptionService.GetActiveSubscriptionsOfUserIdAsync(user.Id),
             WatchHistories = user.WatchHistories.Select(wh => new WatchHistoryDTO()
             {
+                Id = wh.Id,
                 MediaId = wh.MediaId,
                 MediaTitle = wh.MediaContent.Title,
                 TimeLeftOf = wh.TimeLeftOf,
@@ -384,7 +385,7 @@ public class UserService
                     StartTime = today,
                     EndTime = today.AddMonths(dto.DurationInMonth),
                     PaymentMethod = dto.PaymentMethod,
-                    Price = SubscriptionPriceCalculator.CalculateAmount(streamingService.DefaultPrice, user),
+                    Price = SubscriptionService.CalculateAmountOfConfirmation(streamingService.DefaultPrice, user),
                     Subscription = subscription,
                     User = user,
                     UserId = user.Id,
@@ -408,7 +409,7 @@ public class UserService
                     StartTime = today,
                     EndTime = today.AddMonths(dto.DurationInMonth),
                     PaymentMethod = dto.PaymentMethod,
-                    Price = SubscriptionPriceCalculator.CalculateAmount(streamingService.DefaultPrice, user),
+                    Price = SubscriptionService.CalculateAmountOfConfirmation(streamingService.DefaultPrice, user),
                     Subscription = subscription,
                     SubscriptionId = subscription.Id,
                     User = user,
@@ -470,7 +471,7 @@ public class UserService
         }
     }
 
-    private static Status ParseStatus(string status)
+    private Status ParseStatus(string status)
     {
         return Enum.TryParse<Status>(status, true, out var result)
             ? result

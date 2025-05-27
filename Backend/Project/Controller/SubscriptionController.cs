@@ -80,7 +80,7 @@ public class SubscriptionController : ControllerBase
     {
         try
         {
-            await _subscriptionService.RemoveSubscriptionWithGivenIdAsync(subscriptionId);
+            await _subscriptionService.CancelSubscriptionWithGivenIdAsync(subscriptionId);
             return Ok(new { message = "Subscription deleted successfully."});
         }
         catch (ArgumentException ex)

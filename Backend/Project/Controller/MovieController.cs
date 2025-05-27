@@ -48,7 +48,7 @@ public class MovieController : ControllerBase
         }
         catch (Exception ex)
         {
-            return BadRequest(ex.Message);
+            return StatusCode(500, $"Unexpected error: {ex.Message}");
         }
     }
 
@@ -62,7 +62,7 @@ public class MovieController : ControllerBase
         }
         catch (Exception ex)
         {
-            return BadRequest(ex.Message);
+            return StatusCode(500, $"Unexpected error: {ex.Message}");
         }
     }
 

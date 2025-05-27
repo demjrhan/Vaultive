@@ -31,6 +31,7 @@ builder.Services.AddScoped<UserRepository>();
 builder.Services.AddScoped<UserService>();
 
 builder.Services.AddScoped<WatchHistoryRepository>();
+builder.Services.AddScoped<WatchHistoryService>();
 
 builder.Services.AddScoped<MediaContentRepository>();
 builder.Services.AddScoped<MediaContentService>();

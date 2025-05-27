@@ -2,6 +2,7 @@
 using Project.DTOs.SubscriptionDTOs;
 using Project.Exceptions;
 using Project.Models;
+using Project.Models.Enumerations;
 using Project.Repositories;
 
 namespace Project.Services;
@@ -38,7 +39,7 @@ public class SubscriptionService
     }
 
 
-    public async Task RemoveSubscriptionWithGivenIdAsync(int subscriptionId)
+    public async Task CancelSubscriptionWithGivenIdAsync(int subscriptionId)
     {
         if (subscriptionId <= 0) throw new ArgumentException("Subscription id can not be equal or smaller than 0.");
 
@@ -174,7 +175,7 @@ public class SubscriptionService
         return null;
     }
 
-    private int CalculateRemainingDaysOfConfirmation(DateOnly endDate)
+    private static int CalculateRemainingDaysOfConfirmation(DateOnly endDate)
     {
         var today = DateOnly.FromDateTime(DateTime.UtcNow);
 
@@ -183,5 +184,24 @@ public class SubscriptionService
             : endDate.DayNumber
               - today.DayNumber
               + 1;
+    }
+    public static decimal CalculateAmountOfConfirmation(decimal defaultPrice, User user)
+    {
+        decimal discount = 0;
+
+        switch (user.Status)
+        {
+            case Status.Student: discount += 0.20m; break;
+            case Status.Elder: discount += 0.10m; break;
+        }
+
+        switch (user.Country.Trim().ToUpperInvariant())
+        {
+            case "POLAND": discount += 0.05m; break;
+            case "GERMANY": discount += 0.03m; break;
+            case "FRANCE": discount += 0.02m; break;
+        }
+
+        return Math.Max(defaultPrice * (1 - discount), 0);
     }
 }

@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Project.Helper;
 using Project.Models.Enumerations;
 using Project.Models;
+using Project.Services;
 
 namespace Project.Context;
 
@@ -107,7 +107,7 @@ public static class SampleData
                         PaymentMethod = "CreditCard",
                         StartTime = DateOnly.FromDateTime(DateTime.UtcNow.AddDays(-155)),
                         EndTime   = DateOnly.FromDateTime(DateTime.UtcNow.AddDays(-130)),
-                        Price = SubscriptionPriceCalculator.CalculateAmount(appleTV.DefaultPrice, demir)
+                        Price = SubscriptionService.CalculateAmountOfConfirmation(appleTV.DefaultPrice, demir)
                     },
                     new()
                     {
@@ -116,7 +116,7 @@ public static class SampleData
                         PaymentMethod = "CreditCard",
                         StartTime = DateOnly.FromDateTime(DateTime.UtcNow.AddDays(-1)),
                         EndTime   = DateOnly.FromDateTime(DateTime.UtcNow.AddDays(20)),
-                        Price = SubscriptionPriceCalculator.CalculateAmount(appleTV.DefaultPrice, demir)
+                        Price = SubscriptionService.CalculateAmountOfConfirmation(appleTV.DefaultPrice, demir)
                     },
                     new()
                     {
@@ -125,7 +125,7 @@ public static class SampleData
                         PaymentMethod = "PayPal",
                         StartTime = DateOnly.FromDateTime(DateTime.UtcNow.AddDays(-5)),
                         EndTime   = DateOnly.FromDateTime(DateTime.UtcNow.AddDays(25)),
-                        Price = SubscriptionPriceCalculator.CalculateAmount(disney.DefaultPrice, aiko)
+                        Price = SubscriptionService.CalculateAmountOfConfirmation(disney.DefaultPrice, aiko)
                     },
                     new()
                     {
@@ -134,7 +134,7 @@ public static class SampleData
                         PaymentMethod = "DebitCard",
                         StartTime = DateOnly.FromDateTime(DateTime.UtcNow.AddDays(-45)),
                         EndTime   = DateOnly.FromDateTime(DateTime.UtcNow.AddDays(-15)),
-                        Price = SubscriptionPriceCalculator.CalculateAmount(hbo.DefaultPrice, michal)
+                        Price = SubscriptionService.CalculateAmountOfConfirmation(hbo.DefaultPrice, michal)
                     }
                 });
 
@@ -157,7 +157,7 @@ public static class SampleData
                     PaymentMethod = "CreditCard",
                     StartTime = DateOnly.FromDateTime(DateTime.UtcNow.AddDays(-10)),
                     EndTime = DateOnly.FromDateTime(DateTime.UtcNow.AddDays(20)),
-                    Price = SubscriptionPriceCalculator.CalculateAmount(appleTV.DefaultPrice, demir)
+                    Price = SubscriptionService.CalculateAmountOfConfirmation(appleTV.DefaultPrice, demir)
                 });
             }
 
@@ -171,7 +171,7 @@ public static class SampleData
                     PaymentMethod = "PayPal",
                     StartTime = DateOnly.FromDateTime(DateTime.UtcNow.AddDays(-5)),
                     EndTime = DateOnly.FromDateTime(DateTime.UtcNow.AddDays(25)),
-                    Price = SubscriptionPriceCalculator.CalculateAmount(disney.DefaultPrice, aiko)
+                    Price = SubscriptionService.CalculateAmountOfConfirmation(disney.DefaultPrice, aiko)
                 });
             }
 
@@ -185,7 +185,7 @@ public static class SampleData
                     PaymentMethod = "DebitCard",
                     StartTime = DateOnly.FromDateTime(DateTime.UtcNow.AddDays(-15)),
                     EndTime = DateOnly.FromDateTime(DateTime.UtcNow.AddDays(15)),
-                    Price = SubscriptionPriceCalculator.CalculateAmount(hbo.DefaultPrice, michal)
+                    Price = SubscriptionService.CalculateAmountOfConfirmation(hbo.DefaultPrice, michal)
                 });
             }
 
