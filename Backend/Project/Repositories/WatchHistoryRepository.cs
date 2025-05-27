@@ -29,6 +29,13 @@ public class WatchHistoryRepository
             .Where(w => w.UserId == userId).ToListAsync();
     }
 
+    public async Task<WatchHistory?> GetUsersWatchHistoryToMediaContent(int userId, int mediaId)
+    {
+        return await _context.WatchHistories
+            .Include(w => w.MediaContent)
+            .Include(w => w.User)
+            .FirstOrDefaultAsync(w => w.UserId == userId && w.MediaId == mediaId);
+    }
     public async Task<IEnumerable<WatchHistory>> GetAllWatchHistories()
     {
         return await _context.WatchHistories

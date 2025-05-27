@@ -2,6 +2,7 @@
 using Project.DTOs.MediaContentDTOs;
 using Project.DTOs.UserDTOs;
 using Project.DTOs.WatchHistoryDTOs;
+using Project.Exceptions;
 using Project.Repositories;
 
 namespace Project.Services;
@@ -81,7 +82,7 @@ public class WatchHistoryService
         }).ToList();
     }
 
-    public async Task<List<UserWithWatchHistoriesDTO>> GetWatchHistoriesOfUser(int userId)
+    public async Task<List<UserWithWatchHistoriesDTO>> GetWatchHistoriesOfUserAsync(int userId)
     {
         var watchHistories = await _watchHistoryRepository.GetWatchHistoriesOfUser(userId);
 
@@ -105,5 +106,25 @@ public class WatchHistoryService
                 WatchDate = uwh.WatchDate
             }).ToList()
         }).ToList();
+    }
+
+    /* Method used in front end to determine if user can see the adding review button or not */
+    public async Task<bool> CanUserWriteReviewAsync(int userId, int mediaId)
+    {
+        if (userId <= 0) throw new ArgumentException("User id can not be equal or smaller than 0.");
+        if (mediaId <= 0) throw new ArgumentException("Media id can not be equal or smaller than 0.");
+
+        if (await _mediaContentRepository.GetMediaContentWithGivenIdAsync(mediaId) == null)
+            throw new MediaContentDoesNotExistsException(new[] { mediaId });
+
+        if (await _userRepository.GetUserWithGivenId(userId) == null) throw new UserDoesNotExistsException(userId);
+
+        var existingReview =
+            await _reviewRepository.GetReviewOfUserToMediaContentAsync(userId, mediaId);
+
+        if (existingReview != null) return false;
+        
+        var watchHistory = await _watchHistoryRepository.GetUsersWatchHistoryToMediaContent(userId, mediaId);
+        return watchHistory != null;
     }
 }

@@ -179,7 +179,8 @@
     gap: 1rem;
 }
 
-.review-popup-button {
+#add-review-button {
+    display: none;
     border: rgba(255,255,255,0.2) 1px solid;
     font-size: 1em;
     height: 25px;
@@ -192,8 +193,13 @@
     transition: all 1.5s ease;
     cursor: pointer;
 }
+#add-review-button.visible {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 
-.review-popup-button:hover {
+.add-review-button:hover {
     transform: scale(1.1);
 }
 
