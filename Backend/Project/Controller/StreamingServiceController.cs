@@ -85,7 +85,27 @@ public class StreamingServiceController : ControllerBase
             return BadRequest(ex.Message);
         }
     }
-    
+    [HttpGet("GetMostPopularStreamingService")]
+    public async Task<IActionResult> GetMostPopularStreamingServiceAsync()
+    {
+        try
+        {
+            var result = await _streamingServiceService.GetMostPopularStreamingServiceAsync();
+            return Ok(result);
+        }
+        catch (ArgumentException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+        catch (NoStreamingServiceExistsException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"Unexpected error: {ex.Message}");
+        }
+    }
     [HttpPost("Add")]
     public async Task<IActionResult> AddStreamingServiceAsync([FromBody] CreateStreamingServiceDTO streamingServiceDto)
     {

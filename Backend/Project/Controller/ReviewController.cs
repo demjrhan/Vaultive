@@ -89,7 +89,7 @@ namespace Project.Controller;
             }
         }
 
-        [HttpDelete("Remove/{reviewId:int}")]
+        [HttpDelete("Delete/{reviewId:int}")]
         public async Task<IActionResult> DeleteReviewAsync(int reviewId)
         {
             try

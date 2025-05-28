@@ -92,6 +92,25 @@ public class StreamingServiceService
         }).ToList();
     }
     
+    /* Returns most popular streaming service by the amount of subscriptions. */
+    public async Task<MostPopularStreamingServiceDTO> GetMostPopularStreamingServiceAsync()
+    {
+        var mostPopularStreamingService = await _streamingServiceRepository.GetMostPopularStreamingServiceAsync();
+        if (mostPopularStreamingService == null) throw new NoStreamingServiceExistsException();
+        
+        return new MostPopularStreamingServiceDTO()
+        {
+            Id = mostPopularStreamingService.Id,
+            Name = mostPopularStreamingService.Name,
+            WebsiteLink = mostPopularStreamingService.WebsiteLink,
+            LogoImage = mostPopularStreamingService.LogoImage,
+            Country = mostPopularStreamingService.Country,
+            DefaultPrice = mostPopularStreamingService.DefaultPrice,
+            Description = mostPopularStreamingService.Description,
+            SubscriptionCount = mostPopularStreamingService.Subscriptions.Count
+        };
+    }
+    
     /* Get one streaming service by id including all details, with given id */
     public async Task<StreamingServiceDetailedDTO> GetAllStreamingServicesWithGivenIdAsync(int streamingServiceId)
     {
@@ -134,7 +153,7 @@ public class StreamingServiceService
         };
     }
 
-    /* Remove the streaming service with the given id */
+    /* Delete the streaming service with the given id */
     public async Task DeleteStreamingServiceWithGivenIdAsync(int streamingServiceId)
     {
         if (streamingServiceId <= 0)

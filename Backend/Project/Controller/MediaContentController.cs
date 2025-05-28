@@ -34,7 +34,7 @@ public class MediaContentController : ControllerBase
         }
     }
     
-    [HttpDelete("Remove/{mediaId:int}")]
+    [HttpDelete("Delete/{mediaId:int}")]
     public async Task<IActionResult> DeleteMediaContentAsync(int mediaId)
     {
         try

@@ -41,6 +41,16 @@ public class StreamingServiceRepository
             .ToListAsync();
 
     }
+    public async Task<StreamingService?> GetMostPopularStreamingServiceAsync()
+    {
+        return await _context.StreamingServices
+            .Include(ss => ss.MediaContents)
+            .Include(ss => ss.Subscriptions)
+            .ThenInclude(s => s.Confirmations)
+            .OrderByDescending(ss => ss.Subscriptions.Count)
+            .FirstOrDefaultAsync();
+
+    }
     public async Task RemoveAsync(int streamingServiceId)
     {
         var streamingService = await GetStreamingServiceByIdAsync(streamingServiceId);

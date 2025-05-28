@@ -120,7 +120,13 @@
         {
         }
     }
-
+    public class NoStreamingServiceExistsException : Exception
+    {
+        public NoStreamingServiceExistsException()
+            : base("There is no streaming service exists in database.")
+        {
+        }
+    }
     public class UserHasNoActiveSubscriptionException : Exception
     {
         public UserHasNoActiveSubscriptionException(string nickname, string? message = "")

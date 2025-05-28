@@ -92,7 +92,8 @@ public static class SampleData
                 {
                     new() { StreamingServiceId = appleTV.Id },
                     new() { StreamingServiceId = disney.Id },
-                    new() { StreamingServiceId = hbo.Id }
+                    new() { StreamingServiceId = hbo.Id },
+                    new() { StreamingServiceId = appleTV.Id }
                 };
 
                 context.Subscriptions.AddRange(subscriptions);
@@ -122,6 +123,15 @@ public static class SampleData
                     {
                         UserId = aiko.Id,
                         SubscriptionId = subscriptions[1].Id,
+                        PaymentMethod = "PayPal",
+                        StartTime = DateOnly.FromDateTime(DateTime.UtcNow.AddDays(-5)),
+                        EndTime   = DateOnly.FromDateTime(DateTime.UtcNow.AddDays(25)),
+                        Price = SubscriptionService.CalculateAmountOfConfirmation(disney.DefaultPrice, aiko)
+                    },
+                    new()
+                    {
+                        UserId = aiko.Id,
+                        SubscriptionId = subscriptions[3].Id,
                         PaymentMethod = "PayPal",
                         StartTime = DateOnly.FromDateTime(DateTime.UtcNow.AddDays(-5)),
                         EndTime   = DateOnly.FromDateTime(DateTime.UtcNow.AddDays(25)),

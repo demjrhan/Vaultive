@@ -175,6 +175,8 @@ public class MediaContentService
             subtitleLanguages: dto.MediaContent.SubtitleOption?.Languages
         );
 
+        if (string.IsNullOrWhiteSpace(dto.SchoolName))
+            throw new ArgumentException("School name can not be null or empty.");
 
         await using var transaction = await _context.Database.BeginTransactionAsync();
 
@@ -233,8 +235,10 @@ public class MediaContentService
                 ReleaseDate = dto.MediaContent.ReleaseDate,
                 PosterImageName = dto.MediaContent.PosterImageName,
                 YoutubeTrailerURL = dto.MediaContent.YoutubeTrailerURL,
+                SchoolName = dto.SchoolName,
                 Genres = enums,
                 StreamingServices = streamingServices
+                
             });
 
             await _context.SaveChangesAsync();
@@ -347,7 +351,7 @@ public class MediaContentService
         }
     }
 
-    /* Remove the media content with the given id */
+    /* Delete the media content with the given id */
     public async Task DeleteMediaContentWithGivenIdAsync(int mediaId)
     {
         if (mediaId <= 0) throw new ArgumentException("Media id can not be equal or smaller than 0.");
@@ -528,7 +532,9 @@ public class MediaContentService
             subtitleLanguages: dto.MediaContent.SubtitleOption?.Languages
         );
 
-
+        if (string.IsNullOrWhiteSpace(dto.SchoolName))
+            throw new ArgumentException("School name can not be null or empty.");
+        
         await using var transaction = await _context.Database.BeginTransactionAsync();
 
         try
@@ -541,6 +547,7 @@ public class MediaContentService
             shortFilm.Duration = dto.MediaContent.Duration;
             shortFilm.PosterImageName = dto.MediaContent.PosterImageName;
             shortFilm.YoutubeTrailerURL = dto.MediaContent.YoutubeTrailerURL;
+            shortFilm.SchoolName = dto.SchoolName;
 
             if (shortFilm.AudioOption != null && dto.MediaContent.AudioOption != null)
             {
@@ -865,7 +872,8 @@ public class MediaContentService
                     Languages = m.SubtitleOption?.Languages
                 }
             },
-            Genres = m.Genres.Select(g => g.ToString()).ToList()
+            Genres = m.Genres.Select(g => g.ToString()).ToList(),
+            SchoolName = m.SchoolName
         }).ToList();
     }
 
@@ -1065,7 +1073,8 @@ public class MediaContentService
                     Languages = shortFilm.SubtitleOption?.Languages
                 }
             },
-            Genres = shortFilm.Genres.Select(g => g.ToString()).ToList()
+            Genres = shortFilm.Genres.Select(g => g.ToString()).ToList(),
+            SchoolName = shortFilm.SchoolName
         };
     }
     
@@ -1268,6 +1277,7 @@ public class MediaContentService
         bool langEqual = string.Equals(mc.OriginalLanguage, shortFilm.OriginalLanguage, StringComparison.OrdinalIgnoreCase);
         bool countryEqual = string.Equals(mc.Country, shortFilm.Country, StringComparison.OrdinalIgnoreCase);
         bool durationEqual = mc.Duration == shortFilm.Duration;
+        bool schoolNameEqual = string.Equals(dto.SchoolName, shortFilm.SchoolName, StringComparison.OrdinalIgnoreCase);
 
         bool audioEqual;
         if (mc.AudioOption?.Languages == null && shortFilm.AudioOption?.Languages == null)
@@ -1306,7 +1316,8 @@ public class MediaContentService
             && subtitleEqual
             && servicesEqual
             && posterEqual
-            && trailerEqual)
+            && trailerEqual
+            && schoolNameEqual)
         {
             throw new NoChangesDetectedException();
         }
