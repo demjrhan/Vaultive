@@ -34,6 +34,32 @@ public class MediaContentController : ControllerBase
         }
     }
     
+    [HttpGet("Search")]
+    public async Task<IActionResult> SearchMediaContentAsync(string text)
+    {
+        try
+        {
+            var result = await _mediaContentService.GetMediaContentWithGivenIdAsync(text);
+            return Ok(result);
+        }
+        catch (ArgumentNullException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+        catch (ArgumentException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+        catch (NoMediaContentFoundException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"Unexpected error: {ex.Message}");
+        }
+    }
+    
     [HttpDelete("Delete/{mediaId:int}")]
     public async Task<IActionResult> DeleteMediaContentAsync(int mediaId)
     {
@@ -42,11 +68,11 @@ public class MediaContentController : ControllerBase
             await _mediaContentService.DeleteMediaContentWithGivenIdAsync(mediaId);
             return Ok("Media Content deleted successfully.");
         }
-        catch (MediaContentDoesNotExistsException ex)
+        catch (ArgumentException ex)
         {
             return BadRequest(ex.Message);
         }
-        catch (ArgumentException ex)
+        catch (MediaContentDoesNotExistsException ex)
         {
             return BadRequest(ex.Message);
         }

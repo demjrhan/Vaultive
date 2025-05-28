@@ -926,7 +926,7 @@ public class MediaContentService
         }).ToList();
     }
     
-    /* Get one media content by id including all details, with given id */
+    /* Get one media content including all details, with given id */
     public async Task<MediaContentDetailedDTO> GetMediaContentWithGivenIdAsync(int mediaId)
     {
         if (mediaId <= 0) throw new ArgumentException("Media id can not be equal or smaller than 0.");
@@ -973,7 +973,7 @@ public class MediaContentService
         };
     }
 
-    /* Get one movie by id including all details, with given id */
+    /* Get one movie including all details, with given id */
     public async Task<MovieDTO> GetMovieWithGivenIdAsync(int movieId)
     {
         if (movieId <= 0) throw new ArgumentException("Movie id can not be equal or smaller than 0.");
@@ -1025,7 +1025,7 @@ public class MediaContentService
         };
     }
     
-    /* Get one short film by id including all details, with given id */
+    /* Get one short film  including all details, with given id */
     public async Task<ShortFilmDTO> GetShortFilmWithGivenIdAsync(int shortFilmId)
     {
         if (shortFilmId <= 0) throw new ArgumentException("Short Film id can not be equal or smaller than 0.");
@@ -1078,7 +1078,7 @@ public class MediaContentService
         };
     }
     
-        /* Get one short film by id including all details, with given id */
+    /* Get one short film  including all details, with given id */
     public async Task<DocumentaryDTO> GetDocumentaryWithGivenIdAsync(int documentaryId)
     {
         if (documentaryId <= 0) throw new ArgumentException("Documentary id can not be equal or smaller than 0.");
@@ -1130,6 +1130,25 @@ public class MediaContentService
         };
     }
 
+    /* Get one media content film by title search. */
+    public async Task<List<MediaContentDTO>> GetMediaContentWithGivenIdAsync(string text)
+    {
+        if (string.IsNullOrWhiteSpace(text)) throw new ArgumentException("Searching text can not be null or empty.");
+
+        var response = await _mediaContentRepository.GetMediaContentWithGivenTextAsync(text);
+        var mediaContents = response.ToList();
+        if (!mediaContents.Any()) throw new NoMediaContentFoundException(text);
+
+        return mediaContents.Select(m => new MediaContentDTO
+        {
+            Id = m.Id,
+            Title = m.Title,
+            Description = m.Description,
+            Country = m.Country,
+            Duration = m.Duration,
+            OriginalLanguage = m.OriginalLanguage
+        }).ToList();
+    }
 
     private void ValidateGenres(ICollection<string> genres)
     {

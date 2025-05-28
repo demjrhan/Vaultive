@@ -15,6 +15,14 @@
                 : $"MediaContents with IDs [{string.Join(", ", ids)}] do not exist.";
         }
     }
+    public class NoMediaContentFoundException : Exception
+    {
+        public NoMediaContentFoundException(string text)
+            : base($"Did not manage to find any media content which contains {text} in the title.")
+        {
+        }
+      
+    }
     public class NoMediaContentExistsException : Exception
     {
         public NoMediaContentExistsException()
