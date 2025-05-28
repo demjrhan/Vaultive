@@ -1,5 +1,3 @@
-import { featuredMovie } from './movieData.js';
-
 const detailContainer = document.querySelector('.main-container-detail');
 const mainContainer = document.querySelector('.main-container');
 const detailImage = document.querySelector('.movie-image-detail');
@@ -14,6 +12,8 @@ const moviesPopupContainer = document.querySelector('.movies-popup-container');
 const streamingServicePopUpContainer = document.querySelector(
   '.streaming-popup-container'
 );
+
+const showcaseVideo = showcase.querySelector('.showcase-video');
 const reviewContent = document.querySelector('.review-content');
 const submitReview = document.getElementById('submit-review-button');
 const addReview = document.getElementById('add-review-button');
@@ -117,10 +117,7 @@ function openDetailContainer(from) {
   detailOpenedFrom = from;
   detailContainer.style.display = 'flex';
   mainContainer.style.filter = 'grayscale(100%) blur(10px)';
-  showcase.style.backgroundImage = `
-    linear-gradient(to bottom, rgba(0, 0, 0, 0.55) 0%, rgba(0, 0, 0, 1) 100%),
-    url(${featuredMovie.backgroundHolder})
-  `;
+  showcaseVideo.style.display = 'none';
 
   if (from === 'movies') {
     moviesPopupContainer.style.filter = 'grayscale(100%) blur(10px)';
@@ -134,7 +131,6 @@ function openDetailContainer(from) {
 async function renderReviews(movie) {
   reviewContent.innerHTML = '';
   const mediaId = movie.mediaContent?.id;
-  console.log(`${API_BASE_URL}/Review/MediaContentsReviews/${mediaId}`);
 
   try {
     const response = await fetch(
@@ -298,12 +294,7 @@ export function closeDetailOnEscape() {
       document.body.style.width = '';
       window.scrollTo(0, parseInt(scrollY || '0') * -1);
       detailContainer.style.display = 'none';
-      if (detailOpenedFrom === 'home') {
-        showcase.style.backgroundImage = `url(${featuredMovie.backgroundGif})`;
-        showcase.style.backgroundRepeat = 'no-repeat';
-        showcase.style.backgroundSize = 'cover';
-        showcase.style.backgroundPosition = 'center';
-      }
+
     }
   });
 }
@@ -321,6 +312,8 @@ function closeDetailView() {
     streamingServicePopUpContainer.classList.remove('overlay-disabled');
   } else {
     mainContainer.style.filter = 'none';
+    showcaseVideo.style.display = '';
+    
   }
 
   showcase.classList.remove('overlay-disabled');

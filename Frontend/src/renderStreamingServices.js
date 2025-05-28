@@ -3,8 +3,9 @@ import { showMovieDetail } from './detailView.js';
 
 export async function renderStreamingServices(movies) {
   const popupContentBox = document.querySelector('.streaming-popup-container .content-box-streaming');
-  popupContentBox.innerHTML = '';
 
+
+  popupContentBox.innerHTML = '';
 
     const streamingMap = new Map();
 
@@ -18,7 +19,7 @@ export async function renderStreamingServices(movies) {
     });
 
     const shuffledStreamingServices = [...streamingMap.keys()]
-      .sort(() => Math.random() - 0.5); // Simple shuffle
+      .sort(() => Math.random() - 0.5);
 
     shuffledStreamingServices.forEach(streamingServiceName => {
       const streamingMovies = streamingMap.get(streamingServiceName);

@@ -29,6 +29,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   seriesButton.addEventListener('click', () => {
     openStreamingPopup();
     createNavigationBarStreamingService();
-    renderStreamingServices();
+    renderStreamingServices(movies);
   });
 });

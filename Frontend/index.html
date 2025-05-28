@@ -7,9 +7,7 @@
   <link rel="stylesheet" href="public/moviePage.css">
   <link rel="stylesheet" href="public/streamingServicePage.css">
 
-  <!-- jQuery (required) -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <!-- YTPlayer -->
   <script src="https://cdn.jsdelivr.net/npm/jquery.mb.ytplayer/dist/jquery.mb.YTPlayer.min.js"></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jquery.mb.ytplayer/dist/css/jquery.mb.YTPlayer.min.css">
 
@@ -32,24 +30,32 @@
 
     </div>
     <div class="showcase-container">
-      <div class="navigation-container">
-        <nav class="navbar">
-          <a href="#" id="movies-link">MOVIES</a>
-          <a href="#" id="streaming-link">STREAMING SERVICES</a>
-        </nav>
-      </div>
+      <iframe
+        class="showcase-video"
+        src="https://www.youtube.com/embed/1VIZ89FEjYI?autoplay=1&mute=1&controls=0&loop=1&playlist=1VIZ89FEjYI"
+        frameborder="0"
+        allow="autoplay; encrypted-media"
+        allowfullscreen>
+      </iframe>
 
-      <div class="star-movie-container">
+      <div class="showcase-content">
+        <div class="navigation-container">
+          <nav class="navbar">
+            <a href="#" id="movies-link">MOVIES</a>
+            <a href="#" id="streaming-link">STREAMING SERVICES</a>
+          </nav>
+        </div>
 
-      </div>
-      <div class="recommendations-container">
-        <div class="recommendations">
-          <h2>Recommendations</h2>
-          <div class="movie-cards"></div>
+        <div class="star-movie-container"></div>
+        <div class="recommendations-container">
+          <div class="recommendations">
+            <h2>Recommendations</h2>
+            <div class="movie-cards"></div>
+          </div>
         </div>
       </div>
-
     </div>
+
   </div>
 
   <div class="main-container-detail">
@@ -73,7 +79,7 @@
         </div>
         <div id="add-review" class="add-review">
           <label for="review-textarea"></label><textarea id="review-textarea"></textarea>
-            <button id="submit-review-button">Submit</button>
+          <button id="submit-review-button">Submit</button>
         </div>
       </div>
 
