@@ -1,4 +1,5 @@
 ﻿using System.Net.Mail;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Project.Context;
 using Project.DTOs.ReviewDTOs;
@@ -50,8 +51,8 @@ public class UserService
         _subscriptionConfirmationRepository = subscriptionConfirmationRepository;
     }
 
-    /* Remove user with given id */
-    public async Task RemoveUserWithGivenIdAsync(int userId)
+    /* Delete user with given id */
+    public async Task DeleteUserWithGivenIdAsync(int userId)
     {
         if (userId <= 0) throw new ArgumentException("User id can not be equal or smaller than 0.");
         await using var transaction = await _context.Database.BeginTransactionAsync();
@@ -69,7 +70,38 @@ public class UserService
             throw;
         }
     }
+    /* Delete review with given id */
+    public async Task DeleteReviewWithGivenIdAsync(int userId, int reviewId)
+    {
+        if (reviewId <= 0) throw new ArgumentException("Review id can not be equal or smaller than 0.");
+        if (userId <= 0) throw new ArgumentException("User id can not be equal or smaller than 0.");
 
+        await using var transaction = await _context.Database.BeginTransactionAsync();
+
+        var review = await _reviewService.GetReviewByIdAsync(reviewId);
+        if (review == null) throw new ReviewDoesNotExistsException(reviewId);
+
+        var user = await GetUserWithGivenIdAsync(userId);
+        if (user == null)
+            throw new UserDoesNotExistsException(userId);
+        
+        if (user.Nickname != review.Nickname)
+            throw new AccessDeniedException(
+                $"User {userId} does not own the review with id {reviewId}");
+        
+        try
+        {
+            await _reviewRepository.RemoveAsync(reviewId);
+
+            await _context.SaveChangesAsync();
+            await transaction.CommitAsync();
+        }
+        catch
+        {
+            await transaction.RollbackAsync();
+            throw;
+        }
+    }
     /* Adding new user data to database. */
     public async Task AddUserAsync(CreateUserDTO userDto)
     {
@@ -132,7 +164,7 @@ public class UserService
                        throw new UserDoesNotExistsException(userDto.Id);
 
             ValidateChanges(userDto, user);
-            
+
             if (await _context.Users.AnyAsync(u => u.Email == userDto.Email && u.Id != userDto.Id))
                 throw new EmailAlreadyExistsException(userDto.Email);
 
@@ -254,7 +286,7 @@ public class UserService
             if (mediaId <= 0) throw new ArgumentException("Media id can not be equal or smaller than 0.");
 
             var mediaContent = await _mediaContentRepository.GetMediaContentWithGivenIdAsync(mediaId) ??
-                               throw new MediaContentDoesNotExistsException(new [] {mediaId});
+                               throw new MediaContentDoesNotExistsException(new[] { mediaId });
 
             var user = await _userRepository.GetUserWithGivenId(userId) ?? throw new UserDoesNotExistsException(userId);
 
@@ -315,22 +347,22 @@ public class UserService
             _reviewService.ValidateReview(addReviewDto.Comment);
 
             var mediaContent = await _mediaContentRepository.GetMediaContentWithGivenIdAsync(addReviewDto.MediaId) ??
-                               throw new MediaContentDoesNotExistsException(new [] {addReviewDto.MediaId});
+                               throw new MediaContentDoesNotExistsException(new[] { addReviewDto.MediaId });
 
             var user = await _userRepository.GetUserWithGivenId(addReviewDto.UserId) ??
                        throw new UserDoesNotExistsException(addReviewDto.UserId);
-            
+
             var watchHistory =
                 await _watchHistoryRepository.GetWatchHistoryOfUserToGivenMediaIdAsync(user.Id, mediaContent.Id) ??
                 throw new WatchHistoryDoesNotExistsException(user.Id);
-            
+
             var existingReview =
                 await _reviewRepository.GetReviewOfUserToMediaContentAsync(user.Id, mediaContent.Id);
 
             if (existingReview != null)
                 throw new DuplicateReviewException(user.Nickname, mediaContent.Title);
 
-            
+
             var review = new Review
             {
                 Comment = addReviewDto.Comment,
@@ -358,7 +390,8 @@ public class UserService
 
         try
         {
-            var streamingService = await _streamingServiceRepository.GetStreamingServiceByIdAsync(dto.StreamingServiceId);
+            var streamingService =
+                await _streamingServiceRepository.GetStreamingServiceByIdAsync(dto.StreamingServiceId);
             if (streamingService == null)
                 throw new StreamingServiceDoesNotExistsException(new[] { dto.StreamingServiceId });
 
@@ -369,11 +402,11 @@ public class UserService
             var activeSubscriptions = await _subscriptionService.GetActiveSubscriptionsOfUserIdAsync(user.Id);
             if (activeSubscriptions.Any(ss => ss.StreamingServiceName == streamingService.Name))
                 throw new SubscriptionAlreadyExistsException(user.Id, streamingService.Id);
-            
+
             var today = DateOnly.FromDateTime(DateTime.Now);
 
             var inactiveSubscription =
-               await _subscriptionService.GetInactiveSubscriptionOfUserIdAsync(streamingService.Name, user.Id);
+                await _subscriptionService.GetInactiveSubscriptionOfUserIdAsync(streamingService.Name, user.Id);
             if (inactiveSubscription != null)
             {
                 var subscription = await _subscriptionRepository
@@ -390,8 +423,6 @@ public class UserService
                     User = user,
                     UserId = user.Id,
                     SubscriptionId = subscription.Id,
-
-
                 };
                 await _subscriptionConfirmationRepository.AddSubscriptionConfirmationAsync(subscriptionConfirmation);
             }
@@ -417,10 +448,16 @@ public class UserService
                 };
                 await _subscriptionConfirmationRepository.AddSubscriptionConfirmationAsync(confirmation);
             }
-           
+
+
+            bool paymentSucceeded = Random.Shared.NextDouble() < 0.7;
+            if (!paymentSucceeded)
+            {
+                await transaction.RollbackAsync();
+                throw new PaymentFailedException();
+            }
 
             await _context.SaveChangesAsync();
-
             await transaction.CommitAsync();
         }
         catch
@@ -429,8 +466,72 @@ public class UserService
             throw;
         }
     }
-    
-  
+
+
+    /* Make user cancel subscription to streaming service*/
+    public async Task CancelSubscriptionWithGivenIdAsync(int userId, int subscriptionId)
+    {
+        if (subscriptionId <= 0) throw new ArgumentException("Subscription id can not be equal or smaller than 0.");
+        if (userId <= 0) throw new ArgumentException("User id can not be equal or smaller than 0.");
+
+        await using var transaction = await _context.Database.BeginTransactionAsync();
+        try
+        {
+            var existing = await _subscriptionRepository.GetSubscriptionWithGivenIdAsync(subscriptionId);
+            if (existing == null)
+                throw new SubscriptionsDoesNotExistsException(subscriptionId);
+
+            if (userId != existing.Confirmations.FirstOrDefault()?.UserId)
+                throw new AccessDeniedException(
+                    $"User {userId} does not own the subscription with id {subscriptionId}");
+
+            await _subscriptionRepository.RemoveAsync(subscriptionId);
+
+            await _context.SaveChangesAsync();
+            await transaction.CommitAsync();
+        }
+        catch
+        {
+            await transaction.RollbackAsync();
+            throw;
+        }
+    }
+
+    /* Make user update review. */
+    public async Task UpdateReviewAsync(int userId, UpdateReviewDTO reviewDto)
+    {
+        if (userId <= 0) throw new ArgumentException("User id can not be equal or smaller than 0.");
+
+        await using var transaction = await _context.Database.BeginTransactionAsync();
+
+        try
+        {
+            if (reviewDto.Id <= 0) throw new ArgumentException("Review id can not be equal or smaller than 0.");
+
+            if (reviewDto == null)
+                throw new ArgumentNullException(nameof(reviewDto));
+
+            var review = await _reviewRepository.GetReviewByIdAsync(reviewDto.Id) ??
+                         throw new ReviewDoesNotExistsException(reviewDto.Id);
+
+            if (userId != review.UserId)
+                throw new AccessDeniedException(
+                    $"User {userId} does not own the review with id {review.Id}");
+            
+            _reviewService.ValidateReview(comment: reviewDto.Comment);
+
+            review.Comment = reviewDto.Comment;
+
+            await _context.SaveChangesAsync();
+            await transaction.CommitAsync();
+        }
+        catch
+        {
+            await transaction.RollbackAsync();
+            throw;
+        }
+    }
+
     /* Validations */
     private async Task<bool> CanUserWatchTheContent(User user, MediaContent mediaContent)
     {
@@ -451,11 +552,11 @@ public class UserService
 
     private void ValidateChanges(UpdateUserDTO userDto, User user)
     {
-        bool firstNameEqual  = string.Equals(userDto.Firstname, user.Firstname, StringComparison.OrdinalIgnoreCase);
-        bool lastNameEqual   = string.Equals(userDto.Lastname,  user.Lastname,  StringComparison.OrdinalIgnoreCase);
-        bool nicknameEqual   = string.Equals(userDto.Nickname,  user.Nickname,  StringComparison.OrdinalIgnoreCase);
-        bool emailEqual      = string.Equals(userDto.Email,     user.Email,     StringComparison.OrdinalIgnoreCase);
-        bool countryEqual    = string.Equals(userDto.Country,   user.Country,   StringComparison.OrdinalIgnoreCase);
+        bool firstNameEqual = string.Equals(userDto.Firstname, user.Firstname, StringComparison.OrdinalIgnoreCase);
+        bool lastNameEqual = string.Equals(userDto.Lastname, user.Lastname, StringComparison.OrdinalIgnoreCase);
+        bool nicknameEqual = string.Equals(userDto.Nickname, user.Nickname, StringComparison.OrdinalIgnoreCase);
+        bool emailEqual = string.Equals(userDto.Email, user.Email, StringComparison.OrdinalIgnoreCase);
+        bool countryEqual = string.Equals(userDto.Country, user.Country, StringComparison.OrdinalIgnoreCase);
 
         var status = ParseStatus(userDto.Status);
         bool statusEqual = status == user.Status;

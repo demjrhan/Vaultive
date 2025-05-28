@@ -38,6 +38,80 @@ public class SubscriptionService
         _subscriptionConfirmationRepository = subscriptionConfirmationRepository;
     }
 
+    public async Task AddSubscriptionAsync(AddOrRenewSubscriptionDTO dto)
+    {
+        await using var transaction = await _context.Database.BeginTransactionAsync();
+
+        try
+        {
+            var streamingService =
+                await _streamingServiceRepository.GetStreamingServiceByIdAsync(dto.StreamingServiceId);
+            if (streamingService == null)
+                throw new StreamingServiceDoesNotExistsException(new[] { dto.StreamingServiceId });
+
+            var user = await _userRepository.GetUserWithGivenId(dto.UserId);
+            if (user == null)
+                throw new UserDoesNotExistsException(dto.UserId);
+
+            var activeSubscriptions = await GetActiveSubscriptionsOfUserIdAsync(user.Id);
+            if (activeSubscriptions.Any(ss => ss.StreamingServiceName == streamingService.Name))
+                throw new SubscriptionAlreadyExistsException(user.Id, streamingService.Id);
+
+            var today = DateOnly.FromDateTime(DateTime.Now);
+
+            var inactiveSubscription =
+                await GetInactiveSubscriptionOfUserIdAsync(streamingService.Name, user.Id);
+            if (inactiveSubscription != null)
+            {
+                var subscription = await _subscriptionRepository
+                    .GetSubscriptionWithGivenIdAsync(inactiveSubscription.Id);
+
+                if (subscription == null) throw new SubscriptionsDoesNotExistsException(inactiveSubscription.Id);
+                var subscriptionConfirmation = new SubscriptionConfirmation()
+                {
+                    StartTime = today,
+                    EndTime = today.AddMonths(dto.DurationInMonth),
+                    PaymentMethod = dto.PaymentMethod,
+                    Price = CalculateAmountOfConfirmation(streamingService.DefaultPrice, user),
+                    Subscription = subscription,
+                    User = user,
+                    UserId = user.Id,
+                    SubscriptionId = subscription.Id,
+                };
+                await _subscriptionConfirmationRepository.AddSubscriptionConfirmationAsync(subscriptionConfirmation);
+            }
+            else
+            {
+                var subscription = new Subscription
+                {
+                    StreamingServiceId = dto.StreamingServiceId,
+                    StreamingService = streamingService
+                };
+                await _subscriptionRepository.AddSubscriptionAsync(subscription);
+
+                var confirmation = new SubscriptionConfirmation
+                {
+                    StartTime = today,
+                    EndTime = today.AddMonths(dto.DurationInMonth),
+                    PaymentMethod = dto.PaymentMethod,
+                    Price = CalculateAmountOfConfirmation(streamingService.DefaultPrice, user),
+                    Subscription = subscription,
+                    SubscriptionId = subscription.Id,
+                    User = user,
+                    UserId = user.Id
+                };
+                await _subscriptionConfirmationRepository.AddSubscriptionConfirmationAsync(confirmation);
+            }
+
+            await _context.SaveChangesAsync();
+            await transaction.CommitAsync();
+        }
+        catch
+        {
+            await transaction.RollbackAsync();
+            throw;
+        }
+    }
 
     public async Task CancelSubscriptionWithGivenIdAsync(int subscriptionId)
     {
@@ -170,7 +244,7 @@ public class SubscriptionService
                 AmountPaid = inactiveSubscription.Price
             };
         }
-        
+
 
         return null;
     }
@@ -185,21 +259,32 @@ public class SubscriptionService
               - today.DayNumber
               + 1;
     }
+
     public static decimal CalculateAmountOfConfirmation(decimal defaultPrice, User user)
     {
         decimal discount = 0;
 
         switch (user.Status)
         {
-            case Status.Student: discount += 0.20m; break;
-            case Status.Elder: discount += 0.10m; break;
+            case Status.Student:
+                discount += 0.20m;
+                break;
+            case Status.Elder:
+                discount += 0.10m;
+                break;
         }
 
         switch (user.Country.Trim().ToUpperInvariant())
         {
-            case "POLAND": discount += 0.05m; break;
-            case "GERMANY": discount += 0.03m; break;
-            case "FRANCE": discount += 0.02m; break;
+            case "POLAND":
+                discount += 0.05m;
+                break;
+            case "GERMANY":
+                discount += 0.03m;
+                break;
+            case "FRANCE":
+                discount += 0.02m;
+                break;
         }
 
         return Math.Max(defaultPrice * (1 - discount), 0);

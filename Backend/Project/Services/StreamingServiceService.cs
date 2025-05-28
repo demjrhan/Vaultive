@@ -135,7 +135,7 @@ public class StreamingServiceService
     }
 
     /* Remove the streaming service with the given id */
-    public async Task RemoveStreamingServiceWithGivenIdAsync(int streamingServiceId)
+    public async Task DeleteStreamingServiceWithGivenIdAsync(int streamingServiceId)
     {
         if (streamingServiceId <= 0)
             throw new ArgumentException("Streaming service id can not be equal or smaller than 0.");

@@ -90,11 +90,11 @@ namespace Project.Controller;
         }
 
         [HttpDelete("Remove/{reviewId:int}")]
-        public async Task<IActionResult> RemoveReviewAsync(int reviewId)
+        public async Task<IActionResult> DeleteReviewAsync(int reviewId)
         {
             try
             {
-                await _reviewService.RemoveReviewWithGivenIdAsync(reviewId);
+                await _reviewService.DeleteReviewWithGivenIdAsync(reviewId);
                 return Ok(new { message = "Review deleted successfully" });
             }
             catch (ArgumentException ex)

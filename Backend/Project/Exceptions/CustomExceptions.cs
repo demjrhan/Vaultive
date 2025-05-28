@@ -200,7 +200,20 @@
         {
         }
     }
-
+    public class PaymentFailedException : Exception
+    {
+        public PaymentFailedException()
+            : base("Payment was declined by the bank.")
+        {
+        }
+    }
+    public class AccessDeniedException : Exception
+    {
+        public AccessDeniedException(string message)
+            : base(message)
+        {
+        }
+    }
 
     public class StreamingServiceDoesNotExistsException : Exception
     {

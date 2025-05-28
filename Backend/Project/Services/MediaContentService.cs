@@ -348,7 +348,7 @@ public class MediaContentService
     }
 
     /* Remove the media content with the given id */
-    public async Task RemoveMediaContentWithGivenIdAsync(int mediaId)
+    public async Task DeleteMediaContentWithGivenIdAsync(int mediaId)
     {
         if (mediaId <= 0) throw new ArgumentException("Media id can not be equal or smaller than 0.");
         await using var transaction = await _context.Database.BeginTransactionAsync();

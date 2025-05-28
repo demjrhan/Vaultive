@@ -37,8 +37,8 @@ public class ReviewService
         _subscriptionConfirmationRepository = subscriptionConfirmationRepository;
     }
 
-    /* Remove review with given id */
-    public async Task RemoveReviewWithGivenIdAsync(int reviewId)
+    /* Delete review with given id */
+    public async Task DeleteReviewWithGivenIdAsync(int reviewId)
     {
         if (reviewId <= 0) throw new ArgumentException("Review id can not be equal or smaller than 0.");
         await using var transaction = await _context.Database.BeginTransactionAsync();

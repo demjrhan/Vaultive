@@ -99,9 +99,14 @@ public class UserController : ControllerBase
         try
         {
             await _userService.SubscribeAsync(addOrRenewSubscriptionDto);
-            return Ok($"User with id {addOrRenewSubscriptionDto.UserId} subscribed to streaming service with id {addOrRenewSubscriptionDto.StreamingServiceId} successfully.");
+            return Ok(
+                $"User with id {addOrRenewSubscriptionDto.UserId} subscribed to streaming service with id {addOrRenewSubscriptionDto.StreamingServiceId} successfully.");
         }
 
+        catch (PaymentFailedException ex)
+        {
+            return BadRequest(ex.Message);
+        }
         catch (StreamingServiceDoesNotExistsException ex)
         {
             return BadRequest(ex.Message);
@@ -123,7 +128,7 @@ public class UserController : ControllerBase
             return StatusCode(500, $"Unexpected error: {ex.Message}");
         }
     }
-    
+ 
     [HttpPost("Add")]
     public async Task<IActionResult> AddMovieAsync([FromBody] CreateUserDTO userDto)
     {
@@ -191,7 +196,35 @@ public class UserController : ControllerBase
             return StatusCode(500, $"Unexpected error: {ex.Message}");
         }
     }
-    
+    [HttpPut("UpdateReview/{userId:int}")]
+    public async Task<IActionResult> UpdateReviewAsync(int userId, [FromBody] UpdateReviewDTO dto)
+    {
+        try
+        {
+            await _userService.UpdateReviewAsync(userId, dto);
+            return Ok(new { message = "Review updated successfully" });
+        }
+        catch (AccessDeniedException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+        catch (ReviewDoesNotExistsException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+        catch (ArgumentNullException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+        catch (ArgumentException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"Unexpected error: {ex.Message}");
+        }
+    }
     [HttpPut("Watch")]
     public async Task<IActionResult> WatchMediaContentAsync(int userId, int mediaId)
     {
@@ -226,12 +259,12 @@ public class UserController : ControllerBase
         }
     }
 
-    [HttpDelete("Remove/{userId:int}")]
-    public async Task<IActionResult> RemoveUserAsync(int userId)
+    [HttpDelete("Delete/{userId:int}")]
+    public async Task<IActionResult> DeleteUserAsync(int userId)
     {
         try
         {
-            await _userService.RemoveUserWithGivenIdAsync(userId);
+            await _userService.DeleteUserWithGivenIdAsync(userId);
             return Ok($"User {userId} deleted successfully.");
         }
         catch (ArgumentException ex)
@@ -243,6 +276,55 @@ public class UserController : ControllerBase
             return StatusCode(500, $"Unexpected error: {ex.Message}");
         }
     }
-
+    [HttpDelete("CancelSubscription/{userId:int}/{subscriptionId:int}")]
+    public async Task<IActionResult>  CancelSubscriptionAsync(int userId, int subscriptionId)
+    {
+        try
+        {
+            await _userService.CancelSubscriptionWithGivenIdAsync(userId, subscriptionId);
+            return Ok(new { message = "Subscription deleted successfully." });
+        }
+        catch (AccessDeniedException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+        catch (ArgumentException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+        catch (SubscriptionsDoesNotExistsException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"Unexpected error: {ex.Message}");
+        }
+    }
+    [HttpDelete("DeleteReview/{userId:int}/{reviewId:int}")]
+    public async Task<IActionResult> DeleteReviewAsync(int userId, int reviewId)
+    {
+        try
+        {
+            await _userService.DeleteReviewWithGivenIdAsync(userId, reviewId);
+            return Ok(new { message = "Review deleted successfully" });
+        }
+        catch (AccessDeniedException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+        catch (ArgumentException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+        catch (ReviewDoesNotExistsException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"Unexpected error: {ex.Message}");
+        }
+    }
     
 }

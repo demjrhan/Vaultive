@@ -138,12 +138,12 @@ public class StreamingServiceController : ControllerBase
         }
     }
     
-    [HttpDelete("Remove/{streamingServiceId:int}")]
-    public async Task<IActionResult> RemoveStreamingServiceAsync(int streamingServiceId)
+    [HttpDelete("Delete/{streamingServiceId:int}")]
+    public async Task<IActionResult> DeleteStreamingServiceAsync(int streamingServiceId)
     {
         try
         {
-            await _streamingServiceService.RemoveStreamingServiceWithGivenIdAsync(streamingServiceId);
+            await _streamingServiceService.DeleteStreamingServiceWithGivenIdAsync(streamingServiceId);
             return Ok("Streaming service deleted successfully.");
         }
         catch (StreamingServiceDoesNotExistsException ex)
