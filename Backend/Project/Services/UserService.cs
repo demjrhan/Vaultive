@@ -335,7 +335,7 @@ public class UserService
     }
 
     /* Make user add review to media content */
-    public async Task AddReviewToMediaContentAsync(AddReviewDTO addReviewDto)
+    public async Task ReviewAsync(AddReviewDTO addReviewDto)
     {
         await using var transaction = await _context.Database.BeginTransactionAsync();
 

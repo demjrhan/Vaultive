@@ -59,7 +59,7 @@ public class UserController : ControllerBase
     {
         try
         {
-            await _userService.AddReviewToMediaContentAsync(addReviewDto);
+            await _userService.ReviewAsync(addReviewDto);
             return Ok($"User {addReviewDto.UserId} added review successfully.");
         }
 

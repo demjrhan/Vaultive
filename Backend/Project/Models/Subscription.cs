@@ -10,21 +10,24 @@ public class Subscription
     [NotMapped]
     public int DurationInDays
     {
-        get
-        {
-            var today = DateOnly.FromDateTime(DateTime.UtcNow);
-            var latest = Confirmations.MaxBy(c => c.StartTime);
-            if (latest == null)
-                return 0;
-            
-            return  latest.EndTime < today
-                ? 0
-                : latest.EndTime.DayNumber
-                  - today.DayNumber
-                  + 1;
-            
-        }
+        get => CalculateDurationInDays();
     }
+
+    private int CalculateDurationInDays()
+    {
+        var today = DateOnly.FromDateTime(DateTime.UtcNow);
+
+        var latest = Confirmations.MaxBy(c => c.StartTime);
+        if (latest == null)
+            return 0;
+
+        return latest.EndTime < today
+            ? 0
+            : latest.EndTime.DayNumber
+              - today.DayNumber
+              + 1;
+    }
+
 
     public ICollection<SubscriptionConfirmation> Confirmations { get; set; } = new List<SubscriptionConfirmation>();
     
