@@ -81,7 +81,7 @@ public class ReviewService
             Comment = r.Comment,
             Nickname = r.User.Nickname,
             WatchedOn = r.WatchHistory.WatchDate,
-        }).ToList();
+        }).OrderBy(r => r.Nickname).ToList();
     }
     
     
