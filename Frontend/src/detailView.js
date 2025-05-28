@@ -1,6 +1,6 @@
 const detailContainer = document.querySelector('.main-container-detail');
 const mainContainer = document.querySelector('.main-container');
-const detailImage = document.querySelector('.movie-image-detail');
+const trailerAndPosterContainer = document.querySelector('.movie-poster-and-trailer');
 const detailTitle = document.querySelector('.movie-title-detail');
 const scrollContainer = document.querySelector('.platform-links-detail .logo-images-scroll');
 
@@ -80,15 +80,28 @@ function renderPosterAndTrailer(movie) {
     ? `../public/img/${movie.mediaContent.posterImageName}.png`
     : '../public/img/default-poster.png';
 
-  detailImage.innerHTML = `
+  const poster = document.createElement('div');
+  poster.className = 'poster-detail';
+  poster.innerHTML = `
+  <img 
+    src="${posterImage}" 
+    alt="${movie.mediaContent?.title || 'Movie poster'}"
+  >
+`;
+
+  const trailer = document.createElement('div');
+  trailer.className = 'trailer-detail';
+
+  trailer.innerHTML = `
     <iframe
       class='trailer-iframe'
-      src='https://www.youtube.com/embed/${movie.mediaContent?.youtubeTrailerURL ?? 'dQw4w9WgXcQ'}?autoplay=1&controls=0&loop=1'
+      src='https://www.youtube.com/embed/${movie.mediaContent?.youtubeTrailerURL}?autoplay=1&controls=0&loop=1'
       allow='autoplay; encrypted-media'
       allowfullscreen>
     </iframe>
-    <img src='${posterImage}' alt='${movie.mediaContent?.title}'>
   `;
+  trailerAndPosterContainer.appendChild(trailer);
+  trailerAndPosterContainer.appendChild(poster);
 }
 
 function renderDetailText(movie) {
@@ -301,7 +314,7 @@ export function closeDetailOnEscape() {
 
 function closeDetailView() {
   detailContainer.scrollTop = 0;
-  detailImage.innerHTML = '';
+  trailerAndPosterContainer.innerHTML = '';
   detailContainer.style.display = 'none';
 
   if (detailOpenedFrom === 'movies') {
@@ -313,7 +326,7 @@ function closeDetailView() {
   } else {
     mainContainer.style.filter = 'none';
     showcaseVideo.style.display = '';
-    
+
   }
 
   showcase.classList.remove('overlay-disabled');

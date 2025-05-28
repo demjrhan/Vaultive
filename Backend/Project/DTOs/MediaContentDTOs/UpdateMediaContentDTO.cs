@@ -19,5 +19,5 @@ public class UpdateMediaContentDTO
 
     public string? PosterImageName { get; set; } = null;
     
-    public string YoutubeTrailerURL { get; set; } = null!;
+    public string? YoutubeTrailerURL { get; set; }
 }

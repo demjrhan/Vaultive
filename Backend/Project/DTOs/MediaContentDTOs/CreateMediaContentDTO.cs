@@ -17,5 +17,5 @@ public class CreateMediaContentDTO
 
     public string? PosterImageName { get; set; } = null;
     
-    public string YoutubeTrailerURL { get; set; } = null!;
+    public string? YoutubeTrailerURL { get; set; }
 }

@@ -10,5 +10,10 @@ public enum Genre
     Thriller,
     Mystery,
     Crime,
-    Superhero
+    Superhero,
+    Biography,
+    Animation,
+    Family,
+    Fantasy,
+    Adventure
 }

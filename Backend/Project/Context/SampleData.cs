@@ -204,7 +204,7 @@ public static class SampleData
                         "After the sudden death of his beloved wife, retired assassin John Wick receives one last gift from her—a beagle puppy named Daisy. But when a group of ruthless mobsters break into his home, steal his car, and kill Daisy, they unknowingly reawaken one of the deadliest killers the underworld has ever known. What follows is a relentless, high-octane tale of revenge as John Wick hunts down everyone involved, igniting a war against a powerful Russian crime syndicate.",
                     ReleaseDate = new DateOnly(2014, 10, 24),
                     OriginalLanguage = "English",
-                    Country = "USA",
+                    Country = "US",
                     Duration = 101,
                     YoutubeTrailerURL = "C0BMx-qxsP4",
                     PosterImageName = "john-wick-poster",
@@ -222,7 +222,7 @@ public static class SampleData
                         "Wade Wilson, a former Special Forces operative turned mercenary, is subjected to a rogue experiment that leaves him disfigured but with accelerated healing powers. Adopting the alter ego Deadpool, Wade embarks on a mission to hunt down the man who nearly destroyed his life. Known for his irreverent humor, fourth-wall-breaking antics, and ultra-violent combat skills, Deadpool is unlike any superhero you’ve seen before—raw, unfiltered, and wildly entertaining.",
                     ReleaseDate = new DateOnly(2016, 2, 12),
                     OriginalLanguage = "English",
-                    Country = "USA",
+                    Country = "US",
                     Duration = 108,
                     YoutubeTrailerURL = "VHAK-gU9gi0",
                     PosterImageName = "deadpool-poster",
@@ -240,7 +240,7 @@ public static class SampleData
                         "After being bitten by a genetically modified spider, awkward and intelligent teenager Peter Parker gains spider-like abilities. Struggling to balance his newfound powers, personal life, and responsibility, he takes on the mantle of Spider-Man to protect New York City from rising threats. As he battles foes and faces heartbreaking loss, Peter learns that with great power comes great responsibility.",
                     ReleaseDate = new DateOnly(2017, 2, 12),
                     OriginalLanguage = "English",
-                    Country = "USA",
+                    Country = "US",
                     Duration = 108,
                     YoutubeTrailerURL = "t06RUxPbp_c",
                     PosterImageName = "spider-man-poster",
@@ -258,7 +258,7 @@ public static class SampleData
                         "Quentin Tarantino’s cult masterpiece weaves together several interrelated stories involving Los Angeles mobsters, fringe criminals, and a mysterious briefcase. From the philosophical hitmen Vincent and Jules, to the washed-up boxer Butch, and the volatile duo of Pumpkin and Honey Bunny, 'Pulp Fiction' is a darkly comedic, non-linear exploration of crime, redemption, and pop culture that redefined modern cinema.",
                     ReleaseDate = new DateOnly(1994, 10, 14),
                     OriginalLanguage = "English",
-                    Country = "USA",
+                    Country = "US",
                     Duration = 154,
                     YoutubeTrailerURL = "s7EdQ4FqbhY",
                     PosterImageName = "pulpfiction-poster",
@@ -276,7 +276,7 @@ public static class SampleData
                         "When an unexpected threat emerges to endanger global security, Nick Fury, director of S.H.I.E.L.D., assembles a team of extraordinary individuals: Iron Man, Captain America, Thor, Hulk, Black Widow, and Hawkeye. Together, they must overcome their personal differences and unite to stop Loki, the god of mischief, from enslaving Earth with an alien army. 'The Avengers' is a thrilling culmination of Marvel’s cinematic universe, delivering action, wit, and superhero spectacle.",
                     ReleaseDate = new DateOnly(2012, 5, 4),
                     OriginalLanguage = "English",
-                    Country = "USA",
+                    Country = "US",
                     Duration = 143,
                     YoutubeTrailerURL = "6ZfuNTqbHE8",
                     PosterImageName = "avengers-poster",
@@ -294,7 +294,7 @@ public static class SampleData
 
                     ReleaseDate = new DateOnly(1972, 3, 24),
                     OriginalLanguage = "English",
-                    Country = "USA",
+                    Country = "US",
                     Duration = 175,
                     YoutubeTrailerURL = "UaVTIH8mujA",
                     PosterImageName = "godfather-poster",
@@ -311,7 +311,7 @@ public static class SampleData
                         "Is a gangster drama directed by Brian De Palma in 1983 - inspired by the famous 1932 Howard Hawks film - was not a box office success, but today it is considered one of the most important productions in the oeuvre of the author of \"Carrie\". The story of the rapid criminal career of a small-time thug and its even faster end has gained the status of a cult film for many viewers, the best proof of which is the fact that the special edition DVD with the film sold like hot cakes in the USA. The hero of \"Scarface\" is a Cuban, Antonio Montana, who in 1981, along with thousands of other emigrants, comes to the USA.",
                     ReleaseDate = new DateOnly(1983, 12, 9),
                     OriginalLanguage = "English",
-                    Country = "USA",
+                    Country = "US",
                     Duration = 170,
                     YoutubeTrailerURL = "cv276Wg3e7I",
                     PosterImageName = "scarface-poster",
@@ -326,24 +326,160 @@ public static class SampleData
                         Languages = new List<string>() {"Japanese"}
                     }
                 },
-                new Movie
-                {
-                    Title = "Vaultive",
-                    Description =
-                        "You were expecting plot, drama, maybe some explosions? Nope. Just smooth vocals and betrayal.",
-                    ReleaseDate = new DateOnly(2025, 5, 9),
-                    OriginalLanguage = "English",
-                    Country = "Turkish",
-                    Duration = 125,
-                    YoutubeTrailerURL = "dQw4w9WgXcQ",
-                    PosterImageName = null,
-                    Genres = new List<Genre> { Genre.Action },
-                    SubtitleOption = new SubtitleOption
-                    {
-                        Languages = new List<string>() {"English" }
-
+                new Movie  
+                {  
+                    Title = "The Wolf of Wall Street",  
+                    Description = "Based on the true story of Jordan Belfort, this film chronicles his rise and fall as a wealthy stockbroker living the high life before his dramatic collapse.",  
+                    ReleaseDate = new DateOnly(2013, 12, 25),  
+                    OriginalLanguage = "English",  
+                    Country = "United States",  
+                    Duration = 180,  
+                    YoutubeTrailerURL = "iszwuX1AK6A",  
+                    PosterImageName = "wolf-of-wall-street",  
+                    Genres = new List<Genre>  
+                    {  
+                        Genre.Biography,  
+                        Genre.Comedy,  
+                        Genre.Drama  
+                    },  
+                    SubtitleOption = new SubtitleOption  
+                    {  
+                        Languages = new List<string>  
+                        {  
+                            "English",  
+                            "Spanish",  
+                            "French",  
+                            "German"  
+                        }  
+                    }  
+                },
+                new Movie  
+                {  
+                    Title = "Training Day",  
+                    Description = "A rookie LAPD narcotics officer spends his first day with a rogue detective who isn’t what he appears to be, testing his morals and resolve.",  
+                    ReleaseDate = new DateOnly(2001, 10, 5),  
+                    OriginalLanguage = "English",  
+                    Country = "United States",  
+                    Duration = 122,  
+                    YoutubeTrailerURL = "DXPJqRtkDP0",  
+                    PosterImageName = "training-day-poster",  
+                    Genres = new List<Genre>  
+                    {  
+                        Genre.Crime,  
+                        Genre.Drama,  
+                        Genre.Thriller  
+                    },  
+                    SubtitleOption = new SubtitleOption  
+                    {  
+                        Languages = new List<string>  
+                        {  
+                            "English",  
+                            "Spanish",  
+                            "French"  
+                        }  
+                    }  
+                },
+                new Movie  
+                {  
+                    Title = "Despereaux",  
+                    Description = "A brave mouse helps to restore happiness to a forlorn kingdom by befriending a princess and a gentleman rat.",  
+                    ReleaseDate = new DateOnly(2008, 12, 19),  
+                    OriginalLanguage = "English",  
+                    Country = "United Kingdom, United States",  
+                    Duration = 93,  
+                    YoutubeTrailerURL = "I7b-Vfz0ga4",  
+                    PosterImageName = "despereaux-poster",  
+                    Genres = new List<Genre>  
+                    {  
+                        Genre.Animation,  
+                        Genre.Family,  
+                        Genre.Fantasy  
+                    },  
+                    SubtitleOption = new SubtitleOption  
+                    {  
+                        Languages = new List<string>  
+                        {  
+                            "English",  
+                            "Spanish"  
+                        }  
+                    },  
+                    AudioOption = new AudioOption  
+                    {  
+                        Languages = new List<string>  
+                        {  
+                            "English",  
+                            "French"  
+                        }  
+                    }  
+                },
+                new Movie  
+                {  
+                    Title = "Moana 2",  
+                    Description = "Set three years after the first film, Moana reunites with the demigod Maui and assembles a wayfinding crew to find the lost island of Motufetu, break its curse, and reconnect the people of the ocean.",  
+                    ReleaseDate = new DateOnly(2024, 11, 27),  
+                    OriginalLanguage = "English",  
+                    Country = "United States",  
+                    Duration = 100,  
+                    YoutubeTrailerURL = "hDZ7y8RP5HE",  
+                    PosterImageName = "moana-2-poster",  
+                    Genres = new List<Genre>  
+                    {  
+                        Genre.Action,  
+                        Genre.Animation,  
+                        Genre.Family,  
+                        Genre.Fantasy  
+                    },  
+                    SubtitleOption = new SubtitleOption  
+                    {  
+                        Languages = new List<string>  
+                        {  
+                            "English",  
+                            "Spanish",  
+                            "French",  
+                            "German"  
+                        }  
                     }
+                },
+                new Movie  
+                {  
+                    Title = "Cars",  
+                    Description = "A hotshot race-car named Lightning McQueen becomes stranded in the small town of Radiator Springs, where he learns life's true priorities.",  
+                    ReleaseDate = new DateOnly(2006, 6, 9),  
+                    OriginalLanguage = "English",  
+                    Country = "United States",  
+                    Duration = 117,  
+                    YoutubeTrailerURL = "W_H7_tDHFE8",  
+                    PosterImageName = "cars-poster",  
+                    Genres = new List<Genre>  
+                    {  
+                        Genre.Animation,  
+                        Genre.Adventure,  
+                        Genre.Comedy,  
+                        Genre.Family  
+                    },  
+                    SubtitleOption = new SubtitleOption  
+                    {  
+                        Languages = new List<string>  
+                        {  
+                            "English",  
+                            "Spanish",  
+                            "French"  
+                        }  
+                    },  
+                    AudioOption = new AudioOption  
+                    {  
+                        Languages = new List<string>  
+                        {  
+                            "English",  
+                            "Spanish"  
+                        }  
+                    }  
                 }
+
+
+
+
+
             };
             context.Movies.AddRange(movies);
             context.SaveChanges();
@@ -358,8 +494,24 @@ public static class SampleData
             var pulpFiction = context.Movies.FirstOrDefault(m => m.Title == "Pulp Fiction");
             var scarface = context.Movies.FirstOrDefault(m => m.Title == "Scarface");
             var spiderman = context.Movies.FirstOrDefault(m => m.Title == "Spiderman");
-            var vaultive = context.Movies.FirstOrDefault(m => m.Title == "Vaultive");
+            var wolfOfWallStreet = context.Movies.FirstOrDefault(m => m.Title == "The Wolf of Wall Street");
+            var trainingDay = context.Movies.FirstOrDefault(m => m.Title == "Training Day");
+            var despereaux = context.Movies.FirstOrDefault(m => m.Title == "Despereaux");
+            var moana2 = context.Movies.FirstOrDefault(m => m.Title == "Moana 2");
+            var cars = context.Movies.FirstOrDefault(m => m.Title == "Cars");
 
+            wolfOfWallStreet?.StreamingServices.Add(appleTV);
+            wolfOfWallStreet?.StreamingServices.Add(disney);
+
+            trainingDay?.StreamingServices.Add(hbo);
+
+            despereaux?.StreamingServices.Add(disney);
+
+            moana2?.StreamingServices.Add(disney);
+            moana2?.StreamingServices.Add(appleTV);
+
+            cars?.StreamingServices.Add(disney);
+            cars?.StreamingServices.Add(hbo);
 
             johnWick?.StreamingServices.Add(appleTV);
             johnWick?.StreamingServices.Add(disney);
@@ -370,6 +522,7 @@ public static class SampleData
             avengers?.StreamingServices.Add(hbo);
 
             godfather?.StreamingServices.Add(hbo);
+            godfather?.StreamingServices.Add(appleTV);
 
             pulpFiction?.StreamingServices.Add(appleTV);
 
@@ -377,10 +530,9 @@ public static class SampleData
             scarface?.StreamingServices.Add(appleTV);
 
             spiderman?.StreamingServices.Add(disney);
+            spiderman?.StreamingServices.Add(hbo);
+            spiderman?.StreamingServices.Add(appleTV);
 
-            vaultive?.StreamingServices.Add(disney);
-            vaultive?.StreamingServices.Add(hbo);
-            vaultive?.StreamingServices.Add(appleTV);
 
             context.SaveChanges();
         }

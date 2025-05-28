@@ -29,7 +29,7 @@
     flex-shrink: 0;
 }
 
-.movie-image-detail {
+.movie-poster-and-trailer {
     background-color: black;
     border-top-right-radius: 25px;
     border-top-left-radius: 25px;
@@ -41,7 +41,18 @@
     background-position: center;
 }
 
-.movie-image-detail img {
+
+
+.trailer-detail {
+    width: 100%;
+    height: 100%;
+}
+.trailer-iframe{
+    padding: 1em;
+    border-radius: 35px;
+
+}
+.poster-detail img{
     position: absolute;
     border-radius: 25px;
     width: 12em;

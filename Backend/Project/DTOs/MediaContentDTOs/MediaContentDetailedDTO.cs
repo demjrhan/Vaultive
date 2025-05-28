@@ -14,7 +14,7 @@ public class MediaContentDetailedDTO
     public string OriginalLanguage { get; set; } = null!;
     public string Country { get; set; } = null!;
     public int Duration { get; set; }
-    public string YoutubeTrailerURL { get; set; }  = null!;
+    public string? YoutubeTrailerURL { get; set; }
     public string? PosterImageName { get; set; }
     
     public OptionDTO? SubtitleOption { get; set; }

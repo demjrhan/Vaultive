@@ -19,5 +19,5 @@ public interface IMediaContent
 
     /* Frontend visual properties */ 
     string? PosterImageName { get; set; }
-    string YoutubeTrailerURL { get; set; }
+    string? YoutubeTrailerURL { get; set; }
 }
