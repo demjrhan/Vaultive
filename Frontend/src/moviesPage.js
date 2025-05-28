@@ -18,21 +18,20 @@ function closeMoviesPopup() {
   mainContainer.style.filter = 'none';
   document.body.classList.remove('detail-view-open');
 }
+
 export function createNavigationBarMoviePage() {
   navigationBar.innerHTML = `
     <div class="home-button" id="close-movies-popup">
           <img src="../public/icons/home.png" alt="home">
-</div>
-  `;
+    </div>`;
 
-  document.getElementById('close-movies-popup')?.addEventListener('click', () => {
-    closeMoviesPopup();
-    showcase.style.backgroundImage = `url(${featuredMovie.backgroundGif})`;
-    showcase.style.backgroundRepeat = 'no-repeat';
-    showcase.style.backgroundSize = 'cover';
-    showcase.style.backgroundPosition = 'center';
-  });
+  document
+    .getElementById('close-movies-popup')
+    ?.addEventListener('click', () => {
+      closeMoviesPopup();
+      showcase.style.backgroundImage = `url(${featuredMovie.backgroundGif})`;
+      showcase.style.backgroundRepeat = 'no-repeat';
+      showcase.style.backgroundSize = 'cover';
+      showcase.style.backgroundPosition = 'center';
+    });
 }
-
-
-

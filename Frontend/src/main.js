@@ -1,4 +1,4 @@
-import { renderFeaturedMovie } from './renderFeatured.js';
+import { renderStar } from './renderStar.js';
 import { renderRecommendations } from './renderRecommendations.js';
 import { closeDetailOnEscape } from './detailView.js';
 import { featuredMovie, fetchMovieData } from './movieData.js';
@@ -10,8 +10,8 @@ import { renderStreamingServices } from './renderStreamingServices.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
 
-  var movies = await fetchMovieData();
-  renderFeaturedMovie(featuredMovie);
+  const movies = await fetchMovieData();
+  renderStar(featuredMovie);
   renderRecommendations(movies);
   closeDetailOnEscape();
   window.addEventListener('resize', () => {

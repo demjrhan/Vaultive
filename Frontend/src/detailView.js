@@ -4,10 +4,8 @@ const detailContainer = document.querySelector('.main-container-detail');
 const mainContainer = document.querySelector('.main-container');
 const detailImage = document.querySelector('.movie-image-detail');
 const detailTitle = document.querySelector('.movie-title-detail');
-const platformLinksDetail = document.querySelector('.platform-links-detail');
-const scrollContainer = platformLinksDetail.querySelector(
-  '.logo-images-scroll'
-);
+const scrollContainer = document.querySelector('.platform-links-detail .logo-images-scroll');
+
 const detailDescription = document.querySelector(
   '.movie-text-description-detail'
 );
@@ -200,8 +198,6 @@ function setupReviewSubmission(movie) {
   submitReview.addEventListener('mouseout', () => {
     textarea.style.filter = 'blur(0)';
     textarea.readOnly = false;
-    const existingOverlay = document.getElementById('blur-overlay');
-    if (existingOverlay) existingOverlay.remove();
   });
 
   submitReview.addEventListener('click', async () => {

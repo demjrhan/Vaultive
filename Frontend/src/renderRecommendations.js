@@ -1,6 +1,6 @@
 import { showMovieDetail } from './detailView.js';
 
-export async function renderRecommendations(movies) {
+export function renderRecommendations(movies) {
   const movieCardsContainer = document.querySelector('.movie-cards');
   movieCardsContainer.innerHTML = '';
 
