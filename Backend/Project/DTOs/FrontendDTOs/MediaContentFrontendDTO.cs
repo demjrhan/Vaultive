@@ -7,7 +7,9 @@ public class MediaContentFrontendDTO
     public string Description { get; set; } = null!;
     public string? YoutubeTrailerURL { get; set; }
     public string? PosterImageName { get; set; }
-    
+
+    public string State { get; set; } = null!;
+
     public ICollection<StreamingServiceFrontendDTO> StreamingServices { get; set; } = new List<StreamingServiceFrontendDTO>();
 
 }

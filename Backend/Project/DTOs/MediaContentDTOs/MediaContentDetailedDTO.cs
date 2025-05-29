@@ -2,6 +2,7 @@
 using Project.DTOs.OptionDTOs;
 using Project.DTOs.ReviewDTOs;
 using Project.DTOs.StreamingServiceDTOs;
+using Project.Models.Enumerations;
 
 namespace Project.DTOs.MediaContentDTOs;
 
@@ -17,6 +18,8 @@ public class MediaContentDetailedDTO
     public string? YoutubeTrailerURL { get; set; }
     public string? PosterImageName { get; set; }
     
+    public string State { get; set; } = null!;
+
     public OptionDTO? SubtitleOption { get; set; }
     
     public OptionDTO? AudioOption { get; set; }

@@ -78,7 +78,9 @@ public class MediaContentService
 
         try
         {
-            var enums = ParseGenres(dto.Genres);
+            var genres = ParseGenres(dto.Genres);
+            var state = ParseState(dto.MediaContent.State);
+            
             List<StreamingService> streamingServices = new List<StreamingService>();
             if (dto.MediaContent.StreamingServiceIds.Any())
             {
@@ -131,7 +133,8 @@ public class MediaContentService
                 ReleaseDate = dto.MediaContent.ReleaseDate,
                 PosterImageName = dto.MediaContent.PosterImageName,
                 YoutubeTrailerURL = dto.MediaContent.YoutubeTrailerURL,
-                Genres = enums,
+                Genres = genres,
+                State = state,
                 StreamingServices = streamingServices
             });
 
@@ -144,7 +147,7 @@ public class MediaContentService
             throw;
         }
     }
-    
+
     /* Adding new short film data to database. */
     public async Task AddShortFilmAsync(CreateShortFilmDTO dto)
     {
@@ -182,7 +185,9 @@ public class MediaContentService
 
         try
         {
-            var enums = ParseGenres(dto.Genres);
+            var genres = ParseGenres(dto.Genres);
+            var state = ParseState(dto.MediaContent.State);
+            
             List<StreamingService> streamingServices = new List<StreamingService>();
             if (dto.MediaContent.StreamingServiceIds.Any())
             {
@@ -236,9 +241,9 @@ public class MediaContentService
                 PosterImageName = dto.MediaContent.PosterImageName,
                 YoutubeTrailerURL = dto.MediaContent.YoutubeTrailerURL,
                 SchoolName = dto.SchoolName,
-                Genres = enums,
+                Genres = genres,
+                State = state,
                 StreamingServices = streamingServices
-                
             });
 
             await _context.SaveChangesAsync();
@@ -285,7 +290,8 @@ public class MediaContentService
 
         try
         {
-            var topicEnums = ParseTopics(dto.Topics);
+            var topics = ParseTopics(dto.Topics);
+            var state = ParseState(dto.MediaContent.State);
 
             List<StreamingService> streamingServices = new List<StreamingService>();
             if (dto.MediaContent.StreamingServiceIds.Any())
@@ -336,7 +342,8 @@ public class MediaContentService
                 YoutubeTrailerURL = dto.MediaContent.YoutubeTrailerURL,
                 AudioOption = audioOption,
                 SubtitleOption = subtitleOption,
-                Topics = topicEnums,
+                Topics = topics,
+                State = state,
                 StreamingServices = streamingServices
             };
 
@@ -385,7 +392,7 @@ public class MediaContentService
         if (movie == null) throw new MediaContentDoesNotExistsException(new[] { movieId });
 
         ValidateMovieChanges(dto, movie);
-        
+
         ValidateGenres(dto.Genres);
 
         /* Movie Title must be unique but if the movie trying to update itself, no error is thrown. */
@@ -486,6 +493,9 @@ public class MediaContentService
             var desiredGenres = ParseGenres(dto.Genres);
             movie.Genres = desiredGenres;
 
+            var newState = ParseState(dto.MediaContent.State);
+            movie.State = newState;
+
 
             await _context.SaveChangesAsync();
             await transaction.CommitAsync();
@@ -496,7 +506,7 @@ public class MediaContentService
             throw;
         }
     }
-    
+
     /* Update the media content with the given id */
     public async Task UpdateShortFilmWithGivenIdAsync(int shortFilmId, UpdateShortFilmDTO dto)
     {
@@ -511,7 +521,7 @@ public class MediaContentService
         if (shortFilm == null) throw new MediaContentDoesNotExistsException(new[] { shortFilmId });
 
         ValidateShortFilmChanges(dto, shortFilm);
-        
+
         ValidateGenres(dto.Genres);
 
         /* Short Film Title must be unique but if the short film trying to update itself, no error is thrown. */
@@ -534,7 +544,7 @@ public class MediaContentService
 
         if (string.IsNullOrWhiteSpace(dto.SchoolName))
             throw new ArgumentException("School name can not be null or empty.");
-        
+
         await using var transaction = await _context.Database.BeginTransactionAsync();
 
         try
@@ -615,6 +625,8 @@ public class MediaContentService
             var desiredGenres = ParseGenres(dto.Genres);
             shortFilm.Genres = desiredGenres;
 
+            var newState = ParseState(dto.MediaContent.State);
+            shortFilm.State = newState;
 
             await _context.SaveChangesAsync();
             await transaction.CommitAsync();
@@ -648,7 +660,7 @@ public class MediaContentService
         {
             throw new MediaContentTitleMustBeUniqueException(dto.MediaContent.Title);
         }
-        
+
         ValidateTopics(dto.Topics);
 
         ValidateOptions(dto.MediaContent.AudioOption, dto.MediaContent.SubtitleOption);
@@ -709,8 +721,8 @@ public class MediaContentService
             {
                 documentary.SubtitleOption = null;
             }
-            
-            
+
+
             var existingIds = documentary.StreamingServices
                 .Select(s => s.Id)
                 .ToHashSet();
@@ -721,7 +733,7 @@ public class MediaContentService
                 .ToList();
             foreach (var svc in toRemoveStreamingServices)
                 documentary.StreamingServices.Remove(svc);
-            
+
             var toAddIds = desiredIds.Except(existingIds).ToList();
             if (toAddIds.Any())
             {
@@ -738,10 +750,13 @@ public class MediaContentService
                 foreach (var svc in toAddStreamingServices)
                     documentary.StreamingServices.Add(svc);
             }
-            
-            
+
+
             var desiredTopics = ParseTopics(dto.Topics);
             documentary.Topics = desiredTopics;
+
+            var newState = ParseState(dto.MediaContent.State);
+            documentary.State = newState;
             
             await _context.SaveChangesAsync();
             await transaction.CommitAsync();
@@ -756,7 +771,7 @@ public class MediaContentService
     /* Returns all the movies with their reviews and streaming services. */
     public async Task<List<MovieFrontendDTO>> GetAllMoviesFrontEndAsync()
     {
-        var movies = await _mediaContentRepository.GetAllMoviesAsync();
+        var movies = await _mediaContentRepository.GetAllMoviesFrontEndAsync();
         return movies.Select(m => new MovieFrontendDTO
         {
             MediaContent = new MediaContentFrontendDTO()
@@ -766,6 +781,7 @@ public class MediaContentService
                 Description = m.Description,
                 YoutubeTrailerURL = m.YoutubeTrailerURL,
                 PosterImageName = m.PosterImageName,
+                State = m.State.ToString(),
                 StreamingServices = m.StreamingServices
                     .Select(ss => new StreamingServiceFrontendDTO()
                     {
@@ -774,7 +790,7 @@ public class MediaContentService
                         LogoImage = ss.LogoImage
                     }).ToList()
             },
-            Genres = m.Genres.Select(g => g.ToString()).ToList()
+            Genres = m.Genres.Select(g => g.ToString()).ToList(),
         }).ToList();
     }
 
@@ -796,6 +812,7 @@ public class MediaContentService
                 Duration = m.Duration,
                 OriginalLanguage = m.OriginalLanguage,
                 ReleaseDate = m.ReleaseDate,
+                State = m.State.ToString(),
                 StreamingServices = m.StreamingServices
                     .Select(ss => new StreamingServiceDTO
                     {
@@ -845,6 +862,7 @@ public class MediaContentService
                 Duration = m.Duration,
                 OriginalLanguage = m.OriginalLanguage,
                 ReleaseDate = m.ReleaseDate,
+                State = m.State.ToString(),
                 StreamingServices = m.StreamingServices
                     .Select(ss => new StreamingServiceDTO
                     {
@@ -895,6 +913,7 @@ public class MediaContentService
                 Duration = d.Duration,
                 OriginalLanguage = d.OriginalLanguage,
                 ReleaseDate = d.ReleaseDate,
+                State = d.State.ToString(),
                 StreamingServices = d.StreamingServices
                     .Select(ss => new StreamingServiceDTO
                     {
@@ -925,7 +944,7 @@ public class MediaContentService
             Topics = d.Topics.Select(t => t.ToString()).ToList()
         }).ToList();
     }
-    
+
     /* Get one media content including all details, with given id */
     public async Task<MediaContentDetailedDTO> GetMediaContentWithGivenIdAsync(int mediaId)
     {
@@ -944,6 +963,7 @@ public class MediaContentService
             Country = mediaContent.Country,
             Duration = mediaContent.Duration,
             OriginalLanguage = mediaContent.OriginalLanguage,
+            State = mediaContent.State.ToString(),
             StreamingServices = mediaContent.StreamingServices
                 .Select(ss => new StreamingServiceDTO
                 {
@@ -994,6 +1014,7 @@ public class MediaContentService
                 Duration = movie.Duration,
                 OriginalLanguage = movie.OriginalLanguage,
                 ReleaseDate = movie.ReleaseDate,
+                State = movie.State.ToString(),
                 StreamingServices = movie.StreamingServices
                     .Select(ss => new StreamingServiceDTO
                     {
@@ -1024,7 +1045,7 @@ public class MediaContentService
             Genres = movie.Genres.Select(g => g.ToString()).ToList()
         };
     }
-    
+
     /* Get one short film  including all details, with given id */
     public async Task<ShortFilmDTO> GetShortFilmWithGivenIdAsync(int shortFilmId)
     {
@@ -1046,6 +1067,7 @@ public class MediaContentService
                 Duration = shortFilm.Duration,
                 OriginalLanguage = shortFilm.OriginalLanguage,
                 ReleaseDate = shortFilm.ReleaseDate,
+                State = shortFilm.State.ToString(),
                 StreamingServices = shortFilm.StreamingServices
                     .Select(ss => new StreamingServiceDTO
                     {
@@ -1077,7 +1099,7 @@ public class MediaContentService
             SchoolName = shortFilm.SchoolName
         };
     }
-    
+
     /* Get one short film  including all details, with given id */
     public async Task<DocumentaryDTO> GetDocumentaryWithGivenIdAsync(int documentaryId)
     {
@@ -1099,6 +1121,7 @@ public class MediaContentService
                 Duration = documentary.Duration,
                 OriginalLanguage = documentary.OriginalLanguage,
                 ReleaseDate = documentary.ReleaseDate,
+                State = documentary.State.ToString(),
                 StreamingServices = documentary.StreamingServices
                     .Select(ss => new StreamingServiceDTO
                     {
@@ -1146,8 +1169,36 @@ public class MediaContentService
             Description = m.Description,
             Country = m.Country,
             Duration = m.Duration,
-            OriginalLanguage = m.OriginalLanguage
+            OriginalLanguage = m.OriginalLanguage,
+            State = m.State.ToString(),
+
         }).ToList();
+    }
+
+    /* Change state of the media content */
+    public async Task ChangeStateOfMediaContentAsync(int mediaId, string state)
+    {
+        if (mediaId <= 0) throw new ArgumentException("Media id can not be equal or smaller than 0.");
+
+        var media = await _mediaContentRepository.GetMediaContentWithGivenIdAsync(mediaId);
+        if (media == null) throw new MediaContentDoesNotExistsException(new[] { mediaId });
+
+        var newState = ParseState(state);
+
+        await using var transaction = await _context.Database.BeginTransactionAsync();
+
+        try
+        {
+            media.State = newState;
+
+            await _context.SaveChangesAsync();
+            await transaction.CommitAsync();
+        }
+        catch
+        {
+            await transaction.RollbackAsync();
+            throw;
+        }
     }
 
     private void ValidateGenres(ICollection<string> genres)
@@ -1184,6 +1235,16 @@ public class MediaContentService
                 ? result
                 : throw new InvalidTopicException(t))
             .ToHashSet();
+    }
+
+    private static State ParseState(string state)
+    {
+        if (Enum.TryParse<State>(state, out var result) && Enum.IsDefined(typeof(State), result))
+        {
+            return result;
+        }
+
+        throw new InvalidStateException(state);
     }
 
 
@@ -1239,6 +1300,7 @@ public class MediaContentService
         bool langEqual = string.Equals(mc.OriginalLanguage, movie.OriginalLanguage, StringComparison.OrdinalIgnoreCase);
         bool countryEqual = string.Equals(mc.Country, movie.Country, StringComparison.OrdinalIgnoreCase);
         bool durationEqual = mc.Duration == movie.Duration;
+        bool stateEqual = dto.MediaContent.State == movie.State.ToString();
 
         bool audioEqual;
         if (mc.AudioOption?.Languages == null && movie.AudioOption?.Languages == null)
@@ -1277,12 +1339,13 @@ public class MediaContentService
             && subtitleEqual
             && servicesEqual
             && posterEqual
-            && trailerEqual)
+            && trailerEqual
+            && stateEqual)
         {
             throw new NoChangesDetectedException();
         }
     }
-    
+
     private void ValidateShortFilmChanges(UpdateShortFilmDTO dto, ShortFilm shortFilm)
     {
         var newGenres = ParseGenres(dto.Genres);
@@ -1293,7 +1356,8 @@ public class MediaContentService
         bool titleEqual = string.Equals(mc.Title, shortFilm.Title, StringComparison.OrdinalIgnoreCase);
         bool descEqual = string.Equals(mc.Description, shortFilm.Description, StringComparison.OrdinalIgnoreCase);
         bool releaseDateEqual = mc.ReleaseDate == shortFilm.ReleaseDate;
-        bool langEqual = string.Equals(mc.OriginalLanguage, shortFilm.OriginalLanguage, StringComparison.OrdinalIgnoreCase);
+        bool langEqual = string.Equals(mc.OriginalLanguage, shortFilm.OriginalLanguage,
+            StringComparison.OrdinalIgnoreCase);
         bool countryEqual = string.Equals(mc.Country, shortFilm.Country, StringComparison.OrdinalIgnoreCase);
         bool durationEqual = mc.Duration == shortFilm.Duration;
         bool schoolNameEqual = string.Equals(dto.SchoolName, shortFilm.SchoolName, StringComparison.OrdinalIgnoreCase);
@@ -1320,7 +1384,8 @@ public class MediaContentService
         var newIds = new HashSet<int>(mc.StreamingServiceIds);
         bool servicesEqual = currentIds.SetEquals(newIds);
 
-        bool posterEqual = string.Equals(mc.PosterImageName, shortFilm.PosterImageName, StringComparison.OrdinalIgnoreCase);
+        bool posterEqual = string.Equals(mc.PosterImageName, shortFilm.PosterImageName,
+            StringComparison.OrdinalIgnoreCase);
         bool trailerEqual = string.Equals(mc.YoutubeTrailerURL, shortFilm.YoutubeTrailerURL,
             StringComparison.OrdinalIgnoreCase);
 

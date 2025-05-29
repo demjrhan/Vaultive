@@ -1,4 +1,5 @@
 ﻿
+using Project.Models.Enumerations;
 using Project.Models.Interfaces;
 
 namespace Project.Models;
@@ -13,6 +14,8 @@ public abstract class MediaContent : IMediaContent
     public string OriginalLanguage { get; set; } = null!;
     public string Country { get; set; } = null!;
     public int Duration { get; set; }
+    
+    public State State { get; set; }
 
     public ICollection<Review> Reviews { get; set; } = new List<Review>();
     public ICollection<WatchHistory> WatchHistories { get; set; } = new List<WatchHistory>();

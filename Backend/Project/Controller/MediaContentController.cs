@@ -81,5 +81,31 @@ public class MediaContentController : ControllerBase
             return StatusCode(500, $"Unexpected error: {ex.Message}");
         }
     }
+
+    [HttpPut("ChangeState/{mediaId:int}")]
+    public async Task<IActionResult> ChangeStateOfMediaContentAsync(int mediaId, string state)
+    {
+        try
+        {
+            await _mediaContentService.ChangeStateOfMediaContentAsync(mediaId,state);
+            return Ok($"Media Content's state changed to {state} successfully.");
+        }
+        catch (ArgumentException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+        catch (InvalidStateException ex)
+        {
+            return BadRequest($"Invalid state: {ex.Message}");
+        }
+        catch (MediaContentDoesNotExistsException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"Unexpected error: {ex.Message}");
+        }
+    }
     
 }

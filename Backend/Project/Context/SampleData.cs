@@ -107,7 +107,7 @@ public static class SampleData
                         SubscriptionId = subscriptions[0].Id,
                         PaymentMethod = "CreditCard",
                         StartTime = DateOnly.FromDateTime(DateTime.UtcNow.AddDays(-155)),
-                        EndTime   = DateOnly.FromDateTime(DateTime.UtcNow.AddDays(-130)),
+                        EndTime = DateOnly.FromDateTime(DateTime.UtcNow.AddDays(-130)),
                         Price = SubscriptionService.CalculateAmountOfConfirmation(appleTV.DefaultPrice, demir)
                     },
                     new()
@@ -116,7 +116,7 @@ public static class SampleData
                         SubscriptionId = subscriptions[0].Id,
                         PaymentMethod = "CreditCard",
                         StartTime = DateOnly.FromDateTime(DateTime.UtcNow.AddDays(-1)),
-                        EndTime   = DateOnly.FromDateTime(DateTime.UtcNow.AddDays(20)),
+                        EndTime = DateOnly.FromDateTime(DateTime.UtcNow.AddDays(20)),
                         Price = SubscriptionService.CalculateAmountOfConfirmation(appleTV.DefaultPrice, demir)
                     },
                     new()
@@ -125,7 +125,7 @@ public static class SampleData
                         SubscriptionId = subscriptions[1].Id,
                         PaymentMethod = "PayPal",
                         StartTime = DateOnly.FromDateTime(DateTime.UtcNow.AddDays(-5)),
-                        EndTime   = DateOnly.FromDateTime(DateTime.UtcNow.AddDays(25)),
+                        EndTime = DateOnly.FromDateTime(DateTime.UtcNow.AddDays(25)),
                         Price = SubscriptionService.CalculateAmountOfConfirmation(disney.DefaultPrice, aiko)
                     },
                     new()
@@ -134,7 +134,7 @@ public static class SampleData
                         SubscriptionId = subscriptions[3].Id,
                         PaymentMethod = "PayPal",
                         StartTime = DateOnly.FromDateTime(DateTime.UtcNow.AddDays(-5)),
-                        EndTime   = DateOnly.FromDateTime(DateTime.UtcNow.AddDays(25)),
+                        EndTime = DateOnly.FromDateTime(DateTime.UtcNow.AddDays(25)),
                         Price = SubscriptionService.CalculateAmountOfConfirmation(disney.DefaultPrice, aiko)
                     },
                     new()
@@ -143,7 +143,7 @@ public static class SampleData
                         SubscriptionId = subscriptions[2].Id,
                         PaymentMethod = "DebitCard",
                         StartTime = DateOnly.FromDateTime(DateTime.UtcNow.AddDays(-45)),
-                        EndTime   = DateOnly.FromDateTime(DateTime.UtcNow.AddDays(-15)),
+                        EndTime = DateOnly.FromDateTime(DateTime.UtcNow.AddDays(-15)),
                         Price = SubscriptionService.CalculateAmountOfConfirmation(hbo.DefaultPrice, michal)
                     }
                 });
@@ -219,10 +219,10 @@ public static class SampleData
                     YoutubeTrailerURL = "C0BMx-qxsP4",
                     PosterImageName = "john-wick-poster",
                     Genres = new List<Genre> { Genre.Action, Genre.Thriller },
+                    State = State.Published,
                     SubtitleOption = new SubtitleOption
                     {
-                        Languages = new List<string>() {"English" }
-
+                        Languages = new List<string>() { "English" }
                     }
                 },
                 new Movie
@@ -237,10 +237,10 @@ public static class SampleData
                     YoutubeTrailerURL = "VHAK-gU9gi0",
                     PosterImageName = "deadpool-poster",
                     Genres = new List<Genre> { Genre.Action, Genre.Comedy, Genre.Superhero },
+                    State = State.Published,
                     SubtitleOption = new SubtitleOption
                     {
-                        Languages = new List<string>() {"English" }
-
+                        Languages = new List<string>() { "English" }
                     }
                 },
                 new Movie
@@ -255,10 +255,10 @@ public static class SampleData
                     YoutubeTrailerURL = "t06RUxPbp_c",
                     PosterImageName = "spider-man-poster",
                     Genres = new List<Genre> { Genre.Action, Genre.Superhero },
+                    State = State.Published,
                     SubtitleOption = new SubtitleOption
                     {
-                        Languages = new List<string>() {"English" }
-
+                        Languages = new List<string>() { "English" }
                     }
                 },
                 new Movie
@@ -273,10 +273,10 @@ public static class SampleData
                     YoutubeTrailerURL = "s7EdQ4FqbhY",
                     PosterImageName = "pulpfiction-poster",
                     Genres = new List<Genre> { Genre.Crime, Genre.Drama },
+                    State = State.Published,
                     SubtitleOption = new SubtitleOption
                     {
-                        Languages = new List<string>() {"English" }
-
+                        Languages = new List<string>() { "English" }
                     }
                 },
                 new Movie
@@ -291,9 +291,10 @@ public static class SampleData
                     YoutubeTrailerURL = "6ZfuNTqbHE8",
                     PosterImageName = "avengers-poster",
                     Genres = new List<Genre> { Genre.Action, Genre.Superhero, Genre.SciFi },
+                    State = State.Published,
                     SubtitleOption = new SubtitleOption
                     {
-                        Languages = new List<string>() {"English" }
+                        Languages = new List<string>() { "English" }
                     }
                 },
                 new Movie
@@ -309,9 +310,10 @@ public static class SampleData
                     YoutubeTrailerURL = "UaVTIH8mujA",
                     PosterImageName = "godfather-poster",
                     Genres = new List<Genre> { Genre.Crime, Genre.Drama },
+                    State = State.Published,
                     SubtitleOption = new SubtitleOption
                     {
-                        Languages = new List<string>() {"English" }
+                        Languages = new List<string>() { "English" }
                     }
                 },
                 new Movie
@@ -326,170 +328,175 @@ public static class SampleData
                     YoutubeTrailerURL = "cv276Wg3e7I",
                     PosterImageName = "scarface-poster",
                     Genres = new List<Genre> { Genre.Crime, Genre.Drama },
+                    State = State.Published,
                     SubtitleOption = new SubtitleOption
                     {
-                        Languages = new List<string>() {"English","Spanish" }
-
+                        Languages = new List<string>() { "English", "Spanish" }
                     },
                     AudioOption = new AudioOption()
                     {
-                        Languages = new List<string>() {"Japanese"}
+                        Languages = new List<string>() { "Japanese" }
                     }
                 },
-                new Movie  
-                {  
-                    Title = "The Wolf of Wall Street",  
-                    Description = "Based on the true story of Jordan Belfort, this film chronicles his rise and fall as a wealthy stockbroker living the high life before his dramatic collapse.",  
-                    ReleaseDate = new DateOnly(2013, 12, 25),  
-                    OriginalLanguage = "English",  
-                    Country = "United States",  
-                    Duration = 180,  
-                    YoutubeTrailerURL = "iszwuX1AK6A",  
-                    PosterImageName = "wolf-of-wall-street",  
-                    Genres = new List<Genre>  
-                    {  
-                        Genre.Biography,  
-                        Genre.Comedy,  
-                        Genre.Drama  
-                    },  
-                    SubtitleOption = new SubtitleOption  
-                    {  
-                        Languages = new List<string>  
-                        {  
-                            "English",  
-                            "Spanish",  
-                            "French",  
-                            "German"  
-                        }  
-                    }  
-                },
-                new Movie  
-                {  
-                    Title = "Training Day",  
-                    Description = "A rookie LAPD narcotics officer spends his first day with a rogue detective who isn’t what he appears to be, testing his morals and resolve.",  
-                    ReleaseDate = new DateOnly(2001, 10, 5),  
-                    OriginalLanguage = "English",  
-                    Country = "United States",  
-                    Duration = 122,  
-                    YoutubeTrailerURL = "DXPJqRtkDP0",  
-                    PosterImageName = "training-day-poster",  
-                    Genres = new List<Genre>  
-                    {  
-                        Genre.Crime,  
-                        Genre.Drama,  
-                        Genre.Thriller  
-                    },  
-                    SubtitleOption = new SubtitleOption  
-                    {  
-                        Languages = new List<string>  
-                        {  
-                            "English",  
-                            "Spanish",  
-                            "French"  
-                        }  
-                    }  
-                },
-                new Movie  
-                {  
-                    Title = "Despereaux",  
-                    Description = "A brave mouse helps to restore happiness to a forlorn kingdom by befriending a princess and a gentleman rat.",  
-                    ReleaseDate = new DateOnly(2008, 12, 19),  
-                    OriginalLanguage = "English",  
-                    Country = "United Kingdom, United States",  
-                    Duration = 93,  
-                    YoutubeTrailerURL = "I7b-Vfz0ga4",  
-                    PosterImageName = "despereaux-poster",  
-                    Genres = new List<Genre>  
-                    {  
-                        Genre.Animation,  
-                        Genre.Family,  
-                        Genre.Fantasy  
-                    },  
-                    SubtitleOption = new SubtitleOption  
-                    {  
-                        Languages = new List<string>  
-                        {  
-                            "English",  
-                            "Spanish"  
-                        }  
-                    },  
-                    AudioOption = new AudioOption  
-                    {  
-                        Languages = new List<string>  
-                        {  
-                            "English",  
-                            "French"  
-                        }  
-                    }  
-                },
-                new Movie  
-                {  
-                    Title = "Moana 2",  
-                    Description = "Set three years after the first film, Moana reunites with the demigod Maui and assembles a wayfinding crew to find the lost island of Motufetu, break its curse, and reconnect the people of the ocean.",  
-                    ReleaseDate = new DateOnly(2024, 11, 27),  
-                    OriginalLanguage = "English",  
-                    Country = "United States",  
-                    Duration = 100,  
-                    YoutubeTrailerURL = "hDZ7y8RP5HE",  
-                    PosterImageName = "moana-2-poster",  
-                    Genres = new List<Genre>  
-                    {  
-                        Genre.Action,  
-                        Genre.Animation,  
-                        Genre.Family,  
-                        Genre.Fantasy  
-                    },  
-                    SubtitleOption = new SubtitleOption  
-                    {  
-                        Languages = new List<string>  
-                        {  
-                            "English",  
-                            "Spanish",  
-                            "French",  
-                            "German"  
-                        }  
+                new Movie
+                {
+                    Title = "The Wolf of Wall Street",
+                    Description =
+                        "Based on the true story of Jordan Belfort, this film chronicles his rise and fall as a wealthy stockbroker living the high life before his dramatic collapse.",
+                    ReleaseDate = new DateOnly(2013, 12, 25),
+                    OriginalLanguage = "English",
+                    Country = "United States",
+                    Duration = 180,
+                    YoutubeTrailerURL = "iszwuX1AK6A",
+                    PosterImageName = "wolf-of-wall-street",
+                    Genres = new List<Genre>
+                    {
+                        Genre.Biography,
+                        Genre.Comedy,
+                        Genre.Drama
+                    },
+                    State = State.Published,
+                    SubtitleOption = new SubtitleOption
+                    {
+                        Languages = new List<string>
+                        {
+                            "English",
+                            "Spanish",
+                            "French",
+                            "German"
+                        }
                     }
                 },
-                new Movie  
-                {  
-                    Title = "Cars",  
-                    Description = "A hotshot race-car named Lightning McQueen becomes stranded in the small town of Radiator Springs, where he learns life's true priorities.",  
-                    ReleaseDate = new DateOnly(2006, 6, 9),  
-                    OriginalLanguage = "English",  
-                    Country = "United States",  
-                    Duration = 117,  
-                    YoutubeTrailerURL = "W_H7_tDHFE8",  
-                    PosterImageName = "cars-poster",  
-                    Genres = new List<Genre>  
-                    {  
-                        Genre.Animation,  
-                        Genre.Adventure,  
-                        Genre.Comedy,  
-                        Genre.Family  
-                    },  
-                    SubtitleOption = new SubtitleOption  
-                    {  
-                        Languages = new List<string>  
-                        {  
-                            "English",  
-                            "Spanish",  
-                            "French"  
-                        }  
-                    },  
-                    AudioOption = new AudioOption  
-                    {  
-                        Languages = new List<string>  
-                        {  
-                            "English",  
-                            "Spanish"  
-                        }  
-                    }  
+                new Movie
+                {
+                    Title = "Training Day",
+                    Description =
+                        "A rookie LAPD narcotics officer spends his first day with a rogue detective who isn’t what he appears to be, testing his morals and resolve.",
+                    ReleaseDate = new DateOnly(2001, 10, 5),
+                    OriginalLanguage = "English",
+                    Country = "United States",
+                    Duration = 122,
+                    YoutubeTrailerURL = "DXPJqRtkDP0",
+                    PosterImageName = "training-day-poster",
+                    Genres = new List<Genre>
+                    {
+                        Genre.Crime,
+                        Genre.Drama,
+                        Genre.Thriller
+                    },
+                    State = State.Published,
+                    SubtitleOption = new SubtitleOption
+                    {
+                        Languages = new List<string>
+                        {
+                            "English",
+                            "Spanish",
+                            "French"
+                        }
+                    }
+                },
+                new Movie
+                {
+                    Title = "Despereaux",
+                    Description =
+                        "A brave mouse helps to restore happiness to a forlorn kingdom by befriending a princess and a gentleman rat.",
+                    ReleaseDate = new DateOnly(2008, 12, 19),
+                    OriginalLanguage = "English",
+                    Country = "United Kingdom, United States",
+                    Duration = 93,
+                    YoutubeTrailerURL = "I7b-Vfz0ga4",
+                    PosterImageName = "despereaux-poster",
+                    Genres = new List<Genre>
+                    {
+                        Genre.Animation,
+                        Genre.Family,
+                        Genre.Fantasy
+                    },
+                    State = State.Published,
+                    SubtitleOption = new SubtitleOption
+                    {
+                        Languages = new List<string>
+                        {
+                            "English",
+                            "Spanish"
+                        }
+                    },
+                    AudioOption = new AudioOption
+                    {
+                        Languages = new List<string>
+                        {
+                            "English",
+                            "French"
+                        }
+                    }
+                },
+                new Movie
+                {
+                    Title = "Moana 2",
+                    Description =
+                        "Set three years after the first film, Moana reunites with the demigod Maui and assembles a wayfinding crew to find the lost island of Motufetu, break its curse, and reconnect the people of the ocean.",
+                    ReleaseDate = new DateOnly(2024, 11, 27),
+                    OriginalLanguage = "English",
+                    Country = "United States",
+                    Duration = 100,
+                    YoutubeTrailerURL = "hDZ7y8RP5HE",
+                    PosterImageName = "moana-2-poster",
+                    Genres = new List<Genre>
+                    {
+                        Genre.Action,
+                        Genre.Animation,
+                        Genre.Family,
+                        Genre.Fantasy
+                    },
+                    State = State.Published,
+                    SubtitleOption = new SubtitleOption
+                    {
+                        Languages = new List<string>
+                        {
+                            "English",
+                            "Spanish",
+                            "French",
+                            "German"
+                        }
+                    }
+                },
+                new Movie
+                {
+                    Title = "Cars",
+                    Description =
+                        "A hotshot race-car named Lightning McQueen becomes stranded in the small town of Radiator Springs, where he learns life's true priorities.",
+                    ReleaseDate = new DateOnly(2006, 6, 9),
+                    OriginalLanguage = "English",
+                    Country = "United States",
+                    Duration = 117,
+                    YoutubeTrailerURL = "W_H7_tDHFE8",
+                    PosterImageName = "cars-poster",
+                    Genres = new List<Genre>
+                    {
+                        Genre.Animation,
+                        Genre.Adventure,
+                        Genre.Comedy,
+                        Genre.Family
+                    },
+                    State = State.Archived,
+                    SubtitleOption = new SubtitleOption
+                    {
+                        Languages = new List<string>
+                        {
+                            "English",
+                            "Spanish",
+                            "French"
+                        }
+                    },
+                    AudioOption = new AudioOption
+                    {
+                        Languages = new List<string>
+                        {
+                            "English",
+                            "Spanish"
+                        }
+                    }
                 }
-
-
-
-
-
             };
             context.Movies.AddRange(movies);
             context.SaveChanges();
@@ -546,6 +553,7 @@ public static class SampleData
 
             context.SaveChanges();
         }
+
         if (!context.WatchHistories.Any())
         {
             var watchedMovies = context.Movies.ToList();
@@ -554,7 +562,8 @@ public static class SampleData
             if (demir != null)
             {
                 var demirMovies = watchedMovies
-                    .Where(m => m.Title == "John Wick" || m.Title == "Avengers" || m.Title == "Pulp Fiction" || m.Title == "Deadpool")
+                    .Where(m => m.Title == "John Wick" || m.Title == "Avengers" || m.Title == "Pulp Fiction" ||
+                                m.Title == "Deadpool")
                     .ToList();
 
                 foreach (var movie in demirMovies)
@@ -572,7 +581,8 @@ public static class SampleData
             if (aiko != null)
             {
                 var aikoMovies = watchedMovies
-                    .Where(m => m.Title == "John Wick" || m.Title == "Deadpool" || m.Title == "Spiderman" || m.Title == "Pulp Fiction")
+                    .Where(m => m.Title == "John Wick" || m.Title == "Deadpool" || m.Title == "Spiderman" ||
+                                m.Title == "Pulp Fiction")
                     .ToList();
 
                 foreach (var movie in aikoMovies)

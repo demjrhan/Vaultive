@@ -73,6 +73,10 @@ public class DocumentaryController : ControllerBase
         {
             return BadRequest($"Invalid topic: {ex.Message}");
         }
+        catch (InvalidStateException ex)
+        {
+            return BadRequest($"Invalid state: {ex.Message}");
+        }
         catch (StreamingServiceDoesNotExistsException ex)
         {
             return NotFound(ex.Message);
@@ -111,6 +115,14 @@ public class DocumentaryController : ControllerBase
         {
             return BadRequest(ex.Message);
         }
+        catch (InvalidTopicException ex)
+        {
+            return BadRequest($"Invalid topic: {ex.Message}");
+        }
+        catch (InvalidStateException ex)
+        {
+            return BadRequest($"Invalid state: {ex.Message}");
+        }
         catch (AtLeastOneTopicMustExistsException ex)
         {
             return BadRequest(ex.Message);
@@ -128,10 +140,6 @@ public class DocumentaryController : ControllerBase
             return BadRequest(ex.Message);
         }
         catch (MediaContentTitleMustBeUniqueException ex)
-        {
-            return BadRequest(ex.Message);
-        }
-        catch (InvalidTopicException ex)
         {
             return BadRequest(ex.Message);
         }

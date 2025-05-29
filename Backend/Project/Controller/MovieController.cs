@@ -82,13 +82,17 @@ public class MovieController : ControllerBase
         {
             return BadRequest(ex.Message);
         }
-        catch (NoChangesDetectedException ex)
+        catch (InvalidStateException ex)
         {
-            return BadRequest(ex.Message);
+            return BadRequest($"Invalid state: {ex.Message}");
         }
         catch (InvalidGenreException ex)
         {
             return BadRequest($"Invalid genre: {ex.Message}");
+        }
+        catch (NoChangesDetectedException ex)
+        {
+            return BadRequest(ex.Message);
         }
         catch (StreamingServiceDoesNotExistsException ex)
         {
@@ -128,15 +132,19 @@ public class MovieController : ControllerBase
         {
             return BadRequest(ex.Message);
         }
+        catch (InvalidStateException ex)
+        {
+            return BadRequest($"Invalid state: {ex.Message}");
+        }
+        catch (InvalidGenreException ex)
+        {
+            return BadRequest($"Invalid genre: {ex.Message}");
+        }
         catch (MediaContentDoesNotExistsException ex)
         {
             return BadRequest(ex.Message);
         }
         catch (MediaContentTitleMustBeUniqueException ex)
-        {
-            return BadRequest(ex.Message);
-        }
-        catch (InvalidGenreException ex)
         {
             return BadRequest(ex.Message);
         }

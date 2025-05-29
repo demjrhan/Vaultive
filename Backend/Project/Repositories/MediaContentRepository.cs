@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Project.Context;
 using Project.Exceptions;
 using Project.Models;
+using Project.Models.Enumerations;
 
 namespace Project.Repositories;
 
@@ -14,6 +15,16 @@ public class MediaContentRepository
         _context = masterContext;
     }
 
+    public async Task<IEnumerable<Movie>> GetAllMoviesFrontEndAsync()
+    {
+        return await _context.Movies
+            .Include(m => m.StreamingServices)
+            .Include(m => m.AudioOption)
+            .Include(m => m.SubtitleOption)
+            .Where(m => m.State == State.Published)
+            .ToListAsync();
+    }
+    
     public async Task<IEnumerable<Movie>> GetAllMoviesAsync()
     {
         return await _context.Movies

@@ -214,6 +214,14 @@
         {
         }
     }
+    
+    public class InvalidStateException : Exception
+    {
+        public InvalidStateException(string state)
+            : base($"State '{state}' is not a valid state.")
+        {
+        }
+    }
     public class PaymentFailedException : Exception
     {
         public PaymentFailedException()

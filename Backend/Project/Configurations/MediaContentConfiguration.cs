@@ -36,6 +36,8 @@ namespace Project.Configurations
             builder.Property(m => m.Duration).IsRequired();
             builder.Property(m => m.Title).HasMaxLength(50).IsRequired();
             
+            builder.Property(m => m.State)
+                .HasConversion<string>();
             
             builder.HasIndex(m => m.Title).IsUnique();
         }

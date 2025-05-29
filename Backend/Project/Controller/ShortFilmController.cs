@@ -69,6 +69,10 @@ public class ShortFilmController : ControllerBase
         {
             return BadRequest(ex.Message);
         }
+        catch (InvalidStateException ex)
+        {
+            return BadRequest($"Invalid state: {ex.Message}");
+        }
         catch (InvalidTopicException ex)
         {
             return BadRequest($"Invalid topic: {ex.Message}");
@@ -111,6 +115,14 @@ public class ShortFilmController : ControllerBase
         {
             return BadRequest(ex.Message);
         }
+        catch (InvalidStateException ex)
+        {
+            return BadRequest($"Invalid state: {ex.Message}");
+        }
+        catch (InvalidTopicException ex)
+        {
+            return BadRequest($"Invalid topic: {ex.Message}");
+        }
         catch (AtLeastOneTopicMustExistsException ex)
         {
             return BadRequest(ex.Message);
@@ -128,10 +140,6 @@ public class ShortFilmController : ControllerBase
             return BadRequest(ex.Message);
         }
         catch (MediaContentTitleMustBeUniqueException ex)
-        {
-            return BadRequest(ex.Message);
-        }
-        catch (InvalidTopicException ex)
         {
             return BadRequest(ex.Message);
         }
