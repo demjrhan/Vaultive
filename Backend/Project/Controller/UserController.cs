@@ -63,6 +63,10 @@ public class UserController : ControllerBase
             return Ok($"User {addReviewDto.UserId} added review successfully.");
         }
 
+        catch (MediaContentIsNotPublishedException ex)
+        {
+            return BadRequest(ex.Message);
+        }
         catch (DuplicateReviewException ex)
         {
             return BadRequest(ex.Message);
@@ -130,7 +134,7 @@ public class UserController : ControllerBase
     }
  
     [HttpPost("Add")]
-    public async Task<IActionResult> AddMovieAsync([FromBody] CreateUserDTO userDto)
+    public async Task<IActionResult> AddUserAsync([FromBody] CreateUserDTO userDto)
     {
         try
         {
@@ -232,6 +236,10 @@ public class UserController : ControllerBase
         {
             await _userService.WatchMediaContentAsync(userId, mediaId);
             return Ok($"User {userId} successfully watched media content {mediaId}.");
+        }
+        catch (MediaContentIsNotPublishedException ex)
+        {
+            return BadRequest(ex.Message);
         }
         catch (ArgumentException ex)
         {

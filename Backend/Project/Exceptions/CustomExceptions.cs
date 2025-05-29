@@ -96,6 +96,15 @@
         {
         }
     }
+
+    public class MediaContentIsNotPublishedException : Exception
+    {
+        public MediaContentIsNotPublishedException()
+            : base(
+                "Media content state is not published, no action can be done.")
+        {
+        }
+    }
     /* subscription */
     public class SubscriptionConfirmationDoesNotExistException : Exception
     {

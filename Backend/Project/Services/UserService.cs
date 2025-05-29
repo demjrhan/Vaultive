@@ -315,9 +315,10 @@ public class UserService
             var mediaContent = await _mediaContentRepository.GetMediaContentWithGivenIdAsync(mediaId) ??
                                throw new MediaContentDoesNotExistsException(new[] { mediaId });
 
+            if (mediaContent.State != State.Published) throw new MediaContentIsNotPublishedException();
+            
             var user = await _userRepository.GetUserWithGivenId(userId) ?? throw new UserDoesNotExistsException(userId);
-
-
+            
             if (user.WatchHistories.Any(wh => wh.MediaId == mediaId && wh.TimeLeftOf == 0))
                 throw new MediaContentAlreadyWatchedException(user.Nickname, mediaContent.Title);
 
@@ -375,6 +376,8 @@ public class UserService
 
             var mediaContent = await _mediaContentRepository.GetMediaContentWithGivenIdAsync(addReviewDto.MediaId) ??
                                throw new MediaContentDoesNotExistsException(new[] { addReviewDto.MediaId });
+
+            if (mediaContent.State != State.Published) throw new MediaContentIsNotPublishedException();
 
             var user = await _userRepository.GetUserWithGivenId(addReviewDto.UserId) ??
                        throw new UserDoesNotExistsException(addReviewDto.UserId);
