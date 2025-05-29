@@ -51,6 +51,33 @@ public class UserService
         _subscriptionConfirmationRepository = subscriptionConfirmationRepository;
     }
 
+    
+    
+    /* Delete user with given id */
+
+/* Delete review with given id */
+
+/* Adding new user data to database. */
+
+/* Update the user with the given id */
+
+/* Get all users with detail, like watch history etc. */
+
+/* Get user with detail, like watch history etc. */
+
+/* Make user watch a media content */
+
+/* Make user add review to media content */
+
+/* Make user subscribe to streaming service*/
+
+/* Make user cancel subscription to streaming service*/
+
+/* Make user update review. */
+
+
+
+    
     /* Delete user with given id */
     public async Task DeleteUserWithGivenIdAsync(int userId)
     {
@@ -466,7 +493,6 @@ public class UserService
             throw;
         }
     }
-
 
     /* Make user cancel subscription to streaming service*/
     public async Task CancelSubscriptionWithGivenIdAsync(int userId, int subscriptionId)

@@ -9,35 +9,28 @@ namespace Project.Services;
 
 public class SubscriptionService
 {
-    private readonly ReviewRepository _reviewRepository;
     private readonly UserRepository _userRepository;
     private readonly StreamingServiceRepository _streamingServiceRepository;
     private readonly SubscriptionConfirmationRepository _subscriptionConfirmationRepository;
     private readonly SubscriptionRepository _subscriptionRepository;
-    private readonly MediaContentRepository _mediaContentRepository;
-    private readonly WatchHistoryRepository _watchHistoryRepository;
     private readonly MasterContext _context;
 
     public SubscriptionService(
         MasterContext context,
-        ReviewRepository reviewRepository,
         UserRepository userRepository,
-        MediaContentRepository mediaContentRepository,
-        WatchHistoryRepository watchHistoryRepository,
         SubscriptionRepository subscriptionRepository,
         StreamingServiceRepository streamingServiceRepository,
         SubscriptionConfirmationRepository subscriptionConfirmationRepository)
     {
         _context = context;
-        _reviewRepository = reviewRepository;
         _userRepository = userRepository;
-        _mediaContentRepository = mediaContentRepository;
-        _watchHistoryRepository = watchHistoryRepository;
         _subscriptionRepository = subscriptionRepository;
         _streamingServiceRepository = streamingServiceRepository;
         _subscriptionConfirmationRepository = subscriptionConfirmationRepository;
     }
 
+    
+    /* Adding new subscription. */
     public async Task AddSubscriptionAsync(AddOrRenewSubscriptionDTO dto)
     {
         await using var transaction = await _context.Database.BeginTransactionAsync();
@@ -113,6 +106,7 @@ public class SubscriptionService
         }
     }
 
+    /* Cancel subscription with given id. */
     public async Task CancelSubscriptionWithGivenIdAsync(int subscriptionId)
     {
         if (subscriptionId <= 0) throw new ArgumentException("Subscription id can not be equal or smaller than 0.");
@@ -137,6 +131,7 @@ public class SubscriptionService
         }
     }
 
+    /* Returns all subscriptions with their confirmations. */
     public async Task<IEnumerable<SubscriptionWithConfirmationsDTO>> GetAllSubscriptionsWithConfirmations()
     {
         var subscriptions = await _subscriptionRepository.GetAllSubscriptionsAsync();
@@ -163,6 +158,7 @@ public class SubscriptionService
         }).ToList();
     }
 
+    /* Returns all active subscriptions of the user. */
     public async Task<IEnumerable<SubscriptionDTO>> GetActiveSubscriptionsOfUserIdAsync(int userId)
     {
         if (userId <= 0) throw new ArgumentException("User id can not be equal or smaller than 0.");
@@ -189,6 +185,8 @@ public class SubscriptionService
         return result;
     }
 
+    
+    /* Returns all inactive subscriptions of the user. */
     public async Task<IEnumerable<SubscriptionDTO>> GetInactiveSubscriptionsOfUserIdAsync(int userId)
     {
         if (userId <= 0) throw new ArgumentException("User id can not be equal or smaller than 0.");
@@ -215,6 +213,8 @@ public class SubscriptionService
         return result;
     }
 
+    
+    /* Returns one inactive subscription of the user for the given service name. */
     public async Task<SubscriptionDTO?> GetInactiveSubscriptionOfUserIdAsync(string streamingServiceName,
         int userId)
     {
@@ -249,6 +249,8 @@ public class SubscriptionService
         return null;
     }
 
+    
+    /* Helper method to calculate remaining days of confirmation. */
     private static int CalculateRemainingDaysOfConfirmation(DateOnly endDate)
     {
         var today = DateOnly.FromDateTime(DateTime.UtcNow);
@@ -260,6 +262,7 @@ public class SubscriptionService
               + 1;
     }
 
+    /* Calculates amount of confirmation with discount based on user status and country. */
     public static decimal CalculateAmountOfConfirmation(decimal defaultPrice, User user)
     {
         decimal discount = 0;

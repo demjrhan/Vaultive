@@ -9,35 +9,20 @@ namespace Project.Services;
 public class ReviewService
 {
     private readonly ReviewRepository _reviewRepository;
-    private readonly UserRepository _userRepository;
-    private readonly StreamingServiceRepository _streamingServiceRepository;
-    private readonly SubscriptionConfirmationRepository _subscriptionConfirmationRepository;
-    private readonly SubscriptionRepository _subscriptionRepository;
-    private readonly MediaContentRepository _mediaContentRepository;
-    private readonly WatchHistoryRepository _watchHistoryRepository;
     private readonly MasterContext _context;
 
     public ReviewService(
         MasterContext context,
-        ReviewRepository reviewRepository,
-        UserRepository userRepository,
-        MediaContentRepository mediaContentRepository,
-        WatchHistoryRepository watchHistoryRepository,
-        SubscriptionRepository subscriptionRepository,
-        StreamingServiceRepository streamingServiceRepository,
-        SubscriptionConfirmationRepository subscriptionConfirmationRepository)
+        ReviewRepository reviewRepository
+    )
+
     {
         _context = context;
         _reviewRepository = reviewRepository;
-        _userRepository = userRepository;
-        _mediaContentRepository = mediaContentRepository;
-        _watchHistoryRepository = watchHistoryRepository;
-        _subscriptionRepository = subscriptionRepository;
-        _streamingServiceRepository = streamingServiceRepository;
-        _subscriptionConfirmationRepository = subscriptionConfirmationRepository;
     }
 
-    /* Delete review with given id */
+
+    /* Delete review with given id. */
     public async Task DeleteReviewWithGivenIdAsync(int reviewId)
     {
         if (reviewId <= 0) throw new ArgumentException("Review id can not be equal or smaller than 0.");
@@ -70,7 +55,7 @@ public class ReviewService
             WatchedOn = r.WatchHistory.WatchDate,
         }).ToList();
     }
-    
+
     /* Returns all the reviews of media content.*/
     public async Task<List<ReviewFrontendDTO>> GetReviewsOfMediaContentByIdAsync(int mediaId)
     {
@@ -83,9 +68,9 @@ public class ReviewService
             WatchedOn = r.WatchHistory.WatchDate,
         }).OrderBy(r => r.Nickname).ToList();
     }
-    
-    
-    /* Return review by id */
+
+
+    /* Returns review by id. */
     public async Task<ReviewDTO> GetReviewByIdAsync(int reviewId)
     {
         var review = await _reviewRepository.GetReviewByIdAsync(reviewId);
@@ -100,7 +85,7 @@ public class ReviewService
         };
     }
 
-    /* Update review */
+    /* Updates the review with given information. */
     public async Task UpdateReviewAsync(UpdateReviewDTO reviewDto)
     {
         await using var transaction = await _context.Database.BeginTransactionAsync();
@@ -118,7 +103,7 @@ public class ReviewService
             ValidateReview(comment: reviewDto.Comment);
 
             review.Comment = reviewDto.Comment;
-           
+
             await _context.SaveChangesAsync();
             await transaction.CommitAsync();
         }
@@ -128,6 +113,7 @@ public class ReviewService
             throw;
         }
     }
+    /* Validation operations for review comment */
 
     public void ValidateReview(string comment)
     {
@@ -144,6 +130,5 @@ public class ReviewService
 
         if (comment.Length > 5 && comment == comment.ToUpperInvariant())
             throw new ArgumentException("Please avoid writing the entire comment in uppercase.", nameof(comment));
-
     }
 }

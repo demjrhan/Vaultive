@@ -10,42 +10,25 @@ namespace Project.Services;
 public class WatchHistoryService
 {
     private readonly ReviewRepository _reviewRepository;
-    private readonly ReviewService _reviewService;
     private readonly UserRepository _userRepository;
-    private readonly StreamingServiceRepository _streamingServiceRepository;
-    private readonly SubscriptionConfirmationRepository _subscriptionConfirmationRepository;
-    private readonly SubscriptionRepository _subscriptionRepository;
-    private readonly SubscriptionService _subscriptionService;
     private readonly MediaContentRepository _mediaContentRepository;
     private readonly WatchHistoryRepository _watchHistoryRepository;
     private readonly MasterContext _context;
-    private static readonly Random _random = new Random();
 
     public WatchHistoryService(
-        MasterContext context,
         ReviewRepository reviewRepository,
-        ReviewService reviewService,
         UserRepository userRepository,
         MediaContentRepository mediaContentRepository,
-        WatchHistoryRepository watchHistoryRepository,
-        SubscriptionRepository subscriptionRepository,
-        SubscriptionService subscriptionService,
-        StreamingServiceRepository streamingServiceRepository,
-        SubscriptionConfirmationRepository subscriptionConfirmationRepository)
+        WatchHistoryRepository watchHistoryRepository
+    )
     {
-        _context = context;
         _reviewRepository = reviewRepository;
-        _reviewService = reviewService;
         _userRepository = userRepository;
         _mediaContentRepository = mediaContentRepository;
         _watchHistoryRepository = watchHistoryRepository;
-        _subscriptionRepository = subscriptionRepository;
-        _subscriptionService = subscriptionService;
-        _streamingServiceRepository = streamingServiceRepository;
-        _subscriptionConfirmationRepository = subscriptionConfirmationRepository;
     }
 
-
+    /* Get all watch histories. */
     public async Task<List<WatchHistoryDTO>> GetAllWatchHistoriesAsync()
     {
         var watchHistories = await _watchHistoryRepository.GetAllWatchHistories();
@@ -59,7 +42,9 @@ public class WatchHistoryService
             WatchDate = wh.WatchDate
         }).ToList();
     }
-
+    
+    
+    /* Get all watch histories with media content details. */
     public async Task<List<WatchHistoryDetailedDTO>> GetAllWatchHistoriesDetailedAsync()
     {
         var watchHistories = await _watchHistoryRepository.GetAllWatchHistories();
@@ -82,6 +67,8 @@ public class WatchHistoryService
         }).ToList();
     }
 
+    
+    /* Get watch histories of the user with user details. */
     public async Task<List<UserWithWatchHistoriesDTO>> GetWatchHistoriesOfUserAsync(int userId)
     {
         var watchHistories = await _watchHistoryRepository.GetWatchHistoriesOfUser(userId);
@@ -123,7 +110,7 @@ public class WatchHistoryService
             await _reviewRepository.GetReviewOfUserToMediaContentAsync(userId, mediaId);
 
         if (existingReview != null) return false;
-        
+
         var watchHistory = await _watchHistoryRepository.GetUsersWatchHistoryToMediaContent(userId, mediaId);
         return watchHistory != null;
     }
