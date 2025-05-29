@@ -86,6 +86,22 @@ public class MediaContentRepository
                     EF.Functions.Like(m.Title, pattern)
             ).ToListAsync();
     }
+    public async Task<IEnumerable<Movie?>> GetMoviesWithGivenTextAsync(string text)
+    {
+        var pattern = $"%{text}%";
+        
+        return await _context.Movies
+            .Include(m => m.StreamingServices)
+            .Include(m => m.Reviews)
+            .ThenInclude(r => r.User)
+            .Include(m => m.WatchHistories)
+            .ThenInclude(wh => wh.User)
+            .Include(m => m.AudioOption)
+            .Include(m => m.SubtitleOption)
+            .Where(m =>
+                EF.Functions.Like(m.Title, pattern)
+            ).ToListAsync();
+    }
     public async Task<Movie?> GetMovieWithGivenIdAsync(int movieId)
     {
         return await _context.Movies

@@ -1,6 +1,3 @@
-
-
-/* Fullscreen wrapper */
 .inner-container-moviePage {
     width: 100vw;
     height: 100vh;
@@ -51,7 +48,6 @@
     border-radius: 10px;
 }
 
-/* Hover effect: scale up */
 .home-button:hover {
     transform: scale(1.09);
 }
@@ -100,8 +96,6 @@
     opacity: 0.7;
 }
 
-
-/* The centered box (like a UI card) */
 .genre-container {
     display: flex;
     flex-direction: column;
@@ -190,7 +184,6 @@
     display: flex;
 }
 
-/* Common styles for both buttons */
 .scroll-button {
     width: 30px;
     height: 30px;
@@ -202,17 +195,14 @@
     transition: all 0.3s ease;
 }
 
-/* LEFT Button: Unique border-radius and colors */
 .scroll-button.left {
     border-radius: 20px 0 0 20px;
 }
 
-/* RIGHT Button: Mirrored shape and different colors */
 .scroll-button.right {
     border-radius: 0 20px 20px 0;
 }
 
-/* Hover effect */
 .scroll-button:hover {
     box-shadow: 0 0 25px rgba(255, 255, 255, 0.4);
 }

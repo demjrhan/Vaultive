@@ -37,6 +37,32 @@ public class MovieController : ControllerBase
             return StatusCode(500, $"Unexpected error: {ex.Message}");
         }
     }
+    
+    [HttpGet("Search")]
+    public async Task<IActionResult> SearchMovieFrontEndAsync(string text)
+    {
+        try
+        {
+            var result = await _mediaContentService.GetMoviesWithGivenTextAsync(text);
+            return Ok(result);
+        }
+        catch (ArgumentNullException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+        catch (ArgumentException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+        catch (NoMediaContentFoundException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"Unexpected error: {ex.Message}");
+        }
+    }
 
     [HttpGet("All")]
     public async Task<IActionResult> GetAllMoviesFrontEndAsync()

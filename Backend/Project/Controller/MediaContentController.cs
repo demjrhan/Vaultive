@@ -39,7 +39,7 @@ public class MediaContentController : ControllerBase
     {
         try
         {
-            var result = await _mediaContentService.GetMediaContentWithGivenIdAsync(text);
+            var result = await _mediaContentService.GetMediaContentWithGivenTextAsync(text);
             return Ok(result);
         }
         catch (ArgumentNullException ex)

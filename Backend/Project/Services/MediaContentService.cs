@@ -766,7 +766,7 @@ public class MediaContentService
                         LogoImage = ss.LogoImage
                     }).ToList()
             },
-            Genres = m.Genres.Select(g => g.ToString()).ToList(),
+            Genres = m.Genres.Select(g => g.ToString()).ToList()
         }).ToList();
     }
 
@@ -1129,8 +1129,8 @@ public class MediaContentService
         };
     }
 
-    /* Get one media content film by title search. */
-    public async Task<List<MediaContentDTO>> GetMediaContentWithGivenIdAsync(string text)
+    /* Get media contents by title search. */
+    public async Task<List<MediaContentDTO>> GetMediaContentWithGivenTextAsync(string text)
     {
         if (string.IsNullOrWhiteSpace(text)) throw new ArgumentException("Searching text can not be null or empty.");
 
@@ -1148,6 +1148,36 @@ public class MediaContentService
             OriginalLanguage = m.OriginalLanguage,
             State = m.State.ToString(),
 
+        }).ToList();
+    }
+    /* Get movies by title search. */
+    public async Task<List<MovieFrontendDTO>> GetMoviesWithGivenTextAsync(string text)
+    {
+        if (string.IsNullOrWhiteSpace(text)) throw new ArgumentException("Searching text can not be null or empty.");
+
+        var response = await _mediaContentRepository.GetMoviesWithGivenTextAsync(text);
+        var movies = response.ToList();
+        if (!movies.Any()) throw new NoMediaContentFoundException(text);
+
+        return movies.Select(m => new MovieFrontendDTO
+        {
+            MediaContent = new MediaContentFrontendDTO()
+            {
+                Id = m.Id,
+                Title = m.Title,
+                Description = m.Description,
+                YoutubeTrailerURL = m.YoutubeTrailerURL,
+                PosterImageName = m.PosterImageName,
+                State = m.State.ToString(),
+                StreamingServices = m.StreamingServices
+                    .Select(ss => new StreamingServiceFrontendDTO()
+                    {
+                        Name = ss.Name,
+                        WebsiteLink = ss.WebsiteLink,
+                        LogoImage = ss.LogoImage
+                    }).ToList()
+            },
+            Genres = m.Genres.Select(g => g.ToString()).ToList()
         }).ToList();
     }
 

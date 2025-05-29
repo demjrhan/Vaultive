@@ -57,7 +57,6 @@ header {
     display: flex;
 }
 
-/* Vaultive Message */
 .vaultive-message-container {
     display: flex;
     flex: 1;
@@ -76,14 +75,14 @@ header {
 }
 
 .vaultive-message h1 {
-    font-size: 3rem;
+    font-size: 5rem;
 }
 
 .vaultive-message p {
     font-size: 1.2rem;
 }
 
-/* Showcase Container */
+
 .showcase-container {
     position: relative;
     overflow: hidden;
@@ -147,7 +146,6 @@ header {
     color: #F0BB78;
 }
 
-/* Recommendations */
 .recommendations-container {
     flex: 1;
     display: flex;
@@ -191,7 +189,7 @@ header {
 
 .movie-cards img:hover {
     box-shadow: 0px 0px 25px black;
-    transform: scale(1.1); /* Replaces shorthand scale */
+    transform: scale(1.1);
 }
 
 .movie-cards:hover img:not(:hover) {
@@ -199,7 +197,6 @@ header {
 }
 
 
-/* Animation classes for movie cards */
 .fade-out {
     animation: fadeOut 0.3s forwards;
 }
@@ -208,7 +205,6 @@ header {
     animation: fadeIn 0.3s forwards;
 }
 
-/* Slide left (for next) */
 @keyframes slideOutLeft {
     from { opacity: 1; transform: translateX(0); }
     to { opacity: 0; transform: translateX(-50px); }
@@ -219,7 +215,6 @@ header {
     to { opacity: 1; transform: translateX(0); }
 }
 
-/* Slide right (for previous) */
 @keyframes slideOutRight {
     from { opacity: 1; transform: translateX(0); }
     to { opacity: 0; transform: translateX(50px); }
@@ -230,7 +225,6 @@ header {
     to { opacity: 1; transform: translateX(0); }
 }
 
-/* Classes to apply */
 .slide-out-left {
     animation: slideOutLeft 0.3s forwards;
 }

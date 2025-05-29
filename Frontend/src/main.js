@@ -1,7 +1,7 @@
 import { renderStar } from './renderStar.js';
 import { renderRecommendations } from './renderRecommendations.js';
 import { closeDetailOnEscape } from './detailView.js';
-import { featuredMovie, fetchMovieData } from './movieData.js';
+import { featuredMovie, fetchMovieData, searchTextListener } from './movieData.js';
 import { createNavigationBarMoviePage, openMoviesPopup } from './moviesPage.js';
 import { renderMovies } from './renderMovies.js';
 import { createNavigationBarStreamingService, openStreamingPopup } from './streamingServicePage.js';
@@ -23,7 +23,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     openMoviesPopup();
     createNavigationBarMoviePage();
     renderMovies(movies);
+
+    setTimeout(() => {
+      searchTextListener();
+    }, 0);
   });
+
 
   const seriesButton = document.getElementById('streaming-link');
   seriesButton.addEventListener('click', () => {
