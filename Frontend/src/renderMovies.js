@@ -37,6 +37,17 @@ export async function renderMovies(movies) {
         </div>
       `;
 
+    const leftButton = genreContainer.querySelector('.scroll-button.left');
+    const rightButton = genreContainer.querySelector('.scroll-button.right');
+
+    leftButton.addEventListener('click', () => {
+      postersContainer.scrollBy({ left: -300, behavior: 'smooth' });
+    });
+
+    rightButton.addEventListener('click', () => {
+      postersContainer.scrollBy({ left: 300, behavior: 'smooth' });
+    });
+
     const postersContainer = genreContainer.querySelector('.movie-posters');
 
     genreMovies.forEach((movie) => {
@@ -53,4 +64,5 @@ export async function renderMovies(movies) {
 
     popupContentBox.appendChild(genreContainer);
   });
+
 }

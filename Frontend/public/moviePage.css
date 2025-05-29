@@ -141,9 +141,18 @@
     flex-wrap: nowrap;
     gap: 1.5rem;
     transition: gap 0.3s ease;
+    scroll-behavior: smooth;
+    padding: 1.4rem;
+
+    overflow-x: auto;
+    /* Hide scrollbar for Firefox */
+    scrollbar-width: none;
 }
 
-
+/* Hide scrollbar for WebKit (Chrome, Safari, Edge) */
+.movie-posters::-webkit-scrollbar {
+    display: none;
+}
 
 .movie-posters img {
     border-radius: 25px;
@@ -154,6 +163,7 @@
             box-shadow 0.3s ease,
             height 0.3s ease,
             border-radius 0.3s ease;
+    cursor: pointer;
 }
 
 .movie-posters img:hover {

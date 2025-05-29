@@ -81,7 +81,6 @@
 }
 
 
-
 /* The centered box (like a UI card) */
 .streaming-container {
     display: flex;
@@ -106,84 +105,4 @@
 }
 
 
-.movies {
-    position: relative;
-    display: flex;
-    align-items: center;
-    flex-direction: row;
-    width: 100%;
-    gap: 2rem;
-    transition: padding 0.3s ease, gap 0.3s ease;
-}
 
-.movie-posters {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
-    gap: 1.5rem;
-    transition: gap 0.3s ease;
-}
-
-
-
-.movie-posters img {
-    border-radius: 25px;
-    height: 18rem;
-    box-shadow: 0px 0px 10px black;
-    transition:
-            transform 0.3s ease,
-            box-shadow 0.3s ease,
-            height 0.3s ease,
-            border-radius 0.3s ease;
-}
-
-.movie-posters img:hover {
-    box-shadow: 0px 0px 25px black;
-    transform: scale(1.1);
-    z-index: 3;
-}
-
-.movie-posters:hover img:not(:hover) {
-    opacity: 0.8;
-}
-
-
-.title-buttons-wrapper {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 1rem;
-}
-.genre-title {
-    font-size: 2rem;
-}
-.scroll-buttons {
-    display: flex;
-}
-
-/* Common styles for both buttons */
-.scroll-button {
-    width: 30px;
-    height: 30px;
-    font-size: 1.2rem;
-    font-weight: bold;
-    color: black;
-    cursor: pointer;
-    border: none;
-    transition: all 0.3s ease;
-}
-
-/* LEFT Button: Unique border-radius and colors */
-.scroll-button.left {
-    border-radius: 20px 0 0 20px;
-}
-
-/* RIGHT Button: Mirrored shape and different colors */
-.scroll-button.right {
-    border-radius: 0 20px 20px 0;
-}
-
-/* Hover effect */
-.scroll-button:hover {
-    box-shadow: 0 0 25px rgba(255, 255, 255, 0.4);
-}

@@ -39,6 +39,18 @@ export async function renderStreamingServices(movies) {
         </div>
       `;
 
+      const leftButton = streamingContainer.querySelector('.scroll-button.left');
+      const rightButton = streamingContainer.querySelector('.scroll-button.right');
+
+      leftButton.addEventListener('click', () => {
+        postersContainer.scrollBy({ left: -300, behavior: 'smooth' });
+      });
+
+      rightButton.addEventListener('click', () => {
+        postersContainer.scrollBy({ left: 300, behavior: 'smooth' });
+      });
+
+
       const postersContainer = streamingContainer.querySelector('.movie-posters');
 
 
