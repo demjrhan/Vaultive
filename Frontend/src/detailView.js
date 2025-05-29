@@ -286,31 +286,43 @@ function preventBodyScroll() {
 export function closeDetailOnEscape() {
   window.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && detailContainer.style.display === 'flex') {
+      closeDetailOverlay();
+    }
+  });
 
-      addReview.style.boxShadow = ' 0 0 35px rgba(255, 255, 255, 1)';
-      addReviewContainer.classList.remove('visible');
-      setTimeout(() => {
-        addReviewContainer.style.display = 'none';
-      }, 300);
-      addReview.innerText = 'Add';
-
-      textarea.value = '';
-      textarea.style.color = 'white';
-      textarea.readOnly = false;
-      textarea.disabled = false;
-
-      closeDetailView();
-
-      const scrollY = document.body.style.top;
-      document.body.style.position = '';
-      document.body.style.top = '';
-      document.body.style.width = '';
-      window.scrollTo(0, parseInt(scrollY || '0') * -1);
-      detailContainer.style.display = 'none';
-
+  document.addEventListener('mousedown', (e) => {
+    if (
+      detailContainer.style.display === 'flex' &&
+      !detailContainer.contains(e.target)
+    ) {
+      closeDetailOverlay();
     }
   });
 }
+function closeDetailOverlay() {
+  addReview.style.boxShadow = '0 0 35px rgba(255, 255, 255, 1)';
+  addReviewContainer.classList.remove('visible');
+  setTimeout(() => {
+    addReviewContainer.style.display = 'none';
+  }, 300);
+  addReview.innerText = 'Add';
+
+  textarea.value = '';
+  textarea.style.color = 'white';
+  textarea.readOnly = false;
+  textarea.disabled = false;
+
+  closeDetailView();
+
+  const scrollY = document.body.style.top;
+  document.body.style.position = '';
+  document.body.style.top = '';
+  document.body.style.width = '';
+  window.scrollTo(0, parseInt(scrollY || '0') * -1);
+  detailContainer.style.display = 'none';
+}
+
+
 
 function closeDetailView() {
   detailContainer.scrollTop = 0;
