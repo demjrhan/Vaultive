@@ -15,5 +15,9 @@ public enum Genre
     Animation,
     Family,
     Fantasy,
-    Adventure
+    Adventure,
+    Psychological,
+    Student,
+    Experiment,
+    
 }

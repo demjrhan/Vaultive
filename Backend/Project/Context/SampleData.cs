@@ -152,56 +152,6 @@ public static class SampleData
             }
         }
 
-        if (!context.SubscriptionConfirmations.Any())
-        {
-            var subscriptions = context.Subscriptions.ToList();
-            var confirmations = new List<SubscriptionConfirmation>();
-
-            if (demir != null && subscriptions.Any(s => s.StreamingServiceId == appleTV.Id))
-            {
-                var subId = subscriptions.First(s => s.StreamingServiceId == appleTV.Id).Id;
-                confirmations.Add(new SubscriptionConfirmation
-                {
-                    UserId = demir.Id,
-                    SubscriptionId = subId,
-                    PaymentMethod = "CreditCard",
-                    StartTime = DateOnly.FromDateTime(DateTime.UtcNow.AddDays(-10)),
-                    EndTime = DateOnly.FromDateTime(DateTime.UtcNow.AddDays(20)),
-                    Price = SubscriptionService.CalculateAmountOfConfirmation(appleTV.DefaultPrice, demir)
-                });
-            }
-
-            if (aiko != null && subscriptions.Any(s => s.StreamingServiceId == disney.Id))
-            {
-                var subId = subscriptions.First(s => s.StreamingServiceId == disney.Id).Id;
-                confirmations.Add(new SubscriptionConfirmation
-                {
-                    UserId = aiko.Id,
-                    SubscriptionId = subId,
-                    PaymentMethod = "PayPal",
-                    StartTime = DateOnly.FromDateTime(DateTime.UtcNow.AddDays(-5)),
-                    EndTime = DateOnly.FromDateTime(DateTime.UtcNow.AddDays(25)),
-                    Price = SubscriptionService.CalculateAmountOfConfirmation(disney.DefaultPrice, aiko)
-                });
-            }
-
-            if (michal != null && subscriptions.Any(s => s.StreamingServiceId == hbo.Id))
-            {
-                var subId = subscriptions.First(s => s.StreamingServiceId == hbo.Id).Id;
-                confirmations.Add(new SubscriptionConfirmation
-                {
-                    UserId = michal.Id,
-                    SubscriptionId = subId,
-                    PaymentMethod = "DebitCard",
-                    StartTime = DateOnly.FromDateTime(DateTime.UtcNow.AddDays(-15)),
-                    EndTime = DateOnly.FromDateTime(DateTime.UtcNow.AddDays(15)),
-                    Price = SubscriptionService.CalculateAmountOfConfirmation(hbo.DefaultPrice, michal)
-                });
-            }
-
-            context.SubscriptionConfirmations.AddRange(confirmations);
-            context.SaveChanges();
-        }
 
         if (!context.Movies.Any())
         {
@@ -478,7 +428,7 @@ public static class SampleData
                         Genre.Comedy,
                         Genre.Family
                     },
-                    State = State.Archived,
+                    State = State.Published,
                     SubtitleOption = new SubtitleOption
                     {
                         Languages = new List<string>
@@ -496,9 +446,467 @@ public static class SampleData
                             "Spanish"
                         }
                     }
+                },
+                new Movie  
+                {  
+                    Title = "Ratatouille",  
+                    Description = "A rat named Remy dreams of becoming a great French chef despite his family's wishes and the obvious problem of being a rat in a decidedly rodent-phobic profession.",  
+                    ReleaseDate = new DateOnly(2007, 6, 29),  
+                    OriginalLanguage = "English",  
+                    Country = "United States",  
+                    Duration = 111,  
+                    YoutubeTrailerURL = "NgsQ8mVkN8w",  
+                    PosterImageName = "ratatouille-poster",  
+                    State = State.Published,
+                    Genres = new List<Genre>  
+                    {  
+                        Genre.Animation,  
+                        Genre.Comedy,  
+                        Genre.Family  
+                    },  
+                    SubtitleOption = new SubtitleOption  
+                    {  
+                        Languages = new List<string>  
+                        {  
+                            "English",  
+                            "French",  
+                            "Spanish"  
+                        }  
+                    },  
+                    AudioOption = new AudioOption  
+                    {  
+                        Languages = new List<string>  
+                        {  
+                            "English",  
+                            "Spanish"  
+                        }  
+                    }  
+                },
+                new Movie  
+                {  
+                    Title = "Lilo & Stitch",  
+                    Description = "A young Hawaiian girl adopts an unusual pet who is actually a notorious extraterrestrial fugitive. Through her love, faith, and unwavering belief in 'ohana' (family), she helps unlock his heart and gives him a chance at redemption.",  
+                    ReleaseDate = new DateOnly(2002, 6, 21),  
+                    OriginalLanguage = "English",  
+                    Country = "United States",  
+                    Duration = 85,  
+                    YoutubeTrailerURL = "9OAC55UWAQs",  
+                    PosterImageName = "lilo-and-stitch-poster",  
+                    State = State.Published,
+                    Genres = new List<Genre>  
+                    {  
+                        Genre.Animation,  
+                        Genre.Adventure,  
+                        Genre.Comedy,  
+                        Genre.Family,  
+                        Genre.SciFi  
+                    },  
+                    SubtitleOption = new SubtitleOption  
+                    {  
+                        Languages = new List<string>  
+                        {  
+                            "English",  
+                            "Spanish",  
+                            "French"  
+                        }  
+                    },  
+                    AudioOption = new AudioOption  
+                    {  
+                        Languages = new List<string>  
+                        {  
+                            "English",  
+                            "Spanish"  
+                        }  
+                    }  
+                },
+                new Movie  
+                {  
+                    Title = "Shrek",  
+                    Description = "In a faraway swamp, an ogre named Shrek finds his peaceful life disrupted when a multitude of fairy tale creatures are exiled there by the evil Lord Farquaad. To reclaim his land, Shrek makes a deal to rescue Princess Fiona with the help of a talkative donkey — only to discover unexpected friendship, secrets, and love.",  
+                    ReleaseDate = new DateOnly(2001, 5, 18),  
+                    OriginalLanguage = "English",  
+                    Country = "United States",  
+                    Duration = 90,  
+                    YoutubeTrailerURL = "CwXOrWvPBPk",  
+                    PosterImageName = "shrek-poster", 
+                    State = State.Published,
+                    Genres = new List<Genre>  
+                    {  
+                        Genre.Animation,  
+                        Genre.Comedy,  
+                        Genre.Adventure,  
+                        Genre.Fantasy,  
+                        Genre.Family  
+                    },  
+                    SubtitleOption = new SubtitleOption  
+                    {  
+                        Languages = new List<string>  
+                        {  
+                            "English",  
+                            "Spanish",  
+                            "German"  
+                        }  
+                    },  
+                    AudioOption = new AudioOption  
+                    {  
+                        Languages = new List<string>  
+                        {  
+                            "English",  
+                            "Spanish"  
+                        }  
+                    }  
+                },
+                new Movie  
+                {  
+                    Title = "Ice Age",  
+                    Description = "Set during the Ice Age, a woolly mammoth, a sloth, and a saber-toothed tiger form an unlikely herd as they embark on a journey to return a lost human baby to its tribe, encountering comic misadventures and building unexpected bonds along the way.",  
+                    ReleaseDate = new DateOnly(2002, 3, 15),  
+                    OriginalLanguage = "English",  
+                    Country = "United States",  
+                    Duration = 81,  
+                    YoutubeTrailerURL = "i4noiCRJRoE",  
+                    PosterImageName = "ice-age-poster",  
+                    State = State.Published,
+                    Genres = new List<Genre>  
+                    {  
+                        Genre.Animation,  
+                        Genre.Adventure,  
+                        Genre.Comedy,  
+                        Genre.Family  
+                    },  
+                    SubtitleOption = new SubtitleOption  
+                    {  
+                        Languages = new List<string>  
+                        {  
+                            "English",  
+                            "Spanish",  
+                            "French"  
+                        }  
+                    },  
+                    AudioOption = new AudioOption  
+                    {  
+                        Languages = new List<string>  
+                        {  
+                            "English",  
+                            "Spanish"  
+                        }  
+                    }  
+                },
+                new Movie  
+                {  
+                    Title = "Up",  
+                    Description = "An elderly widower named Carl sets out to fulfill his lifelong dream of visiting South America by tying thousands of balloons to his house. Accidentally accompanied by an earnest young Wilderness Explorer named Russell, Carl embarks on a heartwarming and unexpected adventure.",  
+                    ReleaseDate = new DateOnly(2009, 5, 29),  
+                    OriginalLanguage = "English",  
+                    Country = "United States",  
+                    Duration = 96,  
+                    YoutubeTrailerURL = "HWEW_qTLSEE",  
+                    PosterImageName = "up-poster",  
+                    State = State.Published,
+                    Genres = new List<Genre>  
+                    {  
+                        Genre.Animation,  
+                        Genre.Adventure,  
+                        Genre.Comedy,  
+                        Genre.Family  
+                    },  
+                    SubtitleOption = new SubtitleOption  
+                    {  
+                        Languages = new List<string>  
+                        {  
+                            "English",  
+                            "Spanish",  
+                            "German"  
+                        }  
+                    },  
+                    AudioOption = new AudioOption  
+                    {  
+                        Languages = new List<string>  
+                        {  
+                            "English",  
+                            "Spanish"  
+                        }  
+                    }  
+                },
+                new Movie  
+                {  
+                    Title = "Kung Fu Panda",  
+                    Description = "Po, a clumsy and food-loving panda, is unexpectedly chosen to fulfill an ancient prophecy. Trained by Master Shifu, he must embrace his destiny to become the Dragon Warrior and protect the Valley of Peace from the villainous Tai Lung.",  
+                    ReleaseDate = new DateOnly(2008, 6, 6),  
+                    OriginalLanguage = "English",  
+                    Country = "United States",  
+                    Duration = 92,  
+                    YoutubeTrailerURL = "NRc-ze7Wrxw",  
+                    PosterImageName = "kung-fu-panda-1-poster",
+                    State = State.Published,
+                    Genres = new List<Genre>  
+                    {  
+                        Genre.Animation,  
+                        Genre.Action,  
+                        Genre.Comedy,  
+                        Genre.Family  
+                    },  
+                    SubtitleOption = new SubtitleOption  
+                    {  
+                        Languages = new List<string> { "English", "Spanish", "German" }  
+                    },  
+                    AudioOption = new AudioOption  
+                    {  
+                        Languages = new List<string> { "English", "Spanish" }  
+                    }  
+                },
+                new Movie  
+                {  
+                    Title = "Kung Fu Panda 2",  
+                    Description = "Po and the Furious Five set out on a mission to stop a villainous peacock named Lord Shen, who plans to use a powerful weapon to conquer China and destroy kung fu. Along the way, Po uncovers the truth about his past.",  
+                    ReleaseDate = new DateOnly(2011, 5, 26),  
+                    OriginalLanguage = "English",  
+                    Country = "United States",  
+                    Duration = 91,  
+                    YoutubeTrailerURL = "FQ63rqSRrEI",  
+                    PosterImageName = "kung-fu-panda-2-poster",  
+                    State = State.Published,
+                    Genres = new List<Genre>  
+                    {  
+                        Genre.Animation,  
+                        Genre.Action,  
+                        Genre.Comedy,  
+                        Genre.Family  
+                    },  
+                    SubtitleOption = new SubtitleOption  
+                    {  
+                        Languages = new List<string> { "English", "French", "Spanish" }  
+                    },  
+                    AudioOption = new AudioOption  
+                    {  
+                        Languages = new List<string> { "English", "Spanish", "French" }  
+                    }  
+                }
+
+            };
+            var documentaries = new List<Documentary>
+            {
+                new Documentary
+                {
+                    Title = "The Social Dilemma",
+                    Description =
+                        "Explores the dangerous human impact of social networking, with tech experts sounding the alarm on their own creations.",
+                    ReleaseDate = new DateOnly(2020, 9, 9),
+                    OriginalLanguage = "English",
+                    Country = "United States",
+                    Duration = 94,
+                    YoutubeTrailerURL = null,
+                    PosterImageName = null,
+                    State = State.Published,
+                    Topics = new List<Topic>
+                    {
+                        Topic.Technology,
+                        Topic.Society
+                    },
+                    AudioOption = new AudioOption
+                    {
+                        Languages = new List<string>
+                        {
+                            "English"
+                        }
+                    },
+                    SubtitleOption = new SubtitleOption
+                    {
+                        Languages = new List<string>
+                        {
+                            "English",
+                            "German"
+                        }
+                    }
+                },
+                new Documentary
+                {
+                    Title = "My Octopus Teacher",
+                    Description =
+                        "A filmmaker forges an unusual friendship with an octopus living in a South African kelp forest, learning about its world.",
+                    ReleaseDate = new DateOnly(2020, 9, 7),
+                    OriginalLanguage = "English",
+                    Country = "South Africa",
+                    Duration = 85,
+                    YoutubeTrailerURL = null,
+                    PosterImageName = null,
+                    State = State.Published,
+                    Topics = new List<Topic>
+                    {
+                        Topic.Nature,
+                        Topic.Biology,
+                    },
+                    AudioOption = new AudioOption
+                    {
+                        Languages = new List<string>
+                        {
+                            "English"
+                        }
+                    },
+                    SubtitleOption = new SubtitleOption
+                    {
+                        Languages = new List<string>
+                        {
+                            "English",
+                            "Spanish"
+                        }
+                    }
+                },
+                new Documentary
+                {
+                    Title = "Seaspiracy",
+                    Description =
+                        "A filmmaker uncovers alarming global corruption and environmental destruction in the commercial fishing industry.",
+                    ReleaseDate = new DateOnly(2021, 3, 24),
+                    OriginalLanguage = "English",
+                    Country = "United Kingdom",
+                    Duration = 89,
+                    YoutubeTrailerURL = null,
+                    PosterImageName = null,
+                    State = State.Archived,
+                    Topics = new List<Topic>
+                    {
+                        Topic.Environment,
+                        Topic.Economy,
+                        Topic.Politics
+                    },
+                    AudioOption = new AudioOption
+                    {
+                        Languages = new List<string>
+                        {
+                            "English",
+                            "French"
+                        }
+                    },
+                    SubtitleOption = new SubtitleOption
+                    {
+                        Languages = new List<string>
+                        {
+                            "English",
+                            "Italian",
+                            "German"
+                        }
+                    }
                 }
             };
+            var shortFilms = new List<ShortFilm>
+            {
+                new ShortFilm
+                {
+                    Title = "Digital Pulse",
+                    Description =
+                        "An experimental look into the constant stream of information shaping modern youth in a digitally saturated society.",
+                    ReleaseDate = new DateOnly(2022, 3, 14),
+                    OriginalLanguage = "English",
+                    Country = "Poland",
+                    Duration = 12,
+                    YoutubeTrailerURL = null,
+                    PosterImageName = null,
+                    SchoolName = "Polish Japanese Academy of Technology",
+                    State = State.Published,
+                    Genres = new List<Genre>
+                    {
+                        Genre.Drama,
+                        Genre.Experiment,
+                        Genre.SciFi
+                    },
+                    AudioOption = new AudioOption
+                    {
+                        Languages = new List<string> { "English", "Polish" }
+                    },
+                    SubtitleOption = new SubtitleOption
+                    {
+                        Languages = new List<string> { "English", "Polish" }
+                    }
+                },
+                new ShortFilm
+                {
+                    Title = "The Last Sketch",
+                    Description =
+                        "A forgotten artist’s final days in a rapidly changing urban landscape. Captured in stark black-and-white visuals.",
+                    ReleaseDate = new DateOnly(2021, 11, 2),
+                    OriginalLanguage = "Polish",
+                    Country = "Poland",
+                    Duration = 9,
+                    YoutubeTrailerURL = null,
+                    PosterImageName = null,
+                    SchoolName = "Polish Japanese Academy of Technology",
+                    State = State.Published,
+                    Genres = new List<Genre>
+                    {
+                        Genre.Drama,
+                        Genre.Biography
+                    },
+                    AudioOption = new AudioOption
+                    {
+                        Languages = new List<string> { "Polish" }
+                    },
+                    SubtitleOption = new SubtitleOption
+                    {
+                        Languages = new List<string> { "English" }
+                    }
+                },
+                new ShortFilm
+                {
+                    Title = "Echoes of Code",
+                    Description =
+                        "A poetic short following a coder’s internal monologue as they confront self-doubt and imposter syndrome during finals week.",
+                    ReleaseDate = new DateOnly(2023, 6, 10),
+                    OriginalLanguage = "English",
+                    Country = "Poland",
+                    Duration = 10,
+                    YoutubeTrailerURL = null,
+                    PosterImageName = null,
+                    SchoolName = "Polish Japanese Academy of Technology",
+                    State = State.Published,
+                    Genres = new List<Genre>
+                    {
+                        Genre.Psychological,
+                        Genre.Student,
+                        Genre.Fantasy
+                    },
+                    AudioOption = new AudioOption
+                    {
+                        Languages = new List<string> { "English" }
+                    },
+                    SubtitleOption = new SubtitleOption
+                    {
+                        Languages = new List<string> { "English", "Polish" }
+                    }
+                },
+                new ShortFilm
+                {
+                    Title = "CTRL+Z",
+                    Description =
+                        "After a software glitch gives a student the power to rewind time, they must choose between fixing mistakes or accepting growth.",
+                    ReleaseDate = new DateOnly(2022, 12, 20),
+                    OriginalLanguage = "Polish",
+                    Country = "Poland",
+                    Duration = 15,
+                    YoutubeTrailerURL = null,
+                    PosterImageName = null,
+                    SchoolName = "Polish Japanese Academy of Technology",
+                    State = State.Published,
+                    Genres = new List<Genre>
+                    {
+                        Genre.SciFi,
+                        Genre.Drama,
+                        Genre.Mystery
+                    },
+                    AudioOption = new AudioOption
+                    {
+                        Languages = new List<string> { "Polish", "English" }
+                    },
+                    SubtitleOption = new SubtitleOption
+                    {
+                        Languages = new List<string> { "English" }
+                    }
+                }
+            };
+
             context.Movies.AddRange(movies);
+            context.Documentaries.AddRange(documentaries);
+            context.ShortFilms.AddRange(shortFilms);
             context.SaveChanges();
         }
 
@@ -516,11 +924,40 @@ public static class SampleData
             var despereaux = context.Movies.FirstOrDefault(m => m.Title == "Despereaux");
             var moana2 = context.Movies.FirstOrDefault(m => m.Title == "Moana 2");
             var cars = context.Movies.FirstOrDefault(m => m.Title == "Cars");
+            var kungFuPanda1 = context.Movies.FirstOrDefault(m => m.Title == "Kung Fu Panda");
+            var kungFuPanda2 = context.Movies.FirstOrDefault(m => m.Title == "Kung Fu Panda 2");
+            var iceAge = context.Movies.FirstOrDefault(m => m.Title == "Ice Age");
+            var up = context.Movies.FirstOrDefault(m => m.Title == "Up");
+            var shrek = context.Movies.FirstOrDefault(m => m.Title == "Shrek");
+            var liloAndStitch = context.Movies.FirstOrDefault(m => m.Title == "Lilo & Stitch");
+            var ratatouille = context.Movies.FirstOrDefault(m => m.Title == "Ratatouille");
+
+            kungFuPanda1?.StreamingServices.Add(hbo);
+            kungFuPanda1?.StreamingServices.Add(disney);
+
+            kungFuPanda2?.StreamingServices.Add(hbo);
+            kungFuPanda2?.StreamingServices.Add(disney);
+
+            iceAge?.StreamingServices.Add(disney);
+            iceAge?.StreamingServices.Add(hbo);
+            iceAge?.StreamingServices.Add(appleTV);
+
+            up?.StreamingServices.Add(disney);
+            up?.StreamingServices.Add(appleTV);
+
+            shrek?.StreamingServices.Add(hbo);
+            shrek?.StreamingServices.Add(appleTV);
+
+            liloAndStitch?.StreamingServices.Add(disney);
+
+            ratatouille?.StreamingServices.Add(disney);
+            ratatouille?.StreamingServices.Add(appleTV);
 
             wolfOfWallStreet?.StreamingServices.Add(appleTV);
             wolfOfWallStreet?.StreamingServices.Add(disney);
 
             trainingDay?.StreamingServices.Add(hbo);
+            trainingDay?.StreamingServices.Add(appleTV);
 
             despereaux?.StreamingServices.Add(disney);
 

@@ -5,9 +5,9 @@ using Project.Models;
 
 namespace Project.Configurations
 {
-    public class ShortFilmConfiguration : IEntityTypeConfiguration<Movie>
+    public class ShortFilmConfiguration : IEntityTypeConfiguration<ShortFilm>
     {
-        public void Configure(EntityTypeBuilder<Movie> builder)
+        public void Configure(EntityTypeBuilder<ShortFilm> builder)
         {
             builder.Property(m => m.Genres)
                 .HasConversion(

@@ -6,8 +6,13 @@ public enum Topic
     Protest,
     Medical,
     Health,
+    Economy,
     Violence,
     Science,
     Environment,
-    Wildlife
+    Wildlife,
+    Technology,
+    Society,
+    Nature,
+    Biology
 }
