@@ -2,6 +2,6 @@
 
 public class UpdateDocumentaryDTO
 {
-    public CreateMediaContentDTO MediaContent { get; set; } =  new();
+    public UpdateMediaContentDTO MediaContent { get; set; } =  new();
     public List<string> Topics { get; set; } = new();
 }

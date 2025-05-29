@@ -493,8 +493,7 @@ public class MediaContentService
             var desiredGenres = ParseGenres(dto.Genres);
             movie.Genres = desiredGenres;
 
-            var newState = ParseState(dto.MediaContent.State);
-            movie.State = newState;
+            movie.State = State.PendingReview;
 
 
             await _context.SaveChangesAsync();
@@ -625,8 +624,7 @@ public class MediaContentService
             var desiredGenres = ParseGenres(dto.Genres);
             shortFilm.Genres = desiredGenres;
 
-            var newState = ParseState(dto.MediaContent.State);
-            shortFilm.State = newState;
+            shortFilm.State = State.PendingReview;
 
             await _context.SaveChangesAsync();
             await transaction.CommitAsync();
@@ -755,8 +753,7 @@ public class MediaContentService
             var desiredTopics = ParseTopics(dto.Topics);
             documentary.Topics = desiredTopics;
 
-            var newState = ParseState(dto.MediaContent.State);
-            documentary.State = newState;
+            documentary.State = State.PendingReview;
             
             await _context.SaveChangesAsync();
             await transaction.CommitAsync();
@@ -1300,7 +1297,6 @@ public class MediaContentService
         bool langEqual = string.Equals(mc.OriginalLanguage, movie.OriginalLanguage, StringComparison.OrdinalIgnoreCase);
         bool countryEqual = string.Equals(mc.Country, movie.Country, StringComparison.OrdinalIgnoreCase);
         bool durationEqual = mc.Duration == movie.Duration;
-        bool stateEqual = dto.MediaContent.State == movie.State.ToString();
 
         bool audioEqual;
         if (mc.AudioOption?.Languages == null && movie.AudioOption?.Languages == null)
@@ -1339,8 +1335,7 @@ public class MediaContentService
             && subtitleEqual
             && servicesEqual
             && posterEqual
-            && trailerEqual
-            && stateEqual)
+            && trailerEqual)
         {
             throw new NoChangesDetectedException();
         }
