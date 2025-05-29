@@ -107,6 +107,7 @@ header {
 
 
 .showcase-video {
+    z-index: -1;
     filter: blur(5px);
     position: absolute;
     top: 50%; left: 50%;
@@ -272,6 +273,12 @@ header {
     backdrop-filter: blur(3px);
 }
 
+@media (max-width: 1700px) {
+    .showcase-video {
+        width: 130vw;
+        height: 130vh;
+    }
+}
 
 @media (max-width: 1300px) {
 
