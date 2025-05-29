@@ -13,8 +13,6 @@ public class CreateMediaContentDTO
     public OptionDTO? AudioOption { get; set; }
     public OptionDTO? SubtitleOption { get; set; }
     
-    public string State { get; set; } = null!;
-
     public ICollection<int> StreamingServiceIds { get; set; } 
 
     public string? PosterImageName { get; set; } = null;

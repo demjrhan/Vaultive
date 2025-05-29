@@ -16,7 +16,6 @@ public class UpdateMediaContentDTO
     public OptionDTO? AudioOption { get; set; }
     public OptionDTO? SubtitleOption { get; set; }
     
-
     public ICollection<int> StreamingServiceIds { get; set; }
 
     public string? PosterImageName { get; set; } = null;

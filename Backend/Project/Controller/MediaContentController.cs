@@ -108,4 +108,55 @@ public class MediaContentController : ControllerBase
         }
     }
     
+    [HttpPut("Archive/{mediaId:int}")]
+    public async Task<IActionResult> ArchiveMediaContentAsync(int mediaId)
+    {
+        try
+        {
+            await _mediaContentService.ArchiveMediaContentAsync(mediaId);
+            return Ok($"Media Content's state changed to Archived successfully.");
+        }
+        catch (ArgumentException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+        catch (InvalidStateException ex)
+        {
+            return BadRequest($"Invalid state: {ex.Message}");
+        }
+        catch (MediaContentDoesNotExistsException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"Unexpected error: {ex.Message}");
+        }
+    }
+    [HttpPut("Publish/{mediaId:int}")]
+    public async Task<IActionResult> PublishMediaContentAsync(int mediaId)
+    {
+        try
+        {
+            await _mediaContentService.PublishMediaContentAsync(mediaId);
+            return Ok($"Media Content's state changed to Published successfully.");
+        }
+        catch (ArgumentException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+        catch (InvalidStateException ex)
+        {
+            return BadRequest($"Invalid state: {ex.Message}");
+        }
+        catch (MediaContentDoesNotExistsException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"Unexpected error: {ex.Message}");
+        }
+    }
+    
 }

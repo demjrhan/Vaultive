@@ -61,7 +61,6 @@ public class MediaContentService
         try
         {
             var genres = ParseGenres(dto.Genres);
-            var state = ParseState(dto.MediaContent.State);
             
             List<StreamingService> streamingServices = new List<StreamingService>();
             if (dto.MediaContent.StreamingServiceIds.Any())
@@ -116,7 +115,7 @@ public class MediaContentService
                 PosterImageName = dto.MediaContent.PosterImageName,
                 YoutubeTrailerURL = dto.MediaContent.YoutubeTrailerURL,
                 Genres = genres,
-                State = state,
+                State = State.Published,
                 StreamingServices = streamingServices
             });
 
@@ -168,7 +167,6 @@ public class MediaContentService
         try
         {
             var genres = ParseGenres(dto.Genres);
-            var state = ParseState(dto.MediaContent.State);
             
             List<StreamingService> streamingServices = new List<StreamingService>();
             if (dto.MediaContent.StreamingServiceIds.Any())
@@ -224,7 +222,7 @@ public class MediaContentService
                 YoutubeTrailerURL = dto.MediaContent.YoutubeTrailerURL,
                 SchoolName = dto.SchoolName,
                 Genres = genres,
-                State = state,
+                State = State.Published,
                 StreamingServices = streamingServices
             });
 
@@ -273,7 +271,6 @@ public class MediaContentService
         try
         {
             var topics = ParseTopics(dto.Topics);
-            var state = ParseState(dto.MediaContent.State);
 
             List<StreamingService> streamingServices = new List<StreamingService>();
             if (dto.MediaContent.StreamingServiceIds.Any())
@@ -325,7 +322,7 @@ public class MediaContentService
                 AudioOption = audioOption,
                 SubtitleOption = subtitleOption,
                 Topics = topics,
-                State = state,
+                State = State.Published,
                 StreamingServices = streamingServices
             };
 
@@ -1180,6 +1177,51 @@ public class MediaContentService
         }
     }
 
+    public async Task ArchiveMediaContentAsync(int mediaId)
+    {
+        if (mediaId <= 0) throw new ArgumentException("Media id can not be equal or smaller than 0.");
+
+        var media = await _mediaContentRepository.GetMediaContentWithGivenIdAsync(mediaId);
+        if (media == null) throw new MediaContentDoesNotExistsException(new[] { mediaId });
+
+        await using var transaction = await _context.Database.BeginTransactionAsync();
+
+        try
+        {
+            media.State = State.Archived;
+
+            await _context.SaveChangesAsync();
+            await transaction.CommitAsync();
+        }
+        catch
+        {
+            await transaction.RollbackAsync();
+            throw;
+        }
+    }
+    
+    public async Task PublishMediaContentAsync(int mediaId)
+    {
+        if (mediaId <= 0) throw new ArgumentException("Media id can not be equal or smaller than 0.");
+
+        var media = await _mediaContentRepository.GetMediaContentWithGivenIdAsync(mediaId);
+        if (media == null) throw new MediaContentDoesNotExistsException(new[] { mediaId });
+
+        await using var transaction = await _context.Database.BeginTransactionAsync();
+
+        try
+        {
+            media.State = State.Published;
+
+            await _context.SaveChangesAsync();
+            await transaction.CommitAsync();
+        }
+        catch
+        {
+            await transaction.RollbackAsync();
+            throw;
+        }
+    }
     
     /* Validation and parse operations */
     private void ValidateGenres(ICollection<string> genres)
