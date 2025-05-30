@@ -1,5 +1,4 @@
 ﻿using Project.DTOs.OptionDTOs;
-using Project.Models.Enumerations;
 
 namespace Project.DTOs.MediaContentDTOs;
 

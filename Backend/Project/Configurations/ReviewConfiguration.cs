@@ -25,7 +25,7 @@ namespace Project.Configurations
                 .WithMany() 
                 .HasForeignKey(r => new { r.UserId, r.MediaId })
                 .HasPrincipalKey(w => new { w.UserId, w.MediaId })
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Cascade);
             
             builder.Property(r => r.Comment).HasMaxLength(50).IsRequired();
             

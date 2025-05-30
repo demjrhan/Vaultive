@@ -1,6 +1,4 @@
-﻿using Project.Models.Enumerations;
-
-namespace Project.DTOs.MediaContentDTOs;
+﻿namespace Project.DTOs.MediaContentDTOs;
 
 public class MediaContentDTO
 {
