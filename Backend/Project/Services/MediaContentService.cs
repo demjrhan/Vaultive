@@ -1082,7 +1082,7 @@ public class MediaContentService
         if (documentaryId <= 0) throw new ArgumentException("Documentary id can not be equal or smaller than 0.");
 
         var documentary = await _mediaContentRepository.GetDocumentaryWithGivenIdAsync(documentaryId);
-        if (documentary == null) throw new ShortFilmDoesNotExistsException(documentaryId);
+        if (documentary == null) throw new DocumentaryDoesNotExistsException(documentaryId);
 
         return new DocumentaryDTO()
         {
