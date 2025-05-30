@@ -275,8 +275,8 @@ header {
 
 @media (max-width: 1700px) {
     .showcase-video {
-        width: 130vw;
-        height: 130vh;
+        width: 140vw;
+        height: 140vh;
     }
 }
 
@@ -297,6 +297,11 @@ header {
         border-radius: 25px 25px 0 0;
     }
 
+    .showcase-video {
+        width: 150vw;
+        height: 150vh;
+    }
+
     .vaultive-message h1 {
         font-size: 3rem;
     }
@@ -315,7 +320,10 @@ header {
         gap: 40px;
         padding: 1.5rem;
     }
-
+    .showcase-video {
+        width: 160vw;
+        height: 160vh;
+    }
     .vaultive-message h1 {
         font-size: 2.5rem;
     }
