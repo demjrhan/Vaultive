@@ -4,6 +4,8 @@ export function renderRecommendations(movies) {
   const movieCardsContainer = document.querySelector('.movie-cards');
   movieCardsContainer.innerHTML = '';
 
+    /* Current movies variable holds every movie in database, depending on the amount of movies we get from the
+    getMoviesPerPage() we show user that amount by slicing the array*/
     const visibleMovies = movies.slice(0, getMoviesPerPage());
 
     visibleMovies.forEach((movie) => {
@@ -15,6 +17,8 @@ export function renderRecommendations(movies) {
       movieCardsContainer.appendChild(img);
     });
 }
+
+/* Returning the amount of the movies will be shown in recommendations div depending on screen size */
 function getMoviesPerPage() {
   const width = window.innerWidth;
 

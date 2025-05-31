@@ -17,8 +17,12 @@ export async function renderMovies(movies) {
     });
   });
 
+  /* Used spread operator ... in order to get only the genre names.*/
   const shuffledGenres = [...genreMap.keys()].sort(() => Math.random() - 0.5);
 
+  /* Now the array more or less looks like this ["Action" ["Movie", "Movie"]]
+  * I created container for each genre names and adding all movie posters as image. And all
+  * images has eventListener for click. Clicking will bring details. */
   shuffledGenres.forEach((genreName) => {
     const genreMovies = genreMap.get(genreName);
     const genreContainer = document.createElement('div');
@@ -37,6 +41,7 @@ export async function renderMovies(movies) {
         </div>
       `;
 
+    const postersContainer = genreContainer.querySelector('.movie-posters');
     const leftButton = genreContainer.querySelector('.scroll-button.left');
     const rightButton = genreContainer.querySelector('.scroll-button.right');
 
@@ -48,7 +53,6 @@ export async function renderMovies(movies) {
       postersContainer.scrollBy({ left: 300, behavior: 'smooth' });
     });
 
-    const postersContainer = genreContainer.querySelector('.movie-posters');
 
     genreMovies.forEach((movie) => {
       const posterImage = movie.mediaContent?.posterImageName

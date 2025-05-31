@@ -6,7 +6,9 @@ export const featuredMovie = {
   publisher: 'A Disney Original Film',
   title: 'RAYA AND THE LAST DRAGON',
   imageSrc: 'public/img/star/raya-the-last-dragon-star-container.png',
+  trailerURL: '1VIZ89FEjYI'
 };
+
 
 export async function fetchMovieData() {
   try {

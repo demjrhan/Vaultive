@@ -18,9 +18,13 @@ export async function renderStreamingServices(movies) {
       });
     });
 
+     /* Used spread operator ... in order to get only the streaming service names.*/
     const shuffledStreamingServices = [...streamingMap.keys()]
       .sort(() => Math.random() - 0.5);
 
+    /* Now the array more or less looks like this ["HBO" ["Movie", "Movie"]]
+    * I created container for each streaming services and adding all movie posters as image. And all
+    * images has eventListener for click. Clicking will bring details. */
     shuffledStreamingServices.forEach(streamingServiceName => {
       const streamingMovies = streamingMap.get(streamingServiceName);
       const streamingContainer = document.createElement('div');
@@ -39,6 +43,8 @@ export async function renderStreamingServices(movies) {
         </div>
       `;
 
+
+      const postersContainer = streamingContainer.querySelector('.movie-posters');
       const leftButton = streamingContainer.querySelector('.scroll-button.left');
       const rightButton = streamingContainer.querySelector('.scroll-button.right');
 
@@ -49,10 +55,6 @@ export async function renderStreamingServices(movies) {
       rightButton.addEventListener('click', () => {
         postersContainer.scrollBy({ left: 300, behavior: 'smooth' });
       });
-
-
-      const postersContainer = streamingContainer.querySelector('.movie-posters');
-
 
 
       streamingMovies.forEach((movie) => {
