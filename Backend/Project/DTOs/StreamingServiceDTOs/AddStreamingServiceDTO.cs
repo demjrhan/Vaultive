@@ -1,6 +1,6 @@
 ﻿namespace Project.DTOs.StreamingServiceDTOs;
 
-public class CreateStreamingServiceDTO
+public class AddStreamingServiceDTO
 {
     public string Name { get; set; } = null!;
     public string Country { get; set; } = null!;

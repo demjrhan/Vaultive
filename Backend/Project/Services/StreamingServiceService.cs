@@ -198,7 +198,7 @@ public class StreamingServiceService
             var existingIds = streamingService.MediaContents
                 .Select(mc => mc.Id)
                 .ToHashSet();
-            var desiredIds = streamingServiceDto.MediaContentIds;
+            var desiredIds = streamingServiceDto.SupportedMediaContents;
 
             var toRemove = streamingService.MediaContents
                 .Where(mc => !desiredIds.Contains(mc.Id))
@@ -253,7 +253,7 @@ public class StreamingServiceService
     }
 
     /* Adding new streaming service data to database. */
-    public async Task AddStreamingServiceAsync(CreateStreamingServiceDTO streamingServiceDto)
+    public async Task AddStreamingServiceAsync(AddStreamingServiceDTO streamingServiceDto)
     {
         if (streamingServiceDto == null)
             throw new ArgumentNullException(nameof(streamingServiceDto));
@@ -330,7 +330,7 @@ public class StreamingServiceService
         bool linkEqual = string.Equals(dto.WebsiteLink, service.WebsiteLink, StringComparison.OrdinalIgnoreCase);
 
         var currentIds = new HashSet<int>(service.MediaContents.Select(s => s.Id));
-        var newIds = new HashSet<int>(dto.MediaContentIds);
+        var newIds = new HashSet<int>(dto.SupportedMediaContents);
         bool mediaContentsEqual = currentIds.SetEquals(newIds);
         
         if (nameEqual

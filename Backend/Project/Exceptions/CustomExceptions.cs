@@ -1,6 +1,6 @@
 ﻿namespace Project.Exceptions
 {
-    /* Media Content */
+    /* media Content */
     public class MediaContentDoesNotExistsException : Exception
     {
         public MediaContentDoesNotExistsException(IEnumerable<int> mediaContentIds)
@@ -15,18 +15,11 @@
                 : $"MediaContents with IDs [{string.Join(", ", ids)}] do not exist.";
         }
     }
+
     public class NoMediaContentFoundException : Exception
     {
         public NoMediaContentFoundException(string text)
             : base($"Did not manage to find any media content which contains {text} in the title.")
-        {
-        }
-      
-    }
-    public class NoMediaContentExistsException : Exception
-    {
-        public NoMediaContentExistsException()
-            : base($"There is no media content in database.")
         {
         }
     }
@@ -35,6 +28,54 @@
     {
         public MediaContentTitleMustBeUniqueException(string title)
             : base($"{title} already exists.")
+        {
+        }
+    }
+
+    public class MediaContentIsNotPublishedException : Exception
+    {
+        public MediaContentIsNotPublishedException()
+            : base("Media content state is not published, no action can be done.")
+        {
+        }
+    }
+
+    public class InvalidGenreException : Exception
+    {
+        public InvalidGenreException(string genre)
+            : base($"Genre '{genre}' is not a valid genre.")
+        {
+        }
+    }
+
+    public class AtLeastOneGenreMustExistsException : Exception
+    {
+        public AtLeastOneGenreMustExistsException()
+            : base("At least one genre must be existing in the media content.")
+        {
+        }
+    }
+
+    public class AtLeastOneTopicMustExistsException : Exception
+    {
+        public AtLeastOneTopicMustExistsException()
+            : base("At least one topic must be existing in the media content.")
+        {
+        }
+    }
+
+    public class InvalidTopicException : Exception
+    {
+        public InvalidTopicException(string topic)
+            : base($"Topic '{topic}' is not a valid topic.")
+        {
+        }
+    }
+
+    public class InvalidStateException : Exception
+    {
+        public InvalidStateException(string state)
+            : base($"State '{state}' is not a valid state.")
         {
         }
     }
@@ -83,67 +124,11 @@
     public class UserCanNotWatchMediaContentException : Exception
     {
         public UserCanNotWatchMediaContentException(int userId)
-            : base(
-                $"{userId} can not watch the media content, does not satisfy the required subscriptions for streaming services.")
-        {
-        }
-    }
-    public class UserCanNotReviewMediaContentException : Exception
-    {
-        public UserCanNotReviewMediaContentException(int userId)
-            : base(
-                $"{userId} can not review the media content, does not satisfy the required subscriptions for streaming services.")
+            : base($"{userId} can not watch the media content, does not satisfy the required subscriptions for streaming services.")
         {
         }
     }
 
-    public class MediaContentIsNotPublishedException : Exception
-    {
-        public MediaContentIsNotPublishedException()
-            : base(
-                "Media content state is not published, no action can be done.")
-        {
-        }
-    }
-    /* subscription */
-    public class SubscriptionConfirmationDoesNotExistException : Exception
-    {
-        public SubscriptionConfirmationDoesNotExistException(int subscriptionId)
-            : base($"Subscription confirmation not found with given subscribe id {subscriptionId}.")
-        {
-        }
-    }
-
-    public class SubscriptionsDoesNotExistsException : Exception
-    {
-        public SubscriptionsDoesNotExistsException(int subscriptionId)
-            : base($"Subscription not found with given Id {subscriptionId}.")
-        {
-        }
-    }
-
-    public class SubscriptionAlreadyExistsException : Exception
-    {
-        public SubscriptionAlreadyExistsException(int userId, int serviceId)
-            : base($"User {userId} already has an active subscription for service ID {serviceId}.")
-        {
-        }
-    }
-
-    public class NoSubscriptionExistsException : Exception
-    {
-        public NoSubscriptionExistsException()
-            : base("There is no subscription exists in database.")
-        {
-        }
-    }
-    public class NoStreamingServiceExistsException : Exception
-    {
-        public NoStreamingServiceExistsException()
-            : base("There is no streaming service exists in database.")
-        {
-        }
-    }
     public class UserHasNoActiveSubscriptionException : Exception
     {
         public UserHasNoActiveSubscriptionException(string nickname, string? message = "")
@@ -151,7 +136,6 @@
         {
         }
     }
-
 
     /* watch history */
     public class WatchHistoryDoesNotExistsException : Exception
@@ -169,7 +153,6 @@
         {
         }
     }
-
     public class MovieDoesNotExistsException : Exception
     {
         public MovieDoesNotExistsException(int movieId)
@@ -177,6 +160,7 @@
         {
         }
     }
+
     public class ShortFilmDoesNotExistsException : Exception
     {
         public ShortFilmDoesNotExistsException(int movieId)
@@ -184,7 +168,7 @@
         {
         }
     }
-    
+
     public class DocumentaryDoesNotExistsException : Exception
     {
         public DocumentaryDoesNotExistsException(int movieId)
@@ -192,56 +176,29 @@
         {
         }
     }
-    public class InvalidGenreException : Exception
+
+    /* subscriptions */
+    public class SubscriptionsDoesNotExistsException : Exception
     {
-        public InvalidGenreException(string genre)
-            : base($"Genre '{genre}' is not a valid genre.")
+        public SubscriptionsDoesNotExistsException(int subscriptionId)
+            : base($"Subscription not found with given Id {subscriptionId}.")
         {
         }
     }
 
-    public class AtLeastOneGenreMustExistsException : Exception
+    public class SubscriptionAlreadyExistsException : Exception
     {
-        public AtLeastOneGenreMustExistsException()
-            : base("At least one genre must be existing in the media content.")
-        {
-        }
-    }
-    
-    public class AtLeastOneTopicMustExistsException : Exception
-    {
-        public AtLeastOneTopicMustExistsException()
-            : base("At least one topic must be existing in the media content.")
+        public SubscriptionAlreadyExistsException(int userId, int serviceId)
+            : base($"User {userId} already has an active subscription for service ID {serviceId}.")
         {
         }
     }
 
-    public class InvalidTopicException : Exception
+    /* streaming service */
+    public class NoStreamingServiceExistsException : Exception
     {
-        public InvalidTopicException(string topic)
-            : base($"Topic '{topic}' is not a valid topic.")
-        {
-        }
-    }
-    
-    public class InvalidStateException : Exception
-    {
-        public InvalidStateException(string state)
-            : base($"State '{state}' is not a valid state.")
-        {
-        }
-    }
-    public class PaymentFailedException : Exception
-    {
-        public PaymentFailedException()
-            : base("Payment was declined by the bank.")
-        {
-        }
-    }
-    public class AccessDeniedException : Exception
-    {
-        public AccessDeniedException(string message)
-            : base(message)
+        public NoStreamingServiceExistsException()
+            : base("There is no streaming service exists in database.")
         {
         }
     }
@@ -261,7 +218,7 @@
                 : $"Streaming services with IDs [{string.Join(", ", ids)}] do not exist.";
         }
     }
-  
+
     public class StreamingServiceNameMustBeUniqueException : Exception
     {
         public StreamingServiceNameMustBeUniqueException(string name)
@@ -271,8 +228,6 @@
     }
 
     /* Option */
-  
-
     public class AtLeastOneOptionMustExistsException : Exception
     {
         public AtLeastOneOptionMustExistsException()
@@ -280,7 +235,6 @@
         {
         }
     }
-
 
     /* review */
     public class ReviewDoesNotExistsException : Exception
@@ -299,4 +253,20 @@
         }
     }
 
+    /* other */
+    public class PaymentFailedException : Exception
+    {
+        public PaymentFailedException()
+            : base("Payment was declined by the bank.")
+        {
+        }
+    }
+
+    public class AccessDeniedException : Exception
+    {
+        public AccessDeniedException(string message)
+            : base(message)
+        {
+        }
+    }
 }

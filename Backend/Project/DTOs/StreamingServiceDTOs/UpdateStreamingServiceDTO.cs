@@ -10,5 +10,5 @@ public class UpdateStreamingServiceDTO
     public string LogoImage { get; set; } = null!;
     public string WebsiteLink { get; set; } = null!;
     
-    public ICollection<int> MediaContentIds { get; set; }
+    public ICollection<int> SupportedMediaContents { get; set; }
 }

@@ -107,7 +107,7 @@ public class StreamingServiceController : ControllerBase
         }
     }
     [HttpPost("Add")]
-    public async Task<IActionResult> AddStreamingServiceAsync([FromBody] CreateStreamingServiceDTO streamingServiceDto)
+    public async Task<IActionResult> AddStreamingServiceAsync([FromBody] AddStreamingServiceDTO streamingServiceDto)
     {
         try
         {
