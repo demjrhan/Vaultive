@@ -56,9 +56,25 @@ public class ReviewService
         }).ToList();
     }
 
+    /* Returns all reviews of given userId  */
+    public async Task<List<ReviewDTO>> GetAllReviewsOfUserByIdAsync(int userId)
+    {
+        if (userId <= 0) throw new ArgumentException("User id can not be equal or smaller than 0.");
+        var reviews = await _reviewRepository.GetReviewsOfUserIdAsync(userId);
+        return reviews.Select(r => new ReviewDTO()
+        {
+            Id = r.Id,
+            Comment = r.Comment,
+            Nickname = r.User.Nickname,
+            MediaTitle = r.MediaContent.Title,
+            WatchedOn = r.WatchHistory.WatchDate,
+        }).OrderBy(r => r.Nickname).ToList();
+    }
     /* Returns all the reviews of media content.*/
     public async Task<List<ReviewFrontendDTO>> GetReviewsOfMediaContentByIdAsync(int mediaId)
     {
+        if (mediaId <= 0) throw new ArgumentException("Media id can not be equal or smaller than 0.");
+
         var reviews = await _reviewRepository.GetReviewsOfMediaContentByIdAsync(mediaId);
         return reviews.Select(r => new ReviewFrontendDTO()
         {

@@ -60,6 +60,7 @@ public class ReviewRepository
             .Include(r => r.User)
             .Include(r => r.MediaContent)
             .ThenInclude(r => r.WatchHistories)
+            .OrderBy(r => r.UserId)
             .ToListAsync();
     }
 

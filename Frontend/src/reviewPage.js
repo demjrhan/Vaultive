@@ -1,37 +1,33 @@
 
-const moviesPopupContainer = document.querySelector('.streaming-popup-container');
+const reviewPopupContainer = document.querySelector('.review-popup-container');
 const mainContainer = document.querySelector('.main-container');
 const showcase = mainContainer.querySelector('.showcase-container');
 const showcaseVideo = showcase.querySelector('.showcase-video');
-const navigationBar = document.querySelector('.navigation-bar-streaming');
+const navigationBar = document.querySelector('.navigation-bar-review');
 
 
-export function openStreamingPopup() {
+export function openReviewsPopup() {
   showcaseVideo.style.display = 'none';
-
-  moviesPopupContainer.style.display = 'flex';
+  reviewPopupContainer.style.display = 'flex';
   mainContainer.style.filter = 'grayscale(100%) blur(5px)';
   document.body.classList.add('detail-view-open');
 }
 
-function closeStreamingServicePopup() {
+function closeReviewsPopup() {
   showcaseVideo.style.display = '';
 
-  moviesPopupContainer.style.display = 'none';
+  reviewPopupContainer.style.display = 'none';
   mainContainer.style.filter = 'none';
   document.body.classList.remove('detail-view-open');
 }
-export function createNavigationBarStreamingService() {
+export function createNavigationBarReviewsPage() {
   navigationBar.innerHTML = `
-    <div class="home-button" id="close-streaming-popup">
+    <div class="home-button" id="close-review-popup">
           <img src="../public/icons/home.png" alt="home">
     </div>
   `;
 
-  document.getElementById('close-streaming-popup')?.addEventListener('click', () => {
-    closeStreamingServicePopup();
+  document.getElementById('close-review-popup')?.addEventListener('click', () => {
+    closeReviewsPopup();
   });
 }
-
-
-

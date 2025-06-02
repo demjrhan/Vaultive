@@ -56,13 +56,33 @@ namespace Project.Controller;
                 var result = await _reviewService.GetReviewsOfMediaContentByIdAsync(mediaId);
                 return Ok(result);
             }
-            catch (Exception ex)
+            catch (ArgumentException ex)
             {
                 return BadRequest(ex.Message);
             }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Unexpected error: {ex.Message}");
+            }
         }
 
-
+        [HttpGet("UserReviews/{userId:int}")]
+        public async Task<IActionResult> GetAllReviewsOfUserByIdAsync(int userId)
+        {
+            try
+            {
+                var result = await _reviewService.GetAllReviewsOfUserByIdAsync(userId);
+                return Ok(result);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Unexpected error: {ex.Message}");
+            }
+        }
         [HttpPut("Update")]
         public async Task<IActionResult> UpdateReviewAsync([FromBody] UpdateReviewDTO dto)
         {
