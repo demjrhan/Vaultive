@@ -51,6 +51,10 @@ public class WatchHistoryController : ControllerBase
             var result = await _watchHistoryService.GetWatchHistoriesOfUserAsync(userId);
             return Ok(result);
         } 
+        catch (ArgumentException ex)
+        {
+            return BadRequest(ex.Message);
+        }
         catch (Exception ex)
         {
             return StatusCode(500, $"Unexpected error: {ex.Message}");

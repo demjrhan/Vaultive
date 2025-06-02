@@ -25,6 +25,10 @@ namespace Project.Controller;
                 var reviews = await _reviewService.GetReviewByIdAsync(reviewId);
                 return Ok(reviews);
             }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
             catch (ReviewDoesNotExistsException ex)
             {
                 return BadRequest(ex.Message);
@@ -45,7 +49,7 @@ namespace Project.Controller;
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return StatusCode(500, $"Unexpected error: {ex.Message}");
             }
         }
         [HttpGet("MediaContentsReviews/{mediaId:int}")]

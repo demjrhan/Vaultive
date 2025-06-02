@@ -588,28 +588,24 @@ public class UserService
         string country,
         string status)
     {
-        // First name: optional, but if provided must be 2–50 chars
         if (!string.IsNullOrWhiteSpace(firstname) &&
             (firstname.Length < 2 || firstname.Length > 50))
         {
             throw new ArgumentException("First name must be 2–50 characters when provided.", nameof(firstname));
         }
 
-        // Last name: optional, but if provided must be 2–50 chars
         if (!string.IsNullOrWhiteSpace(lastname) &&
             (lastname.Length < 2 || lastname.Length > 50))
         {
             throw new ArgumentException("Last name must be 2–50 characters when provided.", nameof(lastname));
         }
 
-        // Nickname: required, 2–30 chars
         if (string.IsNullOrWhiteSpace(nickname) ||
             nickname.Length < 2 || nickname.Length > 30)
         {
             throw new ArgumentException("Nickname is required and must be 2–30 characters.", nameof(nickname));
         }
 
-        // Email: required, must be valid format
         if (string.IsNullOrWhiteSpace(email))
         {
             throw new ArgumentException("Email is required.", nameof(email));
@@ -620,7 +616,6 @@ public class UserService
             throw new ArgumentException("Email is not in a valid format.", nameof(email));
         }
 
-        // Country: required, non-empty
         if (string.IsNullOrWhiteSpace(country))
         {
             throw new ArgumentException("Country is required.", nameof(country));
@@ -631,7 +626,6 @@ public class UserService
             throw new ArgumentException("Country name must fit into alpha-2 code. e.g 'TR' 'PL", nameof(country));
         }
 
-        // Status: required, non-empty
         if (string.IsNullOrWhiteSpace(status))
         {
             throw new ArgumentException("Status is required.", nameof(status));

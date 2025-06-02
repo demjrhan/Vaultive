@@ -71,6 +71,7 @@ public class WatchHistoryService
     /* Get watch histories of the user with user details. */
     public async Task<List<UserWithWatchHistoriesDTO>> GetWatchHistoriesOfUserAsync(int userId)
     {
+        if (userId <= 0) throw new ArgumentException("User id can not be equal or smaller than 0.");
         var watchHistories = await _watchHistoryRepository.GetWatchHistoriesOfUser(userId);
 
         return watchHistories.Select(wh => new UserWithWatchHistoriesDTO()

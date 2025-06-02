@@ -89,6 +89,8 @@ public class ReviewService
     /* Returns review by id. */
     public async Task<ReviewDTO> GetReviewByIdAsync(int reviewId)
     {
+        if (reviewId <= 0) throw new ArgumentException("Review id can not be equal or smaller than 0.");
+
         var review = await _reviewRepository.GetReviewByIdAsync(reviewId);
         if (review == null) throw new ReviewDoesNotExistsException(reviewId);
         return new ReviewDTO()
