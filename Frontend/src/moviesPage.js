@@ -3,6 +3,7 @@ const mainContainer = document.querySelector('.main-container');
 const showcase = mainContainer.querySelector('.showcase-container');
 const showcaseVideo = showcase.querySelector('.showcase-video');
 const navigationBar = document.querySelector('.navigation-bar-moviePage');
+const searchInput = document.querySelector('.search-area');
 
 export function openMoviesPopup() {
   showcaseVideo.style.display = 'none';
@@ -14,6 +15,7 @@ export function openMoviesPopup() {
 }
 
 function closeMoviesPopup() {
+  searchInput.value = '';
   showcaseVideo.style.display = '';
 
 
