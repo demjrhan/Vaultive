@@ -272,20 +272,7 @@ header {
     overflow: auto;
     backdrop-filter: blur(3px);
 }
-.review-popup-container {
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: 100dvh;
-    width: 100dvw;
-    background-color: rgba(0, 0, 0, 0.8);
-    z-index: 1000;
-    display: none;
-    justify-content: center;
-    align-items: center;
-    overflow: auto;
-    backdrop-filter: blur(3px);
-}
+
 
 @media (max-width: 1700px) {
     .showcase-video {

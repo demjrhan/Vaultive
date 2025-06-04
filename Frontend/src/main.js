@@ -6,9 +6,6 @@ import { createNavigationBarMoviePage, openMoviesPopup } from './moviesPage.js';
 import { renderMovies } from './renderMovies.js';
 import { createNavigationBarStreamingService, openStreamingPopup } from './streamingServicePage.js';
 import { renderStreamingServices } from './renderStreamingServices.js';
-import { createNavigationBarReviewsPage, openReviewsPopup } from './reviewPage.js';
-import { renderReviews } from './renderReviews.js';
-import { fetchReviews } from './reviewData.js';
 
 
 document.addEventListener('DOMContentLoaded', async () => {
@@ -41,13 +38,4 @@ document.addEventListener('DOMContentLoaded', async () => {
     renderStreamingServices(movies);
   });
 
-  const reviewButton = document.getElementById('review-link');
-  reviewButton.addEventListener('click', async () => {
-    const reviews = await fetchReviews();
-    openReviewsPopup();
-    createNavigationBarReviewsPage()
-    renderReviews(reviews);
-
-
-  })
 });
