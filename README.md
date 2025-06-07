@@ -4,27 +4,32 @@ Vaultive is a dynamic movie streaming website that features short films, trailer
 ## Screenshots from website
 
 <p align="center">
-    <img src="https://github.com/demjrhan/Vaultive/blob/main/Documentation/home.png" alt="Home Page" width="500"/>
+    <img src="https://github.com/demjrhan/Vaultive/blob/main/Documentation/home.png" alt="Home Page" width="1000"/>
 </p>
 <p align="center">
-    <img src="https://github.com/demjrhan/Vaultive/blob/main/Documentation/movies.png" alt="Movies Page" width="500"/>
+    <img src="https://github.com/demjrhan/Vaultive/blob/main/Documentation/movies.png" alt="Movies Page" width="1000"/>
 </p>
 
 <p align="center">
-    <img src="https://github.com/demjrhan/Vaultive/blob/main/Documentation/streaming_services.png" alt="Streaming Services Page" width="500"/>
+    <img src="https://github.com/demjrhan/Vaultive/blob/main/Documentation/streaming_services.png" alt="Streaming Services Page" width="1000"/>
 </p>
 <p align="center">
-    <img src="https://github.com/demjrhan/Vaultive/blob/main/Documentation/details.png" alt="Details Of Movie" width="500"/>
+    <img src="https://github.com/demjrhan/Vaultive/blob/main/Documentation/details.png" alt="Details Of Movie" width="1000"/>
 </p>
 <p align="center">
-    <img src="https://github.com/demjrhan/Vaultive/blob/main/Documentation/details_review.png" alt="Details Of Movie Review Section" width="500"/>
+    <img src="https://github.com/demjrhan/Vaultive/blob/main/Documentation/details_review.png" alt="Details Of Movie Review Section" width="1000"/>
 </p>
 
 ## Analytical Diagram
-Soon...
+<p align="center">
+    <img src="https://github.com/demjrhan/Vaultive/blob/main/Documentation/Vaultive%20-%20Analytical.png" alt="Analytical Diagram" width="1000"/>
+</p>
 
 ## Design Diagram
-Soon...
+<p align="center">
+    <img src="https://github.com/demjrhan/Vaultive/blob/main/Documentation/Vaultive%20-%20Design.png" alt="Design Diagram" width="1000"/>
+</p>
+
 
 ## 📂 Database Details
 Sample Data: `Backend/Project/Context/SampleData.cs`  
