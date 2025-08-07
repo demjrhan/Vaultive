@@ -6,32 +6,32 @@ Vaultive is a dynamic movie streaming website that features short films, trailer
 
 ## Screenshots from website
 
-<p align="center">
+<a href="https://github.com/demjrhan/Vaultive" target="_blank">
     <img src="https://github.com/demjrhan/Vaultive/blob/main/Documentation/home.gif" alt="Home Page" width="1000"/>
-</p>
-<p align="center">
+</a>
+<a href="https://github.com/demjrhan/Vaultive" target="_blank">
     <img src="https://github.com/demjrhan/Vaultive/blob/main/Documentation/movies.png" alt="Movies Page" width="1000"/>
-</p>
+</a>
 
-<p align="center">
+<a href="https://github.com/demjrhan/Vaultive" target="_blank">
     <img src="https://github.com/demjrhan/Vaultive/blob/main/Documentation/streaming_services.png" alt="Streaming Services Page" width="1000"/>
-</p>
-<p align="center">
+</a>
+<a href="https://github.com/demjrhan/Vaultive" target="_blank">
     <img src="https://github.com/demjrhan/Vaultive/blob/main/Documentation/details.gif" alt="Details Of Movie" width="1000"/>
-</p>
-<p align="center">
+</a>
+<a href="https://github.com/demjrhan/Vaultive" target="_blank">
     <img src="https://github.com/demjrhan/Vaultive/blob/main/Documentation/details_review.gif" alt="Details Of Movie Review Section" width="1000"/>
-</p>
+</a>
 
 ## Analytical Diagram
-<p align="center">
+<a href="https://github.com/demjrhan/Vaultive" target="_blank">
     <img src="https://github.com/demjrhan/Vaultive/blob/main/Documentation/Vaultive%20-%20Analytical.png" alt="Analytical Diagram" width="1000"/>
-</p>
+</a>
 
 ## Design Diagram
-<p align="center">
+<a href="https://github.com/demjrhan/Vaultive" target="_blank">
     <img src="https://github.com/demjrhan/Vaultive/blob/main/Documentation/Vaultive%20-%20Design.png" alt="Design Diagram" width="1000"/>
-</p>
+</a>
 
 
 ## 📂 Database Details
