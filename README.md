@@ -20,7 +20,7 @@ Vaultive is a dynamic movie streaming website that features short films, trailer
     <img src="https://github.com/demjrhan/Vaultive/blob/main/Documentation/details.gif" alt="Details Of Movie" width="1000"/>
 </p>
 <p align="center">
-    <img src="https://github.com/demjrhan/Vaultive/blob/main/Documentation/details_review.png" alt="Details Of Movie Review Section" width="1000"/>
+    <img src="https://github.com/demjrhan/Vaultive/blob/main/Documentation/details_review.gif" alt="Details Of Movie Review Section" width="1000"/>
 </p>
 
 ## Analytical Diagram
