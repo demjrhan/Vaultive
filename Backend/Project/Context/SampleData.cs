@@ -966,6 +966,7 @@ public static class SampleData
 
             cars?.StreamingServices.Add(disney);
             cars?.StreamingServices.Add(hbo);
+            cars?.StreamingServices.Add(appleTV);
 
             johnWick?.StreamingServices.Add(appleTV);
             johnWick?.StreamingServices.Add(disney);
@@ -1000,7 +1001,7 @@ public static class SampleData
             {
                 var demirMovies = watchedMovies
                     .Where(m => m.Title == "John Wick" || m.Title == "Avengers" || m.Title == "Pulp Fiction" ||
-                                m.Title == "Deadpool")
+                                m.Title == "Deadpool" || m.Title == "Cars")
                     .ToList();
 
                 foreach (var movie in demirMovies)
@@ -1019,7 +1020,7 @@ public static class SampleData
             {
                 var aikoMovies = watchedMovies
                     .Where(m => m.Title == "John Wick" || m.Title == "Deadpool" || m.Title == "Spiderman" ||
-                                m.Title == "Pulp Fiction")
+                                m.Title == "Pulp Fiction" || m.Title == "Cars")
                     .ToList();
 
                 foreach (var movie in aikoMovies)
@@ -1037,7 +1038,7 @@ public static class SampleData
             if (michal != null)
             {
                 var michalMovies = watchedMovies
-                    .Where(m => m.Title == "Scarface" || m.Title == "God Father")
+                    .Where(m => m.Title == "Scarface" || m.Title == "God Father" || m.Title == "Cars")
                     .ToList();
 
                 foreach (var movie in michalMovies)
@@ -1065,7 +1066,7 @@ public static class SampleData
 
             if (aiko != null)
             {
-                var aikoTitles = new[] { "Deadpool", "Spiderman" };
+                var aikoTitles = new[] { "Deadpool", "Spiderman", "Cars"};
                 foreach (var title in aikoTitles)
                 {
                     var media = allMovies.FirstOrDefault(m => m.Title == title);
@@ -1082,6 +1083,7 @@ public static class SampleData
                                     "Deadpool is a wild, hilarious ride with relentless action and humor that constantly breaks the fourth wall. Ryan Reynolds was born to play this role.",
                                 "Spiderman" =>
                                     "A fresh take on Peter Parker’s journey. The high school drama blended well with superhero action, though I felt some character arcs were a bit rushed.",
+                                "Cars" => "Ka-chow!",
                                 _ => ""
                             },
                             MediaContent = media,
@@ -1093,7 +1095,7 @@ public static class SampleData
 
             if (michal != null)
             {
-                var michalTitles = new[] { "Scarface", "God Father" };
+                var michalTitles = new[] { "Scarface", "God Father", "Cars" };
                 foreach (var title in michalTitles)
                 {
                     var media = allMovies.FirstOrDefault(m => m.Title == title);
@@ -1110,6 +1112,7 @@ public static class SampleData
                                     "The Godfather isn’t just a movie — it’s an experience. Rich characters, perfect pacing, and one of the best opening scenes in cinema history.",
                                 "Scarface" =>
                                     "Scarface is raw and intense. Al Pacino's performance is unforgettable. The film’s rise-and-fall narrative is brutal and honest.",
+                                "Cars" => "Never gets old",
                                 _ => ""
                             },
                             MediaContent = media,
